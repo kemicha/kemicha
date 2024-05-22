@@ -1,29 +1,73 @@
 package src.domain;
 
 
+import src.persistence.ArtikelExistiertBereitsException;
 import src.valueObjects.Artikel;
-import src.valueObjects.Kunde;
-import src.valueObjects.Mitarbeiter;
 
+import java.io.IOException;
 import java.util.List;
 
 public class EshopVerwaltung {
-    private KundeVerwaltung kv;
-    private MitarbeiterVerwaltung mv;
-    private ArtikelVerwaltung av;
-    private BenutzerVerwaltung bv;
-    private Warenkorb wk;
-    private Object ArtikelBezeichnung;
+
+   private String datei;
+   private ArtikelVerwaltung av;
 
 
-    public EshopVerwaltung() {
-        this.bv = new BenutzerVerwaltung();
-        this.kv = new KundeVerwaltung();
-        this.mv = new MitarbeiterVerwaltung();
-        this.av = new ArtikelVerwaltung();
+    public EshopVerwaltung(String datei ) throws IOException {
+        this.datei = datei;
+        av = new ArtikelVerwaltung();
+        av.liesDaten(datei + "_ArtikelDB.txt");
+
+    }
+    public List<Artikel> gibAlleArtikel() {
+
+        return av.getBestand();
+    }
+public List<Artikel>sucheNachBezeichnung(String bezeichnung){
+        return av.sucheArtikel(bezeichnung);
+}
+
+    public Artikel fuegeArtikelEin(String bezeichnung, int artikelNummer, int bestand,double preis) throws ArtikelExistiertBereitsException {
+        if (!av.sucheArtikel(bezeichnung).isEmpty()) {
+            throw new ArtikelExistiertBereitsException(artikelNummer, bezeichnung);
+        }
+
+        Artikel artikel = new Artikel (bezeichnung,bestand,preis,artikelNummer);
+        av.getBestand().add(artikel);
+        return artikel;
     }
 
-    public boolean eingelogt(String name, String passwort) {
+    public void speicherArtikel() throws IOException {
+        av.schreibeDaten(datei+"_ArtikelDB.txt");
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  /*  public boolean eingelogt(String name, String passwort) {
         return bv.login(name, passwort);
 
     }
@@ -31,9 +75,9 @@ public class EshopVerwaltung {
     public Kunde registierteKunde (int id, String name, String passwort, String adresse) {
         return kv. kundeRegistrierung(id, name, passwort, adresse);
     }
+*/
 
-
-    public boolean fuegeMitarbeiterHinzu(int id, String name, String passwort, String adresse){
+   /* public boolean fuegeMitarbeiterHinzu(int id, String name, String passwort, String adresse){
         return mv.fuegeMitarbeiterHinzu(id, name, passwort,adresse);
     }
     public void legeArtikelAn(String bezeichnung,int bestand, double preis, int artikelnummer) {
@@ -56,9 +100,9 @@ public class EshopVerwaltung {
         av.artikelEntfernen(artikel);
         return ;
     }
-  /*  public void artikelZumWarenkorbHinzufuegen(Artikel artikel, int menge){
+  *//*  public void artikelZumWarenkorbHinzufuegen(Artikel artikel, int menge){
         av.artikelHinzufuegen(artikel, menge);
-    }*/
+    }*//*
     public boolean artikelVomWarenkorbEntfernen(Artikel artikel){
         return wk.artikelEntfernen(artikel);
     }
@@ -98,7 +142,7 @@ public class EshopVerwaltung {
 
     public void artikelZumWarenkorbHinzufuegen(Artikel artikel, int menge) {
         av.artikelImWarenkorbAnzeigen();
-    }
+    }*/
 }
 
 

@@ -1,17 +1,74 @@
 package src.domain;
 
+import src.persistence.ArtikelExistiertBereitsException;
+import src.persistence.FilePersistenceManager;
+import src.persistence.PersistenceManager;
 import src.valueObjects.*;
 
+import java.io.IOException;
 import java.util.*;
 
 public class ArtikelVerwaltung {
-    private List <Artikel >artikelListe;
-    private Map<Artikel, Integer> artikelMap = new HashMap<>();
-    private Rechnung rechnung;
-    private List<Ereignis> ereignisList;
 
-    // Konstruktor
-    public ArtikelVerwaltung() {
+
+    private List<Artikel> artikelList= new ArrayList<>();
+
+   private PersistenceManager pm = new FilePersistenceManager();;
+
+    public ArtikelVerwaltung() throws IOException {
+    }
+
+    public void  liesDaten(String datei) throws IOException {
+        try {
+            artikelList = pm.leseArtikelList(datei);
+        } catch (ArtikelExistiertBereitsException e) {
+            System.err.println("Artikeliste enthaelt Duplikate und konnte nicht geladen werden: " + e);
+        }
+    }
+
+    public void schreibeDaten ( String datei) throws IOException{
+        pm.schreibeArtikelList(artikelList,datei);
+    }
+
+    public List<Artikel> getBestand() {
+        return artikelList;
+    }
+
+
+    public List<Artikel> sucheArtikel(String bezeichnung) {
+        List<Artikel> suche = new ArrayList<>();
+        Iterator it = getBestand().iterator();
+        while (it.hasNext()) {
+            Artikel artikel = (Artikel) it.next();
+            if (artikel.getBezeichnung().equals(bezeichnung)) {
+                suche.add(artikel);
+            }
+        }
+        return suche;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /*public ArtikelVerwaltung() {
         Artikel a1 = new Artikel("shuhe", 5, 19.5, 123);
         Artikel a2 = new Artikel("hose", 2, 18.5, 124);
         Artikel a3 = new Artikel("kleid", 3, 17.5, 113);
@@ -234,5 +291,5 @@ public class ArtikelVerwaltung {
             }
         }
         return foundArtikels;
-    }
+    }*/
 }

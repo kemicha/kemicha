@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 public class KundeVerwaltung {
-    private ArtikelVerwaltung artikels = new ArtikelVerwaltung();
+    private ArtikelVerwaltung artikels ;
     private List<Kunde> kundeList;
     private List<Artikel> artikelList;
     private Map<Artikel,Integer> artikelMap;

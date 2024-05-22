@@ -1,3 +1,4 @@
+/*
 package src.ui;
 
 import src.domain.EshopVerwaltung;
@@ -13,9 +14,9 @@ public class Main {
     private final BufferedReader br;
     EshopVerwaltung shop;
 
-    public Main() {
-        this.shop = new EshopVerwaltung();
-        this.br = new BufferedReader(new InputStreamReader(System.in));
+    public Main(String datei) throws IOException {
+        shop = new EshopVerwaltung(datei);
+        br = new BufferedReader(new InputStreamReader(System.in));
     }
 
     private void gibMenueAus() {
@@ -28,7 +29,7 @@ public class Main {
         System.out.flush();
     }
 
-    private void start() throws IOException {
+    public void start() throws IOException {
         String input;
         do {
             gibMenueAus();
@@ -354,7 +355,7 @@ public class Main {
     public static void main(String[] args) {
         Main main;
         try {
-            main = new Main();
+            main = new Main("Eshop");
             main.start();
         } catch (IOException e) {
             e.printStackTrace();
@@ -363,37 +364,99 @@ public class Main {
 
 
 
-    /*List<Artikel> artikel =shop.ArtikelAusgeben();*/
-    /*gibArtikelAus(artikel);*/
-    /*break;*/
-    /*case "4":*/
-    /*System.out.println("Geben Sie die Bezeichnung des Artikels ein:");*/
-    /*String bezeichnung = liesEingabe();*/
-    /*System.out.println("Geben Sie den Preis des Artikels ein:");*/
-    /*double preis = Double.parseDouble(liesEingabe());*/
-    /*System.out.println("Geben Sie die Artikelnummer des Artikels ein:");*/
-    /*int artikelnummer = Integer.parseInt(liesEingabe());*/
-    /*break;*/
-    /* case"5":*/
-    /*System.out.println("Geben Sie Ihren Namen ein:");*/
-    /*name = liesEingabe();*/
-    /*if (!shop.fuegeMitarbeiterHinzu(0, name, null, null)) {*/
-    /*    System.out.println("Einen Mitarbeiter mit diesem Namen gibt es bereits");*/
-    /*}*/
-    /*for (Mitarbeiter mitarbeiter : shop.gibAlleMitarbeiter()) {*/
-    /*    System.out.println(mitarbeiter);*/
-    /*}*/
-    /*break;*/
-    /*case "6":*/
-    /*System.out.println("Geben Sie den Artikelnamen ein:");*/
-    /*String artikelBezeichnung = liesEingabe();*/
-    /*Artikel artikel1 = (Artikel) shop.nachArtikelBezeichnungSuchen(artikelBezeichnung);*/
-    /*if (artikel1 != null) {*/
-    /*    System.out.println("Geben Sie die Anzahl ein, um den Bestand zu erhöhen:");*/
-    /*    int anzahl = Integer.parseInt(liesEingabe());*/
-    /*    System.out.println("Bestand von " + artikelBezeichnung + " um " + anzahl + " erhöht.");*/
-    /*}else {*/
-    /*    System.out.println("Artikel nicht gefunden.");*/
+    */
+/*List<Artikel> artikel =shop.ArtikelAusgeben();*//*
+
+    */
+/*gibArtikelAus(artikel);*//*
+
+    */
+/*break;*//*
+
+    */
+/*case "4":*//*
+
+    */
+/*System.out.println("Geben Sie die Bezeichnung des Artikels ein:");*//*
+
+    */
+/*String bezeichnung = liesEingabe();*//*
+
+    */
+/*System.out.println("Geben Sie den Preis des Artikels ein:");*//*
+
+    */
+/*double preis = Double.parseDouble(liesEingabe());*//*
+
+    */
+/*System.out.println("Geben Sie die Artikelnummer des Artikels ein:");*//*
+
+    */
+/*int artikelnummer = Integer.parseInt(liesEingabe());*//*
+
+    */
+/*break;*//*
+
+    */
+/* case"5":*//*
+
+    */
+/*System.out.println("Geben Sie Ihren Namen ein:");*//*
+
+    */
+/*name = liesEingabe();*//*
+
+    */
+/*if (!shop.fuegeMitarbeiterHinzu(0, name, null, null)) {*//*
+
+    */
+/*    System.out.println("Einen Mitarbeiter mit diesem Namen gibt es bereits");*//*
+
+    */
+/*}*//*
+
+    */
+/*for (Mitarbeiter mitarbeiter : shop.gibAlleMitarbeiter()) {*//*
+
+    */
+/*    System.out.println(mitarbeiter);*//*
+
+    */
+/*}*//*
+
+    */
+/*break;*//*
+
+    */
+/*case "6":*//*
+
+    */
+/*System.out.println("Geben Sie den Artikelnamen ein:");*//*
+
+    */
+/*String artikelBezeichnung = liesEingabe();*//*
+
+    */
+/*Artikel artikel1 = (Artikel) shop.nachArtikelBezeichnungSuchen(artikelBezeichnung);*//*
+
+    */
+/*if (artikel1 != null) {*//*
+
+    */
+/*    System.out.println("Geben Sie die Anzahl ein, um den Bestand zu erhöhen:");*//*
+
+    */
+/*    int anzahl = Integer.parseInt(liesEingabe());*//*
+
+    */
+/*    System.out.println("Bestand von " + artikelBezeichnung + " um " + anzahl + " erhöht.");*//*
+
+    */
+/*}else {*//*
+
+    */
+/*    System.out.println("Artikel nicht gefunden.");*//*
 
 
-}
+
+}*/

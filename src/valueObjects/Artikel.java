@@ -2,11 +2,11 @@ package src.valueObjects;
 public class  Artikel{
     // Attribute
 
-    int ArtikelNummer;
+    private int ArtikelNummer;
     private String bezeichnung;
     private int bestand;
     private double preis;
-    private int menge;
+
 
     // Konstruktoren
     public Artikel(String bezeichnung, int bestand, double preis, int artikelnummer) {
@@ -14,7 +14,7 @@ public class  Artikel{
         this.bestand = bestand;
         this.preis = preis;
         this.bezeichnung = bezeichnung;
-        this.menge = menge;
+
 
     }
 
@@ -52,13 +52,6 @@ public class  Artikel{
         this.preis = preis;
     }
 
-    public int getMenge() {
-        return menge;
-    }
-
-    public void setMenge(int menge) {
-        this.menge = menge;
-    }
 
     // toString-Methode
     @Override
