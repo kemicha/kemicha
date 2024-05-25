@@ -13,7 +13,7 @@ public class ArtikelVerwaltung {
 
     private List<Artikel> artikelList= new ArrayList<>();
 
-   private PersistenceManager pm = new FilePersistenceManager();;
+   private PersistenceManager pm = new FilePersistenceManager();
 
     public ArtikelVerwaltung() throws IOException {
     }
@@ -35,7 +35,7 @@ public class ArtikelVerwaltung {
     }
 
 
-    public List<Artikel> sucheArtikel(String bezeichnung) {
+    public List<Artikel> sucheArtikelNachName(String bezeichnung) {
         List<Artikel> suche = new ArrayList<>();
         Iterator it = getBestand().iterator();
         while (it.hasNext()) {
@@ -45,6 +45,32 @@ public class ArtikelVerwaltung {
             }
         }
         return suche;
+    }
+    public List<Artikel> artikelNachBezeichnung() {
+        artikelList.sort(Comparator.comparing(Artikel::getBezeichnung));
+        return artikelList;
+    }
+
+    public List<Artikel> artikelNachArtikelnummer() {
+        artikelList.sort( Comparator.comparingInt(Artikel::getArtikelNummer));
+        return artikelList;
+    }
+
+/*    public List<Artikel> sucheArtikelNachNummer(String artikelNummer) {
+        List<Artikel> suche = new ArrayList<>();
+        Iterator it = getBestand().iterator();
+        while (it.hasNext()) {
+            Artikel artikel = (Artikel) it.next();
+            if (artikel.getArtikelNummer().equals(artikelNummer)) {
+                suche.add(artikel);
+            }
+        }
+        return suche;
+    }*/
+
+
+    public void loeschen(int artikelNummer) {
+        artikelList.removeIf(Artikel -> Artikel.getArtikelNummer() == artikelNummer);
     }
 
 

@@ -7,13 +7,13 @@ public class Benutzer {
     private int id;
     private String name;
     private String passwort;
-    private String adresse;
+    private Kunde kunde;
+    private Mitarbeiter mitarbeiter;
 
-    public Benutzer(int id, String name,  String passwort, String adresse) {
-        this.id = id;
+    public Benutzer( String name,int id,  String passwort) {
         this.name = name;
+        this.id = id;
         this.passwort = passwort;
-        this.adresse = adresse;
 
     }
 
@@ -44,12 +44,13 @@ public class Benutzer {
         this.passwort = passwort;
     }
 
-    public String getAdresse() {
-        return adresse;
+
+    public Kunde getKunde() {
+        return kunde;
     }
 
-    public void setAdresse(String adresse) {
-        this.adresse = adresse;
+    public Mitarbeiter getMitarbeiter() {
+        return mitarbeiter;
     }
 
     @Override
@@ -57,12 +58,12 @@ public class Benutzer {
         if (this == o) return true;
         if (!(o instanceof Benutzer)) return false;
         Benutzer benutzer = (Benutzer) o;
-        return getId() == benutzer.getId() && Objects.equals(getName(), benutzer.getName()) && Objects.equals(getPasswort(), benutzer.getPasswort()) && Objects.equals(getAdresse(), benutzer.getAdresse());
+        return getId() == benutzer.getId() && Objects.equals(getName(), benutzer.getName()) && Objects.equals(getPasswort(), benutzer.getPasswort());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getName(), getPasswort(), getAdresse());
+        return Objects.hash(getId(), getName(), getPasswort());
     }
 
     @Override
@@ -71,7 +72,6 @@ public class Benutzer {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", passwort='" + passwort + '\'' +
-                ", adresse='" + adresse + '\'' +
                 '}';
     }
 }

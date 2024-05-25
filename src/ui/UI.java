@@ -2,7 +2,11 @@ package src.ui;
 
 import src.domain.EshopVerwaltung;
 import src.persistence.ArtikelExistiertBereitsException;
+import src.persistence.KundeExistiertBereitsException;
+import src.persistence.MitarbeiterExistiertBereitsException;
 import src.valueObjects.Artikel;
+import src.valueObjects.Kunde;
+import src.valueObjects.Mitarbeiter;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,8 +14,6 @@ import java.io.InputStreamReader;
 import java.util.List;
 
 public class UI {
-
-
     private BufferedReader br;
     private EshopVerwaltung shop;
 
@@ -21,81 +23,76 @@ public class UI {
     }
 
     private void gibMenueAus() {
-        System.out.println("\nWillkommen im E-shop: Wählen sie ein Option\n");
-        System.out.println("1. KundeVerwaltung!");
-        System.out.println("2. MitarbeiterVerwaltung");
-        System.out.println("3. Artikelliste ausgeben");
+        System.out.println("\nWillkommen im E-shop: Waehlen sie ein Option\n");
+        System.out.println("1. Artikelliste ausgeben");
+        System.out.println("2. KundeVerwaltung!");
+        System.out.println("3. MitarbeiterVerwaltung");
         System.out.println("Beenden: E");
-        System.out.print("> Auswahl: ");
+        System.out.print("Ihre Auswahl:> ");
         System.out.flush();
     }
 
     private String liesEingabe() throws IOException {
         return br.readLine();
     }
-    private void start(String input) throws IOException {
+
+    private void start() throws IOException {
+        String input;
         do {
             gibMenueAus();
-            input = br.readLine();
+            input = liesEingabe();
             switch (input) {
                 case "1":
-                    kundeEingabe();
-                    break;
-                case "2":
-                    mitarbeiterEingabe();
-                    break;
-                case "3":
                     artikelEingabe();
                     break;
-                case "E":
+                case "2":
+                    kundeEingabe();
+                    break;
+                case "3":
+                    mitarbeiterEingabe();
+                    break;
+                case "e":
                     System.out.println("Auf Wiedersehen!");
                     break;
                 default:
-                    System.out.println("Ungültige Eingabe. Bitte versuchen Sie es erneut.");
+                    System.out.println("Ungueltige Eingabe. Bitte versuchen Sie es erneut.");
             }
-        } while (!input.equals("E"));
-
+        } while (!input.equals("e"));
     }
 
     private void artikelEingabe() throws IOException {
         String input;
         do {
-            System.out.println("\n Unsere artikel \n");
-            System.out.println("1. Artike anzeige!");
+            System.out.println("\nUnsere Artikel\n");
+            System.out.println("1. Artikel anzeigen!");
             System.out.println("2. Artikel nach Name sortieren!");
-            System.out.println("3. Artike nach Nummer sortieren!");
-            System.out.println("4. Züruck Zur HautpMenu!");
-            System.out.println("> Ihre Auswahl: ");
+            System.out.println("3. Artikel nach Nummer sortieren!");
+            System.out.println("e. Zurueck zum Hauptmenue!");
+            System.out.print("> Ihre Auswahl: ");
             System.out.flush();
 
-            input = br.readLine();
-            List<Artikel> liste ;
+            input = liesEingabe();
+            List<Artikel> liste;
             switch (input) {
                 case "1":
-                   liste=shop.gibAlleArtikel();
+                    liste = shop.gibAlleArtikel();
                     gibArtikellisteAus(liste);
                     break;
                 case "2":
-                    artikelNachNameSortieren();
+                    liste= shop.sortiereArtikelNachName();
+                    gibArtikellisteAus(liste);
                     break;
                 case "3":
-                    artikelNachNummerSortieren();
+                   liste= shop.sortiereArtikelNachNummer();
+                   gibArtikellisteAus(liste);
                     break;
-                case "4":
-                    System.out.println("Zurück zum Hauptmenu ");
+                case "e":
+                    System.out.println("Zurueck zum Hauptmenue");
                     break;
                 default:
-                    System.out.println(" Ungültige Eingabe.Bitte versuchen Sie es erneut");
+                    System.out.println("Ungueltige Eingabe. Bitte versuchen Sie es erneut.");
             }
-
-        } while (!input.equals("E"));
-    }
-
-    private void artikelNachNummerSortieren() {
-    }
-
-    private void artikelNachNameSortieren() {
-
+        } while (!input.equals("e"));
     }
 
     private void gibArtikellisteAus(List<Artikel> liste) {
@@ -104,120 +101,273 @@ public class UI {
         }
     }
 
+    public void mitarbeiterEingabe() throws IOException {
+        String input;
+        do {
+            System.out.println("\nMitarbeiter Menue: waehlen Sie eine Option");
+            System.out.println("1. Benutzer einloggen!");
+            System.out.println("2. Mitarbeiter registrieren!");
+            System.out.println("3. Neue Artikel anlegen!");
+            System.out.println("4. Artikelbestand erhoehen!");
+            System.out.println("5. Artikel entfernen!");
+            System.out.println("6. Artikelliste speichern");
+            System.out.println("7. Mitarbeiterliste anzeigen");
+            System.out.println("8. Mitarbeiter speichern");
+            System.out.println("e. Zurueck zum Hauptmenue");
+            System.out.print("> Ihre Auswahl: ");
+            System.out.flush();
 
-
-
-        public void mitarbeiterEingabe() throws IOException {
-            String input;
-            do {
-
-                System.out.println("\n  Mitarbeiter Menu: wählen Sie eine Option ");
-                System.out.println("1. Benutzer einloggen!");
-                System.out.println("2. mitarbeiter registrieren!");
-                System.out.println("3. Neue Artikel legen!");
-                System.out.println("4. Artike Bestand erhöhen!");
-                System.out.println("5. Artikel entfernen!");
-                System.out.println("6. Artikelliste speichern");
-                System.out.println("> Ihre Auswahl: ");
-                System.out.flush();
-
-                input = br.readLine();
-                switch (input) {
-                    case "1":
-                        benutzerEinlogge();
-                        break;
-                    case "2":
-                        mitarbeiterRegistrieren();
-                        break;
-                    case "3":
-                        neueArtikelAnlegen();
-                        break;
-                    case "4":
-                        artikelBeststandErhoehen();
-                        break;
-                    case "5":
-                        artikelEntfernen();
-                        break;
-                    case "6":
-                        shop.speicherArtikel();
-                    case "7":
-                        ausloggen();
-                        break;
-                    case "8":
-                        System.out.println("Zurück zum Hauptmenu ");
-                        break;
-                    default:
-                        System.out.println(" Ungültige Eingabe.Bitte versuchen Sie es erneut");
-
-                }
-            } while (!input.equals("E"));
-        }
-
-    private void artikelEntfernen() {
+            input = liesEingabe();
+            List<Mitarbeiter> liste;
+            switch (input) {
+                case "1":
+                    benutzerEinlogge();
+                    break;
+                case "2":
+                    mitarbeiterRegistrieren();
+                    break;
+                case "3":
+                    neueArtikelAnlegen();
+                    break;
+                case "4":
+                    artikelBestandErhoehen();
+                    break;
+                case "5":
+                    artikelEntfernen();
+                    break;
+                case "6":
+                    shop.speicherArtikel();
+                    break;
+                case "7":
+                    liste= shop.gibAlleMitarbeiter();
+                    gibMitarbeiterliste(liste);
+                    break;
+                case "8":
+                    shop.speicherMitarbeiter();
+                    break;
+                case "9":
+                    entferntMitarbeiter();
+                    shop.loescheMitabeiter(2);
+                    break;
+                case "e":
+                    System.out.println("Zurueck zum Hauptmenue");
+                    break;
+                default:
+                    System.out.println("Ungueltige Eingabe. Bitte versuchen Sie es erneut.");
+            }
+        } while (!input.equals("e"));
     }
 
-    private void artikelBeststandErhoehen() {
+    private void entferntMitarbeiter() {
+        System.out.println("Bitte geben Sie die ID des zu löschenden Mitarbeiter ein: ");
+        try {
+            int id = Integer.parseInt(liesEingabe());
+            shop.loescheKunde(id);
+            System.out.println("Mitarbeiter erfolgreich geloescht.");
+        } catch (NumberFormatException | IOException e) {
+            System.out.println("Ungueltige ID.");
+        }
+    }
 
+    private void gibMitarbeiterliste(List<Mitarbeiter> liste) {
+        for (Mitarbeiter mitarbeiter : liste) {
+            System.out.println(mitarbeiter);
+        }
+    }
+    private void artikelEntfernen() throws IOException {
+        System.out.println("Bitte geben Sie die Artikelnummer ein: ");
+        try {
+            int artikelNummer = Integer.parseInt(liesEingabe());
+            shop.loescheArtikel(artikelNummer);
+            System.out.println("Artikel erfolgreich entfernt.");
+        } catch (NumberFormatException e) {
+            System.out.println("Ungueltige Artikelnummer.");
+        }
+    }
+
+    private void artikelBestandErhoehen() {
+        // Implement method to increase article stock
     }
 
     private void neueArtikelAnlegen() throws IOException {
-        System.out.println(" Bezeichnung:");
+        System.out.println("Bezeichnung:");
         String bezeichnung = liesEingabe();
-        System.out.println(" Artikel Nummer:");
+        System.out.println("Artikel Nummer:");
         int artikelNummer = Integer.parseInt(liesEingabe());
-        System.out.println(" Artikel Bestand:");
-        int bestand= Integer.parseInt(liesEingabe());
-        System.out.println(" Artikel Preis:");
-        double preis= Double.parseDouble(liesEingabe());
+        System.out.println("Artikel Bestand:");
+        int bestand = Integer.parseInt(liesEingabe());
+        System.out.println("Artikel Preis:");
+        double preis = Double.parseDouble(liesEingabe());
         try {
-            shop.fuegeArtikelEin( bezeichnung,artikelNummer,bestand,preis);
-            System.out.println(" Einfuegen ist ok!");
-        }catch (ArtikelExistiertBereitsException e){
-            System.out.println(" Fehler beim Einfuegen");
+            shop.fuegeArtikelEin(bezeichnung, artikelNummer, bestand, preis);
+            System.out.println("Neue Mitarbeiter erfolgreich eingefuegt!");
+        } catch (ArtikelExistiertBereitsException e) {
+            System.out.println("Fehler beim Einfuegen. Artikel existiert bereits.");
             e.printStackTrace();
         }
-
-
     }
 
-    private void benutzerEinlogge() {
-
-    }
-
-    private void mitarbeiterRegistrieren() {
+    private void benutzerEinlogge() throws IOException {
+        System.out.println(" Geben Sie Ihren Benutzername ein:");
+        String name = liesEingabe();
+        System.out.println(" Geben Sie Ihr Passwort ein:");
+        String passwort = liesEingabe();
+        System.out.println(shop.eingelogt(name, passwort));
+        boolean loginErfolgreich = shop.eingelogt(name, passwort);
+        if (loginErfolgreich) {
+            System.out.println("Erfolgreich eingeloggt!");
+        } else {
+            System.out.println("Fehler beim Einloggen. Benutzername oder Passwort falsch.");
         }
-
-        private void ausloggen() {
-
-        }
-
-
-
-
-    private void kundeEingabe() {
-
     }
 
+    private void mitarbeiterRegistrieren() throws IOException {
+        System.out.println("Bitte geben Sie Ihren Namen ein: ");
+        String name = liesEingabe();
+        System.out.println("Bitte geben Sie eine ID ein: ");
+        int id = Integer.parseInt(liesEingabe());
+        System.out.println("Bitte geben Sie ein Passwort ein: ");
+        String passwort = liesEingabe();
+        try {
+            shop.NeueMitarbeiter(name, id, passwort);
+            System.out.println("Mitarbeiter erfolgreich registriert.");
+        } catch (MitarbeiterExistiertBereitsException e) {
+            System.out.println("Fehler bei der Registrierung: Mitarbeiter existiert bereits.");
+        }
+    }
 
+    public void kundeEingabe() throws IOException {
+        String input;
+        do {
+            System.out.println("\nKunde Menue: waehlen Sie eine Option\n");
+            System.out.println("1. Benutzer einloggen!");
+            System.out.println("2. Kunde registrieren!");
+            System.out.println("3. Artikel in Warenkorb hinzufuegen!");
+            System.out.println("4. Artikel im Warenkorb anzeigen!");
+            System.out.println("5. Artikel im Warenkorb aendern!");
+            System.out.println("6. Artikel im Warenkorb leeren!");
+            System.out.println("7. Artikel im Warenkorb kaufen und Rechnung anzeigen!");
+            System.out.println("8. Kundenliste anzeigen");
+            System.out.println("9. Kunde speichern");
+            System.out.println("10. Kunde loeschen");
+            System.out.println("e. Zurueck zum Hauptmenue");
+            System.out.print("> Ihre Auswahl: ");
+            System.out.flush();
+
+            input = liesEingabe();
+            List<Kunde> liste;
+            switch (input) {
+                case "1":
+                    benutzerEinlogge();
+                    break;
+                case "2":
+                    kundeRegistrieren();
+                    break;
+                case "3":
+                    artikelInWarenkorbHinzufuegen();
+                    break;
+                case "4":
+                    warenkorbZeigen();
+                    break;
+                case "5":
+                    artikelInWarenkorbÄndern();
+                    break;
+                case "6":
+                    warenkorbLeer();
+                    break;
+                case "7":
+                    kaufen();
+                    rechnungErzeugen();
+                    break;
+                case "8":
+                    liste= shop.gibAlleKunden();
+                    gibKundeliste(liste);
+                    break;
+                case "9":
+                    shop.speicherKunden();
+                    System.out.println("Neue Kunden erfolgreich gespeichert!");
+                    break;
+                case "10":
+                    kundeLoeschen();
+                    shop.loescheKunde(2);
+                    break;
+                case "e":
+                    System.out.println("Zurueck zum Hauptmenue");
+                    break;
+                default:
+                    System.out.println("Ungueltige Eingabe. Bitte versuchen Sie es erneut.");
+            }
+        } while (!input.equals("e"));
+    }
+
+    private void kundeRegistrieren() throws IOException {
+        System.out.println("Bitte geben Sie Ihren Namen ein: ");
+        String name = br.readLine();
+        System.out.println("Bitte geben Sie Ihre ID ein: ");
+        int id = Integer.parseInt(br.readLine());
+        System.out.println("Bitte geben Sie Ihr Passwort ein: ");
+        String passwort = br.readLine();
+        System.out.println("Bitte geben Sie Ihre Adresse ein: ");
+        String adresse = br.readLine();
+        try {
+            shop.NeueKunde(name, id, passwort, adresse);
+            System.out.println("Registrierung erfolgreich. Sie koennen sich jetzt einloggen.");
+        } catch (KundeExistiertBereitsException e) {
+            System.out.println("Ein Kunde mit diesen Anmeldeinformationen existiert bereits.");
+        }
+    }
+
+    private void gibKundeliste(List<Kunde> liste) {
+        for (Kunde kunde : liste) {
+            System.out.println(kunde);
+        }
+    }
+    private void kundeLoeschen() throws IOException {
+        System.out.println("Bitte geben Sie die ID des zu löschenden Kunden ein: ");
+        try {
+            int id = Integer.parseInt(liesEingabe());
+            shop.loescheKunde(id);
+            System.out.println("Kunde erfolgreich geloescht.");
+        } catch (NumberFormatException e) {
+            System.out.println("Ungueltige ID.");
+        }
+    }
+
+    private void artikelInWarenkorbHinzufuegen() {
+        // Implement method to add item to cart
+    }
+
+    private void warenkorbZeigen() {
+        // Implement method to show cart
+    }
+
+    private void artikelInWarenkorbÄndern() {
+        // Implement method to change item in cart
+    }
+
+    private void warenkorbLeer() {
+        // Implement method to empty cart
+    }
+
+    private void kaufen() {
+        // Implement method to buy items in cart
+    }
+
+    private void rechnungErzeugen() {
+        // Implement method to generate receipt
+    }
 
     public void run() {
-        String input = "";
-
-        do {
-            gibMenueAus();
-            try {
-                input = liesEingabe();
-                start(input);
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        } while (!input.equals("q"));
-    }
-    public static void main(String[] args) {
-        UI ui;
         try {
-            ui = new UI("Eshop");
+            start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void main(String[] args) {
+        try {
+            UI ui = new UI("Eshop");
             ui.run();
         } catch (IOException e) {
             e.printStackTrace();
