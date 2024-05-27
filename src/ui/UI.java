@@ -337,17 +337,23 @@ public class UI {
     }
 
     private void artikelInWarenkorbHinzufuegen() throws IOException {
-        System.out.println("Bitte geben Sie die  ein: ");
-        Artikel artikel = new Artikel("",0,0,0);
 
-        System.out.println("Bitte geben Sie die Menge ein: ");
-        int menge = Integer.parseInt(br.readLine());
-            try {
-                shop.FuegeArtikelInWarenkorb(artikel, menge);
-                System.out.println("Artikel zum Warenkorb hinzugefügt.");
-            } catch (WarenkorbExistierBereitsException e) {
-                throw new RuntimeException(e);
-            }
+        System.out.println("Bezeichnung:");
+        String bezeichnung= liesEingabe();
+        System.out.println("Artikel Nummer:");
+        int artikelNummer = Integer.parseInt(liesEingabe());
+        System.out.println("Artikel menge: ");
+        int menge = Integer.parseInt(liesEingabe());
+        System.out.println("Artikel Preis:");
+        double preis = Double.parseDouble(liesEingabe());
+        Artikel artikel= new Artikel(bezeichnung,artikelNummer,preis,menge);
+        try {
+            shop.FuegeArtikelInWarenkorb( artikel,menge);
+            System.out.println("Artikel in Warenkorb eingefuegt!");
+        } catch (WarenkorbExistierBereitsException e) {
+            System.out.println("Fehler beim Einfuegen.");
+            e.printStackTrace();
+        }
 
         }
 
