@@ -3,6 +3,7 @@ package src.persistence;
 import src.valueObjects.Artikel;
 import src.valueObjects.Kunde;
 import src.valueObjects.Mitarbeiter;
+import src.valueObjects.Warenkorb;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -215,8 +216,107 @@ public class FilePersistenceManager implements PersistenceManager {
 
     private boolean speichereMitarbeiter(Mitarbeiter mitarbeiter) throws IOException{
         schreibeZeile(mitarbeiter.getName());
-      schreibeZeile(String.valueOf(mitarbeiter.getId()));
+        schreibeZeile(String.valueOf(mitarbeiter.getId()));
         schreibeZeile(String.valueOf(mitarbeiter.getPasswort()));
-            return true;
-}
-}
+        return true;
+    }
+
+
+
+
+
+
+
+    // Warenkorb
+
+    @Override
+    public List<Warenkorb> leseWarenkorbList(String datenquelle) throws IOException, WarenkorbExistierBereitsException {
+        reader = new BufferedReader(new FileReader(datenquelle));
+        List<Warenkorb> warenkorbMenge = new ArrayList<>();
+        Warenkorb warenkorb;
+        do {
+
+            warenkorb = ladeWarenkorb();
+            if (warenkorb != null) {
+                if (warenkorbMenge.contains(warenkorb)) {
+                    throw new WarenkorbExistierBereitsException (warenkorb.getArtikel().getArtikelNummer(),warenkorb. getArtikel().getBezeichnung());
+                }
+
+                warenkorbMenge.add(warenkorb);
+            }
+        } while (warenkorb != null);
+
+        return warenkorbMenge;
+
+    }
+
+    @Override
+    public void schreibeInWarenkorblList(List<Warenkorb> liste, String datei) throws IOException {
+            writer = new PrintWriter(new BufferedWriter(new FileWriter(datei)));
+
+            for (Warenkorb warenkorb : liste)
+                speichereWarenkorb(warenkorb);
+
+            writer.close();
+        }
+
+
+        private Warenkorb ladeWarenkorb() throws IOException {
+            String bezeichnung = liesZeile();
+            if (bezeichnung == null) {
+                return null;
+            }
+            int artikelNummer;
+            try {
+                artikelNummer = Integer.parseInt((liesZeile()));
+            } catch (NumberFormatException e) {
+                return null;
+            }
+
+            int bestand;
+            try {
+                bestand = Integer.parseInt((liesZeile()));
+            } catch
+            (NumberFormatException e) {
+                return null;
+            }
+
+            double preis;
+            try {
+                preis = Double.parseDouble(liesZeile());
+            } catch (NumberFormatException e) {
+                return null;
+            }
+
+            Artikel artikel= new Artikel(bezeichnung,artikelNummer,preis,bestand);
+
+            return new Warenkorb(artikel,bestand);
+        }
+
+
+        private boolean speichereWarenkorb(Warenkorb warenkorb) {
+            schreibeZeile(warenkorb.getArtikel().getBezeichnung());
+            schreibeZeile(String.valueOf(warenkorb.getArtikel().getArtikelNummer()));
+            schreibeZeile(String.valueOf(warenkorb.getMenge()));
+            schreibeZeile(String.valueOf(warenkorb.getArtikel().getPreis()));
+            if (warenkorb.getMenge() != 0)
+
+                return true;
+            return false;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    }
+

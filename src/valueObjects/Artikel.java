@@ -56,8 +56,9 @@ public class  Artikel{
     // toString-Methode
     @Override
     public String toString() {
-        return "Artikelnummer: " + ArtikelNummer + " Bezeichnung: " + bezeichnung +
-                " Bestand: " + bestand + " Preis: " + preis + " Euro" ;
+        return    " \n Bezeichnung: " + bezeichnung + "\nArtikelnummer: " + ArtikelNummer +
+                " \n Bestand: " + bestand + " \n Preis: " + preis + " Euro" ;
 
     }
+
 }

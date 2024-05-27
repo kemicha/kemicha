@@ -4,9 +4,11 @@ package src.domain;
 import src.persistence.ArtikelExistiertBereitsException;
 import src.persistence.KundeExistiertBereitsException;
 import src.persistence.MitarbeiterExistiertBereitsException;
+import src.persistence.WarenkorbExistierBereitsException;
 import src.valueObjects.Artikel;
 import src.valueObjects.Kunde;
 import src.valueObjects.Mitarbeiter;
+import src.valueObjects.Warenkorb;
 
 import java.io.IOException;
 import java.util.List;
@@ -24,6 +26,7 @@ public class EshopVerwaltung {
         this.datei = datei;
         av = new ArtikelVerwaltung();
         av.liesDaten(datei + "_ArtikelDB.txt");
+        av.liesWarenkorbDaten(datei+ "_Warenkorb.txt");
         kv = new KundeVerwaltung();
         kv.liesDatenVonKunde(datei + "_KundeDB.txt ");
         mv = new MitarbeiterVerwaltung();
@@ -38,6 +41,7 @@ public class EshopVerwaltung {
     public void speicherArtikel() throws IOException {
         av.schreibeDaten(datei + "_ArtikelDB.txt");
     }
+
     public List<Artikel> gibAlleArtikel() {
         return av.getBestand();
     }
@@ -47,7 +51,7 @@ public class EshopVerwaltung {
             throw new ArtikelExistiertBereitsException(artikelNummer, bezeichnung);
         }
 
-        Artikel artikel = new Artikel(bezeichnung, bestand, preis, artikelNummer);
+        Artikel artikel = new Artikel(bezeichnung,artikelNummer, bestand, (int) preis);
         av.getBestand().add(artikel);
         return artikel;
     }
@@ -55,14 +59,15 @@ public class EshopVerwaltung {
     public void loescheArtikel(int artikelNummer) {
         av.loeschen(artikelNummer);
     }
+
     public List<Artikel> sortiereArtikelNachNummer() {
         return av.artikelNachArtikelnummer();
-           }
-    public List<Artikel> sortiereArtikelNachName() {
-        return av. artikelNachBezeichnung();
-
     }
 
+    public List<Artikel> sortiereArtikelNachName() {
+        return av.artikelNachBezeichnung();
+
+    }
 
 
     // KundeVerwaltung
@@ -72,10 +77,10 @@ public class EshopVerwaltung {
     }
 
     public void NeueKunde(String name, int id, String passwort, String adresse) throws KundeExistiertBereitsException {
-        if (!kv.sucheKunde(name,id,passwort,adresse).isEmpty()) {
+        if (!kv.sucheKunde(name, id, passwort, adresse).isEmpty()) {
             throw new KundeExistiertBereitsException(name, id);
         }
-        Kunde kunde = new Kunde(name, id,passwort,adresse);
+        Kunde kunde = new Kunde(name, id, passwort, adresse);
         kv.getKundeList().add(kunde);
 
     }
@@ -83,30 +88,26 @@ public class EshopVerwaltung {
     public void speicherKunden() throws IOException {
         kv.schreibeDatenVonKunde(datei + "_KundeDB.txt");
     }
+
     public void loescheKunde(int id) {
         kv.kundeLoeschen(id);
     }
 
 
-
-
-
-
-
-
-// MitarbeiterVerwaltung
-    public  List<Mitarbeiter> gibAlleMitarbeiter(){
+    // MitarbeiterVerwaltung
+    public List<Mitarbeiter> gibAlleMitarbeiter() {
         return mv.getMitarbeiterList();
     }
 
     public void NeueMitarbeiter(String name, int id, String passwort) throws MitarbeiterExistiertBereitsException {
-        if (!mv.sucheMitarbeiter(name,id,passwort).isEmpty()) {
+        if (!mv.sucheMitarbeiter(name, id, passwort).isEmpty()) {
             throw new MitarbeiterExistiertBereitsException(name, id);
         }
-        Mitarbeiter mitarbeiter = new Mitarbeiter(name,id,passwort);
+        Mitarbeiter mitarbeiter = new Mitarbeiter(name, id, passwort);
         mv.getMitarbeiterList().add(mitarbeiter);
 
     }
+
     public void speicherMitarbeiter() throws IOException {
         mv.schreibeDatenVonMitarbeiter(datei + "_MitarbeiterDB.txt");
     }
@@ -120,18 +121,40 @@ public class EshopVerwaltung {
         return bv.login(name, passwort);
 
     }
+
+
+
+
+// WarenkorbVerwaltung
+
+    public void speicherWarenkorb() throws IOException {
+        av.schreibeDatenInWarenkorb(datei + "_Warenkorb.txt");
+    }
+
+    public List<Warenkorb> gibAlleArtikelInWarenkorb() {
+        return av.getMenge();
+    }
+
+    public Warenkorb FuegeArtikelInWarenkorb(Artikel artikel, int menge) throws WarenkorbExistierBereitsException {
+        if (!av.sucheArtikelInWarenkorb(artikel,menge).isEmpty()) {
+            throw new WarenkorbExistierBereitsException(artikel.getArtikelNummer(),artikel.getBezeichnung());
+        }
+
+        Warenkorb warenkorb = new Warenkorb(artikel,menge);
+        av.getMenge().add(warenkorb);
+        return warenkorb;
+    }
+
+    public void loescheArtikelInWarenkorb(int artikelNummer) {
+        av.loeschenArtikelInWarenkorb(artikelNummer);
+    }
+
+
+
+
+
+
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -4,9 +4,11 @@ import src.domain.EshopVerwaltung;
 import src.persistence.ArtikelExistiertBereitsException;
 import src.persistence.KundeExistiertBereitsException;
 import src.persistence.MitarbeiterExistiertBereitsException;
+import src.persistence.WarenkorbExistierBereitsException;
 import src.valueObjects.Artikel;
 import src.valueObjects.Kunde;
 import src.valueObjects.Mitarbeiter;
+import src.valueObjects.Warenkorb;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -113,6 +115,7 @@ public class UI {
             System.out.println("6. Artikelliste speichern");
             System.out.println("7. Mitarbeiterliste anzeigen");
             System.out.println("8. Mitarbeiter speichern");
+            System.out.println("9. Mitarbeiter loeschen!");
             System.out.println("e. Zurueck zum Hauptmenue");
             System.out.print("> Ihre Auswahl: ");
             System.out.flush();
@@ -147,7 +150,6 @@ public class UI {
                     break;
                 case "9":
                     entferntMitarbeiter();
-                    shop.loescheMitabeiter(2);
                     break;
                 case "e":
                     System.out.println("Zurueck zum Hauptmenue");
@@ -162,7 +164,7 @@ public class UI {
         System.out.println("Bitte geben Sie die ID des zu löschenden Mitarbeiter ein: ");
         try {
             int id = Integer.parseInt(liesEingabe());
-            shop.loescheKunde(id);
+            shop.loescheMitabeiter(id);
             System.out.println("Mitarbeiter erfolgreich geloescht.");
         } catch (NumberFormatException | IOException e) {
             System.out.println("Ungueltige ID.");
@@ -186,7 +188,7 @@ public class UI {
     }
 
     private void artikelBestandErhoehen() {
-        // Implement method to increase article stock
+
     }
 
     private void neueArtikelAnlegen() throws IOException {
@@ -255,7 +257,8 @@ public class UI {
             System.out.flush();
 
             input = liesEingabe();
-            List<Kunde> liste;
+            List<Kunde> list;
+            List<Warenkorb>liste;
             switch (input) {
                 case "1":
                     benutzerEinlogge();
@@ -267,7 +270,8 @@ public class UI {
                     artikelInWarenkorbHinzufuegen();
                     break;
                 case "4":
-                    warenkorbZeigen();
+                    liste = shop.gibAlleArtikelInWarenkorb();
+                    warenkorbZeigen(liste);
                     break;
                 case "5":
                     artikelInWarenkorbÄndern();
@@ -280,8 +284,8 @@ public class UI {
                     rechnungErzeugen();
                     break;
                 case "8":
-                    liste= shop.gibAlleKunden();
-                    gibKundeliste(liste);
+                    list= shop.gibAlleKunden();
+                    gibKundeliste(list);
                     break;
                 case "9":
                     shop.speicherKunden();
@@ -289,7 +293,6 @@ public class UI {
                     break;
                 case "10":
                     kundeLoeschen();
-                    shop.loescheKunde(2);
                     break;
                 case "e":
                     System.out.println("Zurueck zum Hauptmenue");
@@ -333,28 +336,43 @@ public class UI {
         }
     }
 
-    private void artikelInWarenkorbHinzufuegen() {
-        // Implement method to add item to cart
-    }
+    private void artikelInWarenkorbHinzufuegen() throws IOException {
+        System.out.println("Bitte geben Sie die  ein: ");
+        Artikel artikel = new Artikel("",0,0,0);
 
-    private void warenkorbZeigen() {
-        // Implement method to show cart
-    }
+        System.out.println("Bitte geben Sie die Menge ein: ");
+        int menge = Integer.parseInt(br.readLine());
+            try {
+                shop.FuegeArtikelInWarenkorb(artikel, menge);
+                System.out.println("Artikel zum Warenkorb hinzugefügt.");
+            } catch (WarenkorbExistierBereitsException e) {
+                throw new RuntimeException(e);
+            }
+
+        }
+
+
+    private void warenkorbZeigen(List<Warenkorb> liste) {
+            for (Warenkorb warenkorb : liste) {
+                System.out.println(warenkorb);
+            }
+        }
+
 
     private void artikelInWarenkorbÄndern() {
-        // Implement method to change item in cart
+
     }
 
     private void warenkorbLeer() {
-        // Implement method to empty cart
+
     }
 
     private void kaufen() {
-        // Implement method to buy items in cart
+
     }
 
     private void rechnungErzeugen() {
-        // Implement method to generate receipt
+
     }
 
     public void run() {

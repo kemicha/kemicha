@@ -6,7 +6,7 @@ public class Mitarbeiter extends  Benutzer {
     }
     public String toString() {
      return new StringBuilder()
-             .append("Name: ")
+             .append("\n Name: ")
              .append(getName())
              .append("\n Id: ")
              .append(getId())

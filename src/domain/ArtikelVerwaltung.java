@@ -3,7 +3,9 @@ package src.domain;
 import src.persistence.ArtikelExistiertBereitsException;
 import src.persistence.FilePersistenceManager;
 import src.persistence.PersistenceManager;
+import src.persistence.WarenkorbExistierBereitsException;
 import src.valueObjects.*;
+import src.valueObjects.Warenkorb;
 
 import java.io.IOException;
 import java.util.*;
@@ -12,17 +14,19 @@ public class ArtikelVerwaltung {
 
 
     private List<Artikel> artikelList= new ArrayList<>();
+    private PersistenceManager pm = new FilePersistenceManager();
+    private List<Warenkorb> warenkorbList = new ArrayList<>();
 
-   private PersistenceManager pm = new FilePersistenceManager();
 
     public ArtikelVerwaltung() throws IOException {
+        this.warenkorbList = warenkorbList;
+
     }
 
     public void  liesDaten(String datei) throws IOException {
         try {
             artikelList = pm.leseArtikelList(datei);
         } catch (ArtikelExistiertBereitsException e) {
-            System.err.println("Artikeliste enthaelt Duplikate und konnte nicht geladen werden: " + e);
         }
     }
 
@@ -72,6 +76,58 @@ public class ArtikelVerwaltung {
     public void loeschen(int artikelNummer) {
         artikelList.removeIf(Artikel -> Artikel.getArtikelNummer() == artikelNummer);
     }
+
+
+
+
+
+
+// WarenkorbVerwaltung
+
+    public void  liesWarenkorbDaten(String datei) throws IOException {
+        try {
+            warenkorbList =  pm.leseWarenkorbList(datei);
+        } catch ( WarenkorbExistierBereitsException e) {
+        }
+    }
+
+    public void schreibeDatenInWarenkorb ( String datei) throws IOException{
+        pm.schreibeInWarenkorblList(warenkorbList,datei);
+    }
+
+    public List<Warenkorb> getMenge() {
+        return warenkorbList;
+    }
+
+
+    public List<Warenkorb> sucheArtikelInWarenkorb(Artikel artikel, int menge) {
+        List<Warenkorb> suche = new ArrayList<>();
+        Iterator it = getMenge().iterator();
+        while (it.hasNext()){
+        Warenkorb warenkorb = (Warenkorb) it.next();
+            if (warenkorb.getArtikel().equals(artikel) && warenkorb.getMenge() == menge) {
+                suche.add(warenkorb);
+            }
+        }
+        return suche;
+    }
+
+
+    public void loeschenArtikelInWarenkorb(int artikelNummer) {
+        warenkorbList.removeIf(warenkorb -> warenkorb.getArtikel().getArtikelNummer() == artikelNummer);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

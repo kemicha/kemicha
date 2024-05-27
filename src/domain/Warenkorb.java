@@ -1,3 +1,4 @@
+/*
 package src.domain;
 
 import src.valueObjects.Artikel;
@@ -25,9 +26,11 @@ public class Warenkorb {
         this.artikelList = new ArrayList<>();
     }
 
-    /*public void artikelHinzufuegen(Artikel artikel, int menge) {
+    */
+/*public void artikelHinzufuegen(Artikel artikel, int menge) {
         warenkorbArtikel.put(artikel, menge);
-    }*/
+    }*//*
+
 
     public boolean artikelEntfernen(Artikel artikel) {
         if (warenkorbArtikel.containsKey(artikel)) {
@@ -68,3 +71,4 @@ public class Warenkorb {
         }
     }
 }
+*/
