@@ -1,13 +1,15 @@
 package src.valueObjects;
 
 public class Warenkorb {
+    public double gesamtePreis;
     private Artikel artikel;
     private int menge;
 
 
-    public Warenkorb(Artikel artikel, int menge) {
+    public Warenkorb(Artikel artikel, int menge,double gesamtePreis) {
         this.artikel = artikel;
         this.menge = menge;
+        this.gesamtePreis= gesamtePreis;
     }
 
     public Artikel getArtikel() {
@@ -24,6 +26,14 @@ public class Warenkorb {
 
     public void setMenge(int menge) {
         this.menge = menge;
+    }
+
+    public double getGesamtePreis() {
+        return gesamtePreis;
+    }
+
+    public void setGesamtePreis(double gesamtePreis) {
+        this.gesamtePreis = gesamtePreis;
     }
 
     @Override

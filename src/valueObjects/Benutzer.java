@@ -1,23 +1,42 @@
 package src.valueObjects;
 
 
+import java.util.List;
 import java.util.Objects;
 
 public class Benutzer {
     private int id;
-    private String name;
+    private static String name;
     private String passwort;
     private Kunde kunde;
     private Mitarbeiter mitarbeiter;
+    private List<Warenkorb> warenkorb;
 
     public Benutzer( String name,int id,  String passwort) {
         this.name = name;
         this.id = id;
         this.passwort = passwort;
+        this.warenkorb= warenkorb;
 
     }
 
     public Benutzer() {
+    }
+
+    public void setKunde(Kunde kunde) {
+        this.kunde = kunde;
+    }
+
+    public void setMitarbeiter(Mitarbeiter mitarbeiter) {
+        this.mitarbeiter = mitarbeiter;
+    }
+
+    public List<Warenkorb> getWarenkorb() {
+        return warenkorb;
+    }
+
+    public void setWarenkorb(List<Warenkorb> warenkorb) {
+        this.warenkorb = warenkorb;
     }
 
     public int getId() {
@@ -28,7 +47,7 @@ public class Benutzer {
         this.id = id;
     }
 
-    public String getName() {
+    public static String getName() {
         return name;
     }
 
@@ -74,5 +93,8 @@ public class Benutzer {
                 ", passwort='" + passwort + '\'' +
                 '}';
     }
+
+
+
 }
 

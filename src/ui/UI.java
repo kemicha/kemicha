@@ -5,10 +5,7 @@ import src.persistence.ArtikelExistiertBereitsException;
 import src.persistence.KundeExistiertBereitsException;
 import src.persistence.MitarbeiterExistiertBereitsException;
 import src.persistence.WarenkorbExistierBereitsException;
-import src.valueObjects.Artikel;
-import src.valueObjects.Kunde;
-import src.valueObjects.Mitarbeiter;
-import src.valueObjects.Warenkorb;
+import src.valueObjects.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -394,9 +391,18 @@ public class UI {
     }
 
 
-    private void kaufen() {
 
-    }
+       private void kaufen() throws IOException {
+           boolean success = shop.kaufen(new Benutzer());
+           if (success) {
+               System.out.println("Artikel erfolgreich gekauft!");
+           } else {
+               System.out.println("Artikel nicht gefunden oder nicht genügend Bestand.");
+           }
+       }
+
+
+
 
     private void rechnungErzeugen() {
 

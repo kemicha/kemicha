@@ -5,10 +5,7 @@ import src.persistence.ArtikelExistiertBereitsException;
 import src.persistence.KundeExistiertBereitsException;
 import src.persistence.MitarbeiterExistiertBereitsException;
 import src.persistence.WarenkorbExistierBereitsException;
-import src.valueObjects.Artikel;
-import src.valueObjects.Kunde;
-import src.valueObjects.Mitarbeiter;
-import src.valueObjects.Warenkorb;
+import src.valueObjects.*;
 
 import java.io.IOException;
 import java.util.List;
@@ -26,7 +23,7 @@ public class EshopVerwaltung {
         this.datei = datei;
         av = new ArtikelVerwaltung();
         av.liesDaten(datei + "_ArtikelDB.txt");
-        av.liesWarenkorbDaten(datei+ "_Warenkorb.txt");
+        av.liesWarenkorbDaten(datei + "_Warenkorb.txt");
         kv = new KundeVerwaltung();
         kv.liesDatenVonKunde(datei + "_KundeDB.txt ");
         mv = new MitarbeiterVerwaltung();
@@ -51,7 +48,7 @@ public class EshopVerwaltung {
             throw new ArtikelExistiertBereitsException(artikelNummer, bezeichnung);
         }
 
-        Artikel artikel = new Artikel(bezeichnung,artikelNummer, bestand, (int) preis);
+        Artikel artikel = new Artikel(bezeichnung, artikelNummer, bestand, (int) preis);
         av.getArtikelBestand().add(artikel);
         return artikel;
     }
@@ -69,8 +66,8 @@ public class EshopVerwaltung {
 
     }
 
-    public void ehöhenArtikel(int artikelNummer, int menge){
-        av.artikelBestandErhoehen(artikelNummer,menge);
+    public void ehöhenArtikel(int artikelNummer, int menge) {
+        av.artikelBestandErhoehen(artikelNummer, menge);
     }
 
 
@@ -127,8 +124,6 @@ public class EshopVerwaltung {
     }
 
 
-
-
 // WarenkorbVerwaltung
 
     public void speicherWarenkorb() throws IOException {
@@ -143,27 +138,40 @@ public class EshopVerwaltung {
         if (!av.sucheArtikelInWarenkorb(artikel, menge).isEmpty()) {
             throw new WarenkorbExistierBereitsException(artikel, menge);
         }
-        Warenkorb warenkorb = new Warenkorb(artikel,menge);
+        Warenkorb warenkorb = new Warenkorb(artikel, menge);
         av.getAlleArtikelMengeInwarenkorb().add(warenkorb);
     }
-            public Artikel getArtikelByName (String bezeichnung) {
-                for (Artikel artikel : av.artikelList()) {
-                    if (artikel.getBezeichnung().equals(bezeichnung)) {
-                        return artikel;
+
+    public Artikel getArtikelByName(String bezeichnung) {
+        for (Artikel artikel : av.artikelList()) {
+            if (artikel.getBezeichnung().equals(bezeichnung)) {
+                return artikel;
 
 
-                    }
-                }
-                return null;
             }
+        }
+        return null;
+    }
 
-            public void loescheArtikelInWarenkorb ( int artikelNummer){
-                av.loeschenArtikelInWarenkorb(artikelNummer);
-            }
-            public Artikel ArtikelInWarenkorbÄndern(String bezeichnung, int menge){
-        av.ändernWarenkorb(bezeichnung,menge);
-                return null;
-            }
+    public void loescheArtikelInWarenkorb(int artikelNummer) {
+        av.loeschenArtikelInWarenkorb(artikelNummer);
+    }
+
+    public Artikel ArtikelInWarenkorbÄndern(String bezeichnung, int menge) {
+        av.ändernWarenkorb(bezeichnung, menge);
+        return null;
+    }
+
+    public boolean kaufen(Benutzer benutzer) {
+        av.gekauftArtikel(benutzer);
+        return false;
+    }
+
+    public Kunde findKundeByName(String kundenName) {
+        return (Kunde) kv.getKundeList();
+    }
+}
+
 
 
 
@@ -252,4 +260,3 @@ public class EshopVerwaltung {
 
 
 
-}

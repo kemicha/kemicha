@@ -1,58 +1,45 @@
 package src.valueObjects;
 
-import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 public class Rechnung {
+    private Benutzer benutzer;
+    private Date datum;
+    private List< Warenkorb> gekaufteArtikel;
+    private double gesamtePreis;
 
-        private Kunde kunde;
-        private LocalDate datum;
-        private List<Artikel> gekaufteArtikel;
-        private double gesamtePreis;
-        private List<RechnungInfos>rechnungsListe;
-
-    public Rechnung(Kunde kunde, LocalDate datum, List<Artikel> gekaufteArtikel) {
-        this.kunde = kunde;
+    public Rechnung(Benutzer benutzer, Date datum, List<Warenkorb> gekaufteArtikel, double gesamtePreis) {
+        this.benutzer = benutzer;
         this.datum = datum;
-        this.gekaufteArtikel = gekaufteArtikel;
+        this.gekaufteArtikel =gekaufteArtikel;
         this.gesamtePreis = gesamtePreis;
     }
 
-    public Rechnung(Kunde benutzer, Map<Artikel, Integer> artikelMap) {
-
+    public Kunde getBenutzer() {
+        return (Kunde) benutzer;
     }
 
-
-    public static class RechnungInfos {
-        public String kunde;
-        public String artikel;
-        public String artikelPreis;
-        public String artikelGesamtPreis;
-        public String anzahl;
-    }
-    public Kunde getKunde() {
-        return kunde;
+    public void setBenutzer(Benutzer benutzer) {
+        this.benutzer = benutzer;
     }
 
-    public void setKunde(Kunde kunde) {
-        this.kunde = kunde;
-    }
-
-    public LocalDate getDatum() {
+    public Date getDatum() {
         return datum;
     }
 
-    public void setDatum(LocalDate datum) {
+    public void setDatum(Date datum) {
         this.datum = datum;
     }
 
-    public List<Artikel> getGekaufteArtikel() {
+    public List<Warenkorb> getGekaufteArtikel() {
         return gekaufteArtikel;
     }
 
-    public void setGekaufteArtikel(List<Artikel> gekaufteArtikel) {
+    public List<Warenkorb> setGekaufteArtikel() {
         this.gekaufteArtikel = gekaufteArtikel;
+        return null;
     }
 
     public double getGesamtePreis() {
@@ -63,48 +50,46 @@ public class Rechnung {
         this.gesamtePreis = gesamtePreis;
     }
 
-    public void ereignisEinzeigen(String ereignisBeschreibung, int anzahl, Mitarbeiter mitarbeiter) {
-
-
+    @Override
+    public String toString() {
+        return "RechnungObjekt{" +
+                "Benutzer=" + benutzer +
+                ", datum=" + datum +
+                ", gekaufteArtikel=" +gekaufteArtikel +
+                ", gesamtePreis=" + gesamtePreis +
+                '}';
     }
-    public List<RechnungInfos> getRechnungsListe() {
-        return rechnungsListe;
-    }
 
-    public void RechnungErzeugen(Kunde kunde, Map<Artikel, Integer> artikelListe)
-    {
-        rechnungsListe.clear();
-        double _gesamtPreis = 0.0;
-        for (Map.Entry<Artikel, Integer> mapArtikel : artikelListe.entrySet()) {
-            // 1 artikel bezeichnung aus der Liste holen
-            Artikel artikel = mapArtikel.getKey();
-            int anzahl = mapArtikel.getValue();
-            double total =  (anzahl * artikel.getPreis());
-            _gesamtPreis +=total;
-            RechnungInfos r = new RechnungInfos();
-            r.anzahl = String.valueOf(anzahl);
-            r.artikel = artikel.getBezeichnung();
-            r.artikelPreis = String.valueOf(artikel.getPreis());
-            r.artikelGesamtPreis = String.valueOf(total);
-            rechnungsListe.add(r);
-            // Zyklus wiederholen.
-        }
-        this.gesamtePreis = _gesamtPreis;
-    }
 
     public void showRechnung(){
         System.out.println("####### Rechnung #######");
-        System.out.println("Kunde: " + kunde.getName());
+        System.out.println("Benutzer: " + Benutzer.getName());
         System.out.println("Datum: " + datum.toString());
         System.out.println("GesamtPreis: " + this.gesamtePreis);
-        for (RechnungInfos r : rechnungsListe) {
-            System.out.println("Artikel: " + r.artikel +
-                    " Anzahl: " + r.anzahl +
-                    " Stückpreis: " + r.artikelPreis +
-                    " GesamtPreis: " + r.artikelGesamtPreis);
+        for (Warenkorb r : gekaufteArtikel) {
+            System.out.println("Artikel: " + r.getArtikel() +
+                    " Benutzer: " + r.getArtikel()+
+                    " Stückpreis: " + r.getMenge() +
+                    " GesamtPreis: " + r.getGesamtePreis());
         }
         System.out.println("#######  #######");
     }
+
+   /* public void kauftArtikel(Benutzer benutzer) {
+        List<Warenkorb> warenkorb = new ArrayList<>(benutzer.getWarenkorb());
+        double gesamtpreis = warenkorb.stream()
+                .mapToDouble(w -> w.getMenge() * w.getArtikel().getPreis())
+                .sum();
+    }*/
+    /*public void drueckeRechnung() {
+            System.out.println("Rechnung für: " + Benutzer.getName());
+            System.out.println("Datum: " + datum);
+            System.out.println("Artikel:");
+        for (Warenkorb warenkorb :gekaufteArtikel) {
+                Artikel artikel = warenkorb.getArtikel();
+                System.out.println(artikel.getBezeichnung() + " - " + warenkorb.getMenge() + " Stück zu " + artikel.getPreis() + " Euro");
+            }
+            System.out.println("Gesamtpreis: " + gesamtePreis + " Euro");
+        }*/
+
 }
-
-

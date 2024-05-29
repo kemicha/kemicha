@@ -13,31 +13,37 @@ import java.util.*;
 public class ArtikelVerwaltung {
 
 
-    private List<Artikel> artikelList= new ArrayList<>();
+    private List<Artikel> artikelList = new ArrayList<>();
     private PersistenceManager pm = new FilePersistenceManager();
     private List<Warenkorb> warenkorbList = new ArrayList<>();
+    private List<Rechnung> rechnung = new ArrayList<>();
+    private List<Ereignis>  ereignisList= new ArrayList<>();
 
 
     public ArtikelVerwaltung() throws IOException {
         this.warenkorbList = warenkorbList;
+        this.rechnung = rechnung;
+        this.ereignisList= ereignisList;
 
     }
 
-    public void  liesDaten(String datei) throws IOException {
+
+    public void liesDaten(String datei) throws IOException {
         try {
             artikelList = pm.leseArtikelList(datei);
         } catch (ArtikelExistiertBereitsException e) {
         }
     }
 
-    public void schreibeDaten ( String datei) throws IOException{
-        pm.schreibeArtikelList(artikelList,datei);
+    public void schreibeDaten(String datei) throws IOException {
+        pm.schreibeArtikelList(artikelList, datei);
     }
 
     public List<Artikel> getArtikelBestand() {
         return artikelList;
     }
-    public List<Artikel> artikelList(){
+
+    public List<Artikel> artikelList() {
         return artikelList;
     }
 
@@ -53,15 +59,16 @@ public class ArtikelVerwaltung {
         }
         return suche;
     }
+
     public List<Artikel> artikelNachBezeichnung() {
         artikelList.sort(Comparator.comparing(Artikel::getBezeichnung));
         return artikelList;
     }
 
-    public void  artikelBestandErhoehen(int atikelNummer,int menge) {
+    public void artikelBestandErhoehen(int atikelNummer, int menge) {
 
         for (Artikel artikels : getArtikelBestand()) {
-            int bumber =artikels.getArtikelNummer();
+            int bumber = artikels.getArtikelNummer();
             if (artikels.getArtikelNummer() != atikelNummer) {
                 return;
             }
@@ -71,8 +78,9 @@ public class ArtikelVerwaltung {
         }
 
     }
+
     public List<Artikel> artikelNachArtikelnummer() {
-        artikelList.sort( Comparator.comparingInt(Artikel::getArtikelNummer));
+        artikelList.sort(Comparator.comparingInt(Artikel::getArtikelNummer));
         return artikelList;
     }
 
@@ -94,21 +102,26 @@ public class ArtikelVerwaltung {
     }
 
 
-
-
-
-
 // WarenkorbVerwaltung
 
-    public void  liesWarenkorbDaten(String datei) throws IOException {
+
+    public List<Warenkorb> getWarenkorbList() {
+        return warenkorbList;
+    }
+
+    public List<Ereignis> getEreignisListe() {
+        return ereignisList;
+    }
+
+    public void liesWarenkorbDaten(String datei) throws IOException {
         try {
-            warenkorbList =  pm.leseWarenkorbList(datei);
-        } catch ( WarenkorbExistierBereitsException e) {
+            warenkorbList = pm.leseWarenkorbList(datei);
+        } catch (WarenkorbExistierBereitsException e) {
         }
     }
 
-    public void schreibeDatenInWarenkorb ( String datei) throws IOException{
-        pm.schreibeInWarenkorblList(warenkorbList,datei);
+    public void schreibeDatenInWarenkorb(String datei) throws IOException {
+        pm.schreibeInWarenkorblList(warenkorbList, datei);
     }
 
     public List<Warenkorb> getAlleArtikelMengeInwarenkorb() {
@@ -119,10 +132,10 @@ public class ArtikelVerwaltung {
     public List<Warenkorb> sucheArtikelInWarenkorb(Artikel artikel, int menge) {
         List<Warenkorb> suche = new ArrayList<>();
         Iterator it = getAlleArtikelMengeInwarenkorb().iterator();
-        while (it.hasNext()){
-        Warenkorb warenkorb = (Warenkorb) it.next();
-            warenkorb.setMenge(warenkorb.getMenge()+menge);
-            if (warenkorb.getArtikel().equals(artikel)&& warenkorb.getMenge() == menge) {
+        while (it.hasNext()) {
+            Warenkorb warenkorb = (Warenkorb) it.next();
+            warenkorb.setMenge(warenkorb.getMenge() + menge);
+            if (warenkorb.getArtikel().equals(artikel) && warenkorb.getMenge() == menge) {
                 suche.add(warenkorb);
             }
         }
@@ -134,7 +147,7 @@ public class ArtikelVerwaltung {
         warenkorbList.removeIf(warenkorb -> warenkorb.getArtikel().getArtikelNummer() == artikelNummer);
     }
 
-    public void ändernWarenkorb(String bezeichnung,int menge) {
+    public void ändernWarenkorb(String bezeichnung, int menge) {
         for (Warenkorb warenkorb : warenkorbList) {
             if (warenkorb.getArtikel().getBezeichnung() == bezeichnung) {
                 warenkorb.setMenge(menge);
@@ -144,7 +157,79 @@ public class ArtikelVerwaltung {
     }
 
 
+
+    public void gekauftArtikel(Benutzer benutzer) {
+        List<Warenkorb> warenkorbList = getWarenkorbList();
+        double gesamtpreis = 0;
+        for (Warenkorb warenkorb : warenkorbList) {
+            Artikel artikel = warenkorb.getArtikel();
+            int menge = warenkorb.getMenge();
+            artikel.setBestand(artikel.getBestand() - menge);
+            gesamtpreis += artikel.getPreis() * menge;
+        }
+        // die Recchnung
+        Rechnung rechnung = new Rechnung(benutzer, new Date(), warenkorbList, gesamtpreis);
+        rechnung.drueckeRechnung();
+        //get Warenkorb Leer
+        warenkorbList.clear();
+        // speicher in Ereignis
+        ereignisErfassen((Kunde) benutzer, warenkorbList);
     }
+
+
+  /*  private void ereignisErfassen(Benutzer benutzer, List<Warenkorb> gekaufteArtikel) {
+        int datum = new Date().getDay();
+        for (Warenkorb warenkorb : gekaufteArtikel) {
+            Artikel artikel = warenkorb.getArtikel();
+            int menge = warenkorb.getMenge();
+
+        }
+    }*/
+
+    public void ereignisErfassen(Benutzer benutzer, List<Warenkorb> warenkorbList) {
+        Date datum = new Date();
+        for (Warenkorb warenkorb : warenkorbList) {
+            Artikel artikel = warenkorb.getArtikel();
+            int menge = warenkorb.getMenge();
+            Ereignis ereignis = new Ereignis(benutzer,datum,artikel,menge);
+            ereignisList.add(ereignis);
+        }
+    }
+
+
+    public boolean artikelAusWarenkorbKaufen () {
+        if (artikelList.isEmpty()) {
+            System.out.println("Der Warenkorb ist leer. Es gibt keine Artikel zum Kaufen.");
+            return false;
+        } else {
+            // gesamt preis initialisieren
+            double gesamtPreis = 0.0;
+            Kunde kunde = null;
+            rechnung = new Rechnung (benutzer, artikelList);
+            artikelList.clear();
+            System.out.println("Die Artikel im Warenkorb wurden gekauft.");
+            rechnung.showRechnung();
+        }
+        return true;
+    }
+
+
+
+    public void showAlleEreignisse()
+    {
+        for (Ereignis er : ereignisList)
+        {
+            System.out.println("> " + String.valueOf(er.getDatum())
+                    +" " + String.valueOf(er.getBenutzer())
+                    +" " + String.valueOf(er.getErgeinis())
+                    +" Artikel: " + String.valueOf(er.getArtikel().getBezeichnung())
+                    +" Stükzahl: " + String.valueOf(er.getAnzahl()));
+        }
+    }
+}
+
+
+
 
 
 

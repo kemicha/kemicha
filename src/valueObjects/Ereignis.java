@@ -7,37 +7,30 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Ereignis {
-    private String benutzer="";
-    private String ergeinis="";
+    private Benutzer benutzer;
     private Artikel artikel;
     private int anzahl=0;
     private Date datum = new Date();
-    private int id;
     private DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
 
-    public Ereignis(String benutzer, int id, String ergeinis, Artikel artikel,int anzahl){
+    public Ereignis(Benutzer benutzer,Date datum, Artikel artikel,int anzahl){
         this.benutzer = benutzer;
-        this.ergeinis= ergeinis;
         this.artikel= artikel;
         this.anzahl= anzahl;
         this.datum = new Date();
         this.dateFormat= dateFormat;
-        this.id = id;
+
     }
 
     public Integer getId() {
         return getId();
     }
 
-    public String getBenutzer() {
+    public Benutzer getBenutzer() {
         return benutzer;
     }
 
-    public String getErgeinis()
-    {
-        return this.ergeinis;
-    }
-    // Getters und Setters
+
     public Date getDatum(){
         return this.datum;
     }
@@ -58,6 +51,15 @@ public class Ereignis {
         this.artikel = artikel;
     }
 
-
+    @Override
+    public String toString() {
+        return "Ereignis{" +
+                "benutzer=" + benutzer +
+                ", artikel=" + artikel +
+                ", anzahl=" + anzahl +
+                ", datum=" + datum +
+                ", dateFormat=" + dateFormat +
+                '}';
+    }
 }
 
