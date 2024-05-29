@@ -239,7 +239,7 @@ public class FilePersistenceManager implements PersistenceManager {
             warenkorb = ladeWarenkorb();
             if (warenkorb != null) {
                 if (warenkorbMenge.contains(warenkorb)) {
-                    throw new WarenkorbExistierBereitsException (warenkorb.getArtikel().getArtikelNummer(),warenkorb. getArtikel().getBezeichnung());
+                    throw new WarenkorbExistierBereitsException (warenkorb.getArtikel(),warenkorb.getMenge());
                 }
 
                 warenkorbMenge.add(warenkorb);

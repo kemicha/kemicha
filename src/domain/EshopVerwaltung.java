@@ -43,7 +43,7 @@ public class EshopVerwaltung {
     }
 
     public List<Artikel> gibAlleArtikel() {
-        return av.getBestand();
+        return av.getArtikelBestand();
     }
 
     public Artikel fuegeArtikelEin(String bezeichnung, int artikelNummer, int bestand, double preis) throws ArtikelExistiertBereitsException {
@@ -52,7 +52,7 @@ public class EshopVerwaltung {
         }
 
         Artikel artikel = new Artikel(bezeichnung,artikelNummer, bestand, (int) preis);
-        av.getBestand().add(artikel);
+        av.getArtikelBestand().add(artikel);
         return artikel;
     }
 
@@ -67,6 +67,10 @@ public class EshopVerwaltung {
     public List<Artikel> sortiereArtikelNachName() {
         return av.artikelNachBezeichnung();
 
+    }
+
+    public void ehöhenArtikel(int artikelNummer, int menge){
+        av.artikelBestandErhoehen(artikelNummer,menge);
     }
 
 
@@ -132,29 +136,41 @@ public class EshopVerwaltung {
     }
 
     public List<Warenkorb> gibAlleArtikelInWarenkorb() {
-        return av.getMenge();
+        return av.getAlleArtikelMengeInwarenkorb();
     }
 
-    public Warenkorb FuegeArtikelInWarenkorb(Artikel artikel, int menge) throws WarenkorbExistierBereitsException {
-        if (!av.sucheArtikelInWarenkorb(artikel,menge).isEmpty()) {
-            throw new WarenkorbExistierBereitsException(artikel.getArtikelNummer(),artikel.getBezeichnung());
+    public void FuegeArtikelInWarenkorb(Artikel artikel, int menge) throws WarenkorbExistierBereitsException {
+        if (!av.sucheArtikelInWarenkorb(artikel, menge).isEmpty()) {
+            throw new WarenkorbExistierBereitsException(artikel, menge);
         }
-
         Warenkorb warenkorb = new Warenkorb(artikel,menge);
-        av.getMenge().add(warenkorb);
-        return warenkorb;
+        av.getAlleArtikelMengeInwarenkorb().add(warenkorb);
     }
-
-    public void loescheArtikelInWarenkorb(int artikelNummer) {
-        av.loeschenArtikelInWarenkorb(artikelNummer);
-    }
-
-
+            public Artikel getArtikelByName (String bezeichnung) {
+                for (Artikel artikel : av.artikelList()) {
+                    if (artikel.getBezeichnung().equals(bezeichnung)) {
+                        return artikel;
 
 
+                    }
+                }
+                return null;
+            }
+
+            public void loescheArtikelInWarenkorb ( int artikelNummer){
+                av.loeschenArtikelInWarenkorb(artikelNummer);
+            }
+            public Artikel ArtikelInWarenkorbÄndern(String bezeichnung, int menge){
+        av.ändernWarenkorb(bezeichnung,menge);
+                return null;
+            }
 
 
-}
+
+
+
+
+
 
 
 
@@ -236,8 +252,4 @@ public class EshopVerwaltung {
 
 
 
-
-
-
-
-
+}

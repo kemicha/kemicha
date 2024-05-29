@@ -34,14 +34,17 @@ public class ArtikelVerwaltung {
         pm.schreibeArtikelList(artikelList,datei);
     }
 
-    public List<Artikel> getBestand() {
+    public List<Artikel> getArtikelBestand() {
+        return artikelList;
+    }
+    public List<Artikel> artikelList(){
         return artikelList;
     }
 
 
     public List<Artikel> sucheArtikelNachName(String bezeichnung) {
         List<Artikel> suche = new ArrayList<>();
-        Iterator it = getBestand().iterator();
+        Iterator it = getArtikelBestand().iterator();
         while (it.hasNext()) {
             Artikel artikel = (Artikel) it.next();
             if (artikel.getBezeichnung().equals(bezeichnung)) {
@@ -55,6 +58,19 @@ public class ArtikelVerwaltung {
         return artikelList;
     }
 
+    public void  artikelBestandErhoehen(int atikelNummer,int menge) {
+
+        for (Artikel artikels : getArtikelBestand()) {
+            int bumber =artikels.getArtikelNummer();
+            if (artikels.getArtikelNummer() != atikelNummer) {
+                return;
+            }
+
+            artikels.setBestand(artikels.getBestand() + menge);
+
+        }
+
+    }
     public List<Artikel> artikelNachArtikelnummer() {
         artikelList.sort( Comparator.comparingInt(Artikel::getArtikelNummer));
         return artikelList;
@@ -95,17 +111,18 @@ public class ArtikelVerwaltung {
         pm.schreibeInWarenkorblList(warenkorbList,datei);
     }
 
-    public List<Warenkorb> getMenge() {
+    public List<Warenkorb> getAlleArtikelMengeInwarenkorb() {
         return warenkorbList;
     }
 
 
     public List<Warenkorb> sucheArtikelInWarenkorb(Artikel artikel, int menge) {
         List<Warenkorb> suche = new ArrayList<>();
-        Iterator it = getMenge().iterator();
+        Iterator it = getAlleArtikelMengeInwarenkorb().iterator();
         while (it.hasNext()){
         Warenkorb warenkorb = (Warenkorb) it.next();
-            if (warenkorb.getArtikel().equals(artikel) && warenkorb.getMenge() == menge) {
+            warenkorb.setMenge(warenkorb.getMenge()+menge);
+            if (warenkorb.getArtikel().equals(artikel)&& warenkorb.getMenge() == menge) {
                 suche.add(warenkorb);
             }
         }
@@ -115,6 +132,18 @@ public class ArtikelVerwaltung {
 
     public void loeschenArtikelInWarenkorb(int artikelNummer) {
         warenkorbList.removeIf(warenkorb -> warenkorb.getArtikel().getArtikelNummer() == artikelNummer);
+    }
+
+    public void ändernWarenkorb(String bezeichnung,int menge) {
+        for (Warenkorb warenkorb : warenkorbList) {
+            if (warenkorb.getArtikel().getBezeichnung() == bezeichnung) {
+                warenkorb.setMenge(menge);
+                return;
+            }
+        }
+    }
+
+
     }
 
 
@@ -374,4 +403,4 @@ public class ArtikelVerwaltung {
         }
         return foundArtikels;
     }*/
-}
+

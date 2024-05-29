@@ -25,4 +25,16 @@ public class Warenkorb {
     public void setMenge(int menge) {
         this.menge = menge;
     }
+
+    @Override
+    public String toString() {
+        return new StringBuilder()
+                .append("\n Warenkorb: ")
+                .append("Artikel")
+                .append(artikel)
+                .append("\n menge = ")
+                .append(menge)
+                .toString();
+    }
+
 }
