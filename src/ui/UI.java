@@ -118,7 +118,8 @@ public class UI {
             System.out.flush();
 
             input = liesEingabe();
-            List<Mitarbeiter> liste;
+            List<Mitarbeiter> liste ;
+            List<Artikel>list;
             switch (input) {
                 case "1":
                     benutzerEinlogge();
@@ -137,6 +138,7 @@ public class UI {
                     break;
                 case "6":
                     shop.speicherArtikel();
+                     gibArtikellisteAus(liste);
                     break;
                 case "7":
                     liste= shop.gibAlleMitarbeiter();
@@ -351,6 +353,7 @@ public class UI {
         System.out.print("Geben Sie die Menge ein: ");
         int menge = Integer.parseInt(liesEingabe());
 
+
         if (menge <= 0 || menge > artikel.getBestand()) {
             System.out.println("Ungültige Menge oder nicht genügend Bestand für den Artikel.");
             return;
@@ -393,12 +396,12 @@ public class UI {
 
 
        private void kaufen() throws IOException {
-           boolean success = shop.kaufen(new Benutzer());
+          /* boolean success = shop.kaufen(new Benutzer());
            if (success) {
                System.out.println("Artikel erfolgreich gekauft!");
            } else {
                System.out.println("Artikel nicht gefunden oder nicht genügend Bestand.");
-           }
+           }*/
        }
 
 

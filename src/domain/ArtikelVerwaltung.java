@@ -79,6 +79,43 @@ public class ArtikelVerwaltung {
 
     }
 
+    public void bestandErhoehen(String bezeichnung, int menge) {
+        if (artikelList == null) {
+            return;
+        }
+        Artikel artikel = artikelList.stream()
+                .filter(a -> a.getBezeichnung().equals(bezeichnung))
+                .findFirst()
+                .orElse(null);
+
+        if (artikel != null) {
+            artikel.setBestand(artikel.getBestand() + menge);
+
+        } else {
+            System.out.println("Artikel unbekannt!");
+            return;
+        }
+    }
+
+    /*public void bestandVerringern(String bezeichnung, int menge) {
+        Artikel artikel = artikelList.stream()
+                .filter(a -> a.getBezeichnung().equals(bezeichnung))
+                .findFirst()
+                .orElse(null);
+        if (artikel != null) {
+
+            int aktuellerBestand = artikel.getBestand();
+        }
+            if (aktuellerBestand >= menge) {
+                artikel.setBestand(aktuellerBestand - menge);
+                ereignisList.add(new Ereignis());
+            }
+
+
+    }*/
+
+
+
     public List<Artikel> artikelNachArtikelnummer() {
         artikelList.sort(Comparator.comparingInt(Artikel::getArtikelNummer));
         return artikelList;
@@ -147,6 +184,30 @@ public class ArtikelVerwaltung {
         warenkorbList.removeIf(warenkorb -> warenkorb.getArtikel().getArtikelNummer() == artikelNummer);
     }
 
+   /* public boolean artikelImWarenkorbRaus(Artikel artikel, int menge) {
+        boolean isOk = false;
+        if (artikelList.containsKey(artikel)) {
+            int vorhandeneMenge = artikelList.getArtikel();
+
+            if (menge >= vorhandeneMenge) {
+                artikelList.remove(artikel);
+                System.out.println("(" + vorhandeneMenge + ") Stück (e) von Artikel " + artikel.getBezeichnung() + " wurden aus dem Warenkorb entfernt.");
+
+                ereignisList.add(new Ereignis("Kunde",0, "Bestand entfernt",artikel,menge ));
+                isOk = true;
+            } else {
+                artikelMap.put(artikel, vorhandeneMenge - menge);
+                System.out.println(menge + " Stück(e) von Artikel " + artikel.getBezeichnung() + " wurden aus dem Warenkorb entfernt.");
+
+                ereignisList.add(new Ereignis("Kunde",0, "Bestand verringert",artikel,menge ));
+                isOk = true;
+            }
+        } else {
+            System.out.println("Artikel " + artikel.getBezeichnung() + " befindet sich nicht im Warenkorb.");
+        }
+        return isOk;
+    }*/
+
     public void ändernWarenkorb(String bezeichnung, int menge) {
         for (Warenkorb warenkorb : warenkorbList) {
             if (warenkorb.getArtikel().getBezeichnung() == bezeichnung) {
@@ -158,6 +219,7 @@ public class ArtikelVerwaltung {
 
 
 
+/*
     public void gekauftArtikel(Benutzer benutzer) {
         List<Warenkorb> warenkorbList = getWarenkorbList();
         double gesamtpreis = 0;
@@ -169,12 +231,13 @@ public class ArtikelVerwaltung {
         }
         // die Recchnung
         Rechnung rechnung = new Rechnung(benutzer, new Date(), warenkorbList, gesamtpreis);
-        rechnung.drueckeRechnung();
+        rechnung.zeigeRechung();
         //get Warenkorb Leer
         warenkorbList.clear();
         // speicher in Ereignis
         ereignisErfassen((Kunde) benutzer, warenkorbList);
     }
+*/
 
 
   /*  private void ereignisErfassen(Benutzer benutzer, List<Warenkorb> gekaufteArtikel) {
@@ -197,23 +260,20 @@ public class ArtikelVerwaltung {
     }
 
 
-    public boolean artikelAusWarenkorbKaufen () {
+ /*   public boolean artikelAusWarenkorbKaufen () {
         if (artikelList.isEmpty()) {
-            System.out.println("Der Warenkorb ist leer. Es gibt keine Artikel zum Kaufen.");
             return false;
         } else {
             // gesamt preis initialisieren
             double gesamtPreis = 0.0;
-            Kunde kunde = null;
+            Benutzer benutzer = null;
             rechnung = new Rechnung (benutzer, artikelList);
             artikelList.clear();
             System.out.println("Die Artikel im Warenkorb wurden gekauft.");
-            rechnung.showRechnung();
+            rechnung.zeigeRechnung();
         }
         return true;
-    }
-
-
+    }*/
 
     public void showAlleEreignisse()
     {
@@ -221,7 +281,7 @@ public class ArtikelVerwaltung {
         {
             System.out.println("> " + String.valueOf(er.getDatum())
                     +" " + String.valueOf(er.getBenutzer())
-                    +" " + String.valueOf(er.getErgeinis())
+                    +" " + String.valueOf(er.getEreignis())
                     +" Artikel: " + String.valueOf(er.getArtikel().getBezeichnung())
                     +" Stükzahl: " + String.valueOf(er.getAnzahl()));
         }

@@ -162,10 +162,10 @@ public class EshopVerwaltung {
         return null;
     }
 
-    public boolean kaufen(Benutzer benutzer) {
+   /* public boolean kaufen(Benutzer benutzer) {
         av.gekauftArtikel(benutzer);
         return false;
-    }
+    }*/
 
     public Kunde findKundeByName(String kundenName) {
         return (Kunde) kv.getKundeList();

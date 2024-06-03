@@ -1,6 +1,5 @@
 package src.valueObjects;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -16,6 +15,7 @@ public class Rechnung {
         this.gekaufteArtikel =gekaufteArtikel;
         this.gesamtePreis = gesamtePreis;
     }
+
 
     public Kunde getBenutzer() {
         return (Kunde) benutzer;
@@ -61,35 +61,23 @@ public class Rechnung {
     }
 
 
-    public void showRechnung(){
+  /*  public void zeigeRechung() {
         System.out.println("####### Rechnung #######");
-        System.out.println("Benutzer: " + Benutzer.getName());
+        System.out.println("Benutzer: " + Benutzer.getName() );
         System.out.println("Datum: " + datum.toString());
         System.out.println("GesamtPreis: " + this.gesamtePreis);
-        for (Warenkorb r : gekaufteArtikel) {
-            System.out.println("Artikel: " + r.getArtikel() +
-                    " Benutzer: " + r.getArtikel()+
-                    " Stückpreis: " + r.getMenge() +
-                    " GesamtPreis: " + r.getGesamtePreis());
+        for (Warenkorb r : getGekaufteArtikel()) {
+            System.out.println(new StringBuilder().append("Artikel: ")
+                    .append(r.getArtikel())
+                    .append(" Benutzer: ")
+                    .append(r.getArtikel())
+                    .append(" Stückpreis: ")
+                    .append(r.getMenge())
+                    .append(" GesamtPreis: ")
+                    .append(r.getGesamtePreis()));
         }
         System.out.println("#######  #######");
-    }
-
-   /* public void kauftArtikel(Benutzer benutzer) {
-        List<Warenkorb> warenkorb = new ArrayList<>(benutzer.getWarenkorb());
-        double gesamtpreis = warenkorb.stream()
-                .mapToDouble(w -> w.getMenge() * w.getArtikel().getPreis())
-                .sum();
     }*/
-    /*public void drueckeRechnung() {
-            System.out.println("Rechnung für: " + Benutzer.getName());
-            System.out.println("Datum: " + datum);
-            System.out.println("Artikel:");
-        for (Warenkorb warenkorb :gekaufteArtikel) {
-                Artikel artikel = warenkorb.getArtikel();
-                System.out.println(artikel.getBezeichnung() + " - " + warenkorb.getMenge() + " Stück zu " + artikel.getPreis() + " Euro");
-            }
-            System.out.println("Gesamtpreis: " + gesamtePreis + " Euro");
-        }*/
+
 
 }

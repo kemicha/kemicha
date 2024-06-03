@@ -6,7 +6,7 @@ public class Warenkorb {
     private int menge;
 
 
-    public Warenkorb(Artikel artikel, int menge,double gesamtePreis) {
+    public Warenkorb(Artikel artikel, int menge) {
         this.artikel = artikel;
         this.menge = menge;
         this.gesamtePreis= gesamtePreis;

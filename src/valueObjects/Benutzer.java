@@ -6,7 +6,7 @@ import java.util.Objects;
 
 public class Benutzer {
     private int id;
-    private static String name;
+    private String name;
     private String passwort;
     private Kunde kunde;
     private Mitarbeiter mitarbeiter;
@@ -47,7 +47,7 @@ public class Benutzer {
         this.id = id;
     }
 
-    public static String getName() {
+    public  String getName() {
         return name;
     }
 

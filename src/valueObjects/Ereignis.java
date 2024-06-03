@@ -11,10 +11,13 @@ public class Ereignis {
     private Artikel artikel;
     private int anzahl=0;
     private Date datum = new Date();
+    private String ereignis= "";
     private DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
 
-    public Ereignis(Benutzer benutzer,Date datum, Artikel artikel,int anzahl){
+    public Ereignis(Benutzer benutzer, Date datum, Artikel artikel, int anzahl){
         this.benutzer = benutzer;
+        this.ereignis= ereignis;
+        this.datum= datum;
         this.artikel= artikel;
         this.anzahl= anzahl;
         this.datum = new Date();
@@ -30,6 +33,9 @@ public class Ereignis {
         return benutzer;
     }
 
+    public String getEreignis() {
+        return ereignis;
+    }
 
     public Date getDatum(){
         return this.datum;
@@ -50,6 +56,8 @@ public class Ereignis {
     public void setArtikel(Artikel artikel) {
         this.artikel = artikel;
     }
+
+
 
     @Override
     public String toString() {

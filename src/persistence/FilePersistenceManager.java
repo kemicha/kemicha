@@ -288,9 +288,9 @@ public class FilePersistenceManager implements PersistenceManager {
                 return null;
             }
 
-            Artikel artikel= new Artikel(bezeichnung,artikelNummer,preis,bestand);
+            Artikel artikel= new Artikel(bezeichnung,artikelNummer,preis,bestand) ;
 
-            return new Warenkorb(artikel,bestand);
+            return new Warenkorb(artikel, bestand);
         }
 
 

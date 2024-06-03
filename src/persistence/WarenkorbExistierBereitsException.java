@@ -6,7 +6,7 @@ public class WarenkorbExistierBereitsException extends Throwable {
 
 
     public WarenkorbExistierBereitsException(Artikel artikel, int menge) {
-        super("Artikel " + artikel + " mit Menge " + menge + " existiert bereits im Warenkorb.");
+        super("Artikel " + artikel + " mit Menge " + menge +  " existiert bereits im Warenkorb.");
 
     }
 }
