@@ -1,12 +1,17 @@
 package src.valueObjects;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Warenkorb {
     public double gesamtePreis;
     private Artikel artikel;
     private int menge;
+    private Map<Artikel ,Integer > artikelListe;
 
 
     public Warenkorb(Artikel artikel, int menge) {
+        this.artikelListe = new HashMap<>();
         this.artikel = artikel;
         this.menge = menge;
         this.gesamtePreis= gesamtePreis;
@@ -34,6 +39,16 @@ public class Warenkorb {
 
     public void setGesamtePreis(double gesamtePreis) {
         this.gesamtePreis = gesamtePreis;
+    }
+
+
+    public void artikelInWarenkorbRein() {
+        if (artikelListe.containsKey(artikel)) {
+            int vorhandeneMenge = artikelListe.get(artikel);
+            artikelListe.put(artikel, vorhandeneMenge + menge);
+        } else {
+            artikelListe.put(artikel, menge);
+        }
     }
 
     @Override

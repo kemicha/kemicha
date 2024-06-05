@@ -13,17 +13,17 @@ import java.util.*;
 public class ArtikelVerwaltung {
 
 
-    private List<Artikel> artikelList = new ArrayList<>();
+    private List <Artikel> artikelList = new ArrayList<>();
     private PersistenceManager pm = new FilePersistenceManager();
     private List<Warenkorb> warenkorbList = new ArrayList<>();
     private List<Rechnung> rechnung = new ArrayList<>();
-    private List<Ereignis>  ereignisList= new ArrayList<>();
+    private List<Ereignis> ereignisList = new ArrayList<>();
 
 
     public ArtikelVerwaltung() throws IOException {
         this.warenkorbList = warenkorbList;
         this.rechnung = rechnung;
-        this.ereignisList= ereignisList;
+        this.ereignisList = ereignisList;
 
     }
 
@@ -65,21 +65,7 @@ public class ArtikelVerwaltung {
         return artikelList;
     }
 
-    public void artikelBestandErhoehen(int atikelNummer, int menge) {
-
-        for (Artikel artikels : getArtikelBestand()) {
-            int bumber = artikels.getArtikelNummer();
-            if (artikels.getArtikelNummer() != atikelNummer) {
-                return;
-            }
-
-            artikels.setBestand(artikels.getBestand() + menge);
-
-        }
-
-    }
-
-    public void bestandErhoehen(String bezeichnung, int menge) {
+    public void artikelBestandErhoehen(String bezeichnung, int menge) {
         if (artikelList == null) {
             return;
         }
@@ -96,25 +82,6 @@ public class ArtikelVerwaltung {
             return;
         }
     }
-
-    /*public void bestandVerringern(String bezeichnung, int menge) {
-        Artikel artikel = artikelList.stream()
-                .filter(a -> a.getBezeichnung().equals(bezeichnung))
-                .findFirst()
-                .orElse(null);
-        if (artikel != null) {
-
-            int aktuellerBestand = artikel.getBestand();
-        }
-            if (aktuellerBestand >= menge) {
-                artikel.setBestand(aktuellerBestand - menge);
-                ereignisList.add(new Ereignis());
-            }
-
-
-    }*/
-
-
 
     public List<Artikel> artikelNachArtikelnummer() {
         artikelList.sort(Comparator.comparingInt(Artikel::getArtikelNummer));
@@ -179,10 +146,63 @@ public class ArtikelVerwaltung {
         return suche;
     }
 
+    public void artikelInWarenkorbRein(Artikel artikel, int menge) {
+        for (Warenkorb eintrag : warenkorbList) {
+            if (eintrag.getArtikel().equals(artikel)) {
+                eintrag.setMenge(eintrag.getMenge() + menge);
+                return;
+            }
+        }
+        warenkorbList.add(new Warenkorb (artikel, menge));
+    }
+
+    public void printWarenkorb() {
+        for (Warenkorb eintrag : warenkorbList) {
+            System.out.println("Artikel: " + eintrag.getArtikel().getBezeichnung() + ", Menge: " + eintrag.getMenge());
+        }
+    }
+
+
+
+    public void fuegeArtikelInWarenkorbEin(String bezeichnung, int menge) {
+        Artikel artikel = null;
+        for (Artikel a : artikelList) {
+            if (a.getBezeichnung().equals(bezeichnung)) {
+                artikel = a;
+                break;
+            }
+        }
+        if (artikel != null) {
+            if (artikel.getBestand() >= menge) {
+                artikelInWarenkorbRein(artikel, menge);
+                artikel.setBestand(artikel.getBestand() - menge);
+                System.out.println("Artikel " + bezeichnung + " wurde in den Warenkorb gelegt.");
+            } else {
+                System.out.println("Nicht genügend Bestand für den Artikel " + bezeichnung + ".");
+            }
+        } else {
+            System.out.println("Artikel " + bezeichnung + " nicht gefunden.");
+        }
+    }
+
 
     public void loeschenArtikelInWarenkorb(int artikelNummer) {
         warenkorbList.removeIf(warenkorb -> warenkorb.getArtikel().getArtikelNummer() == artikelNummer);
     }
+
+    public void ändernWarenkorb(String bezeichnung, int menge) {
+        for (Warenkorb warenkorb : warenkorbList) {
+            if (warenkorb.getArtikel().getBezeichnung().equals(bezeichnung)) {
+                warenkorb.setMenge(menge);
+                return;
+            }
+        }
+    }
+
+
+  /*  public void loeschenArtikelInWarenkorb(int artikelNummer) {
+        warenkorbList.removeIf(warenkorb -> warenkorb.getArtikel().getArtikelNummer() == artikelNummer);
+    }*/
 
    /* public boolean artikelImWarenkorbRaus(Artikel artikel, int menge) {
         boolean isOk = false;
@@ -208,7 +228,7 @@ public class ArtikelVerwaltung {
         return isOk;
     }*/
 
-    public void ändernWarenkorb(String bezeichnung, int menge) {
+  /*  public void ändernWarenkorb(String bezeichnung, int menge) {
         for (Warenkorb warenkorb : warenkorbList) {
             if (warenkorb.getArtikel().getBezeichnung() == bezeichnung) {
                 warenkorb.setMenge(menge);
@@ -216,7 +236,7 @@ public class ArtikelVerwaltung {
             }
         }
     }
-
+*/
 
 
 /*
@@ -286,7 +306,12 @@ public class ArtikelVerwaltung {
                     +" Stükzahl: " + String.valueOf(er.getAnzahl()));
         }
     }
-}
+
+    public void warenkorbLeeren() {
+            warenkorbList.clear();
+        }
+
+    }
 
 
 

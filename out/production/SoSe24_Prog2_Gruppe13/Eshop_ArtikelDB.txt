@@ -8,12 +8,8 @@ mango
 34.0
 Jacke
 77
-1
+84
 89.0
-Hose
-98
-2
-76.0
 Shuhe
 3
 34

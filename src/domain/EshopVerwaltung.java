@@ -66,9 +66,11 @@ public class EshopVerwaltung {
 
     }
 
-    public void ehöhenArtikel(int artikelNummer, int menge) {
-        av.artikelBestandErhoehen(artikelNummer, menge);
+    public void ehöhenArtikel(String bezeichnung, int menge) {
+        av.artikelBestandErhoehen(bezeichnung, menge);
     }
+
+
 
 
     // KundeVerwaltung
@@ -134,13 +136,15 @@ public class EshopVerwaltung {
         return av.getAlleArtikelMengeInwarenkorb();
     }
 
-    public void FuegeArtikelInWarenkorb(Artikel artikel, int menge) throws WarenkorbExistierBereitsException {
-        if (!av.sucheArtikelInWarenkorb(artikel, menge).isEmpty()) {
+    public void FuegeArtikelInWarenkorb(String bezeichnung, int menge) throws WarenkorbExistierBereitsException {
+        av.fuegeArtikelInWarenkorbEin(bezeichnung, menge);
+    }
+      /*  {
             throw new WarenkorbExistierBereitsException(artikel, menge);
         }
-        Warenkorb warenkorb = new Warenkorb(artikel, menge);
+        Warenkorb warenkorb = new Warenkorb(bezeichnung, menge);
         av.getAlleArtikelMengeInwarenkorb().add(warenkorb);
-    }
+    }*/
 
     public Artikel getArtikelByName(String bezeichnung) {
         for (Artikel artikel : av.artikelList()) {
@@ -152,6 +156,15 @@ public class EshopVerwaltung {
         }
         return null;
     }
+    public Artikel getArtikelByNummer(int artikelNummer) {
+        for (Artikel artikel : av.artikelList()) {
+            if (artikel.getArtikelNummer() == artikelNummer) {
+                return artikel;
+            }
+        }
+        return null;
+    }
+
 
     public void loescheArtikelInWarenkorb(int artikelNummer) {
         av.loeschenArtikelInWarenkorb(artikelNummer);
@@ -170,7 +183,12 @@ public class EshopVerwaltung {
     public Kunde findKundeByName(String kundenName) {
         return (Kunde) kv.getKundeList();
     }
+
+    public void warenkorbLeeren() {
+        av.warenkorbLeeren();
+    }
 }
+
 
 
 
@@ -220,9 +238,7 @@ public class EshopVerwaltung {
     public boolean artikelVomWarenkorbEntfernen(Artikel artikel){
         return wk.artikelEntfernen(artikel);
     }
-    public void warenkorbLeeren(){
-        wk.warenkorbLeeren();
-    }
+
 
     public void artikelMengeAendern(Warenkorb warenkorb, int artikelnummer, int neueMenge) {
        warenkorb.artikelMengeAendern(av.artikelSuchen(artikelnummer), neueMenge);

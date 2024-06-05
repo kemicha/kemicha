@@ -74,14 +74,17 @@ public class UI {
             List<Artikel> liste;
             switch (input) {
                 case "1":
+                    System.out.println(" Alle unsere Artikel sind : ");
                     liste = shop.gibAlleArtikel();
                     gibArtikellisteAus(liste);
                     break;
                 case "2":
+                    System.out.println(" Artikel erfolreich nach Name sortiert!");
                     liste= shop.sortiereArtikelNachName();
                     gibArtikellisteAus(liste);
                     break;
                 case "3":
+                   System.out.println(" Artikel erfolreich nach Nummer sortiert!");
                    liste= shop.sortiereArtikelNachNummer();
                    gibArtikellisteAus(liste);
                     break;
@@ -109,7 +112,7 @@ public class UI {
             System.out.println("3. Neue Artikel anlegen!");
             System.out.println("4. Artikelbestand erhoehen!");
             System.out.println("5. Artikel entfernen!");
-            System.out.println("6. Artikelliste speichern");
+            System.out.println("6. Artikelliste speichern & zeigen");
             System.out.println("7. Mitarbeiterliste anzeigen");
             System.out.println("8. Mitarbeiter speichern");
             System.out.println("9. Mitarbeiter loeschen!");
@@ -119,7 +122,7 @@ public class UI {
 
             input = liesEingabe();
             List<Mitarbeiter> liste ;
-            List<Artikel>list;
+            List<Artikel>artikelListe;
             switch (input) {
                 case "1":
                     benutzerEinlogge();
@@ -138,7 +141,8 @@ public class UI {
                     break;
                 case "6":
                     shop.speicherArtikel();
-                     gibArtikellisteAus(liste);
+                    artikelListe = shop.gibAlleArtikel();
+                    gibArtikellisteAus(artikelListe);
                     break;
                 case "7":
                     liste= shop.gibAlleMitarbeiter();
@@ -187,12 +191,13 @@ public class UI {
     }
 
     private void artikelBestandErhoehen() throws IOException {
-        System.out.println(" geben Sie der Artikel Nummer:");
-        int artikelNummer = Integer.parseInt(liesEingabe());
+        System.out.println(" geben Sie der Artikel Name:");
+        String bezeichnung = liesEingabe();
         System.out.println("geben Sie die menge: ");
         int menge = Integer.parseInt(liesEingabe());
-        shop.ehöhenArtikel(artikelNummer, menge);
+        shop.ehöhenArtikel(bezeichnung, menge) ;
         System.out.println(" Artikel erfolreich erhoehen!");
+
     }
 
     private void neueArtikelAnlegen() throws IOException {
@@ -283,7 +288,7 @@ public class UI {
                     warenkorbZeigen(liste);
                     break;
                 case "6":
-                    warenkorbÄndern();
+                    shop.warenkorbLeeren();
                     break;
                 case "7":
                     kaufen();
@@ -345,21 +350,19 @@ public class UI {
     private void artikelInWarenkorbHinzufuegen() throws IOException {
         System.out.println("Bezeichnung:");
         String bezeichnung= liesEingabe();
-        Artikel artikel = shop.getArtikelByName(bezeichnung);
+    /*    Artikel artikel = shop.getArtikelByName(bezeichnung);
         if (artikel == null) {
             System.out.println("Der Artikel existiert nicht.");
             return;
-        }
+        }*/
         System.out.print("Geben Sie die Menge ein: ");
         int menge = Integer.parseInt(liesEingabe());
-
-
-        if (menge <= 0 || menge > artikel.getBestand()) {
+     /*   if (menge <= 0 || menge > artikel.getBestand()) {
             System.out.println("Ungültige Menge oder nicht genügend Bestand für den Artikel.");
             return;
-        }
+        }*/
         try {
-            shop.FuegeArtikelInWarenkorb( artikel,menge);
+            shop.FuegeArtikelInWarenkorb( bezeichnung,menge);
             System.out.println("Artikel in Warenkorb eingefuegt!");
         } catch (WarenkorbExistierBereitsException e) {
             System.out.println("Fehler beim Einfuegen.");
@@ -368,30 +371,29 @@ public class UI {
 
         }
 
-
     private void warenkorbZeigen(List<Warenkorb> liste) {
             for (Warenkorb warenkorb : liste) {
                 System.out.println(warenkorb);
             }
         }
-
-
-    private void artikelInWarenkorbÄndern() {
-
-    }
-
-    private void warenkorbÄndern() throws IOException {
-        System.out.println(" geben Der Bezeichnung:");
-        String bezeichnung = liesEingabe();
-        Artikel artikel = shop.getArtikelByName(bezeichnung);
+        
+    private void artikelInWarenkorbÄndern() throws IOException {
+        System.out.println(" geben Der Artikel Nummer:");
+        int artikelNummer= Integer.parseInt(liesEingabe());
+        Artikel artikel = shop.getArtikelByNummer((artikelNummer));
         if (artikel == null) {
-            System.out.print("Bezeichnung ' " + bezeichnung + " ' unbekannt!");
+            System.out.print("Artikel Nummer ' " + artikelNummer + " ' unbekannt!");
             return;
-        } System.out.println(" geben Sie Die  neue Menge: ");
-        int menge = Integer.parseInt(liesEingabe());
-        shop.ArtikelInWarenkorbÄndern(bezeichnung, menge);
+        } shop.loescheArtikelInWarenkorb(artikelNummer);
         System.out.println("Artikel erfolgreich aus dem Warenkorb entfernt!");
     }
+
+  /*  private void warenkorLeer()  {
+        System.out.println(" Warenkorb erfolrechich geloescht!");
+     Artikel artikel;
+        shop.warenkorbLeeren(artikel);
+    }*/
+
 
 
 
