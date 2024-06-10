@@ -270,13 +270,13 @@ public class UI {
             List<Warenkorb>liste = null;
             switch (input) {
                 case "1":
-                    benutzerEinlogge();
+                     benutzerEinlogge();
                     break;
                 case "2":
                     kundeRegistrieren();
                     break;
                 case "3":
-                    artikelInWarenkorbHinzufuegen();
+                     artikelInWarenkorbHinzufuegen();
                     shop.speicherWarenkorb();
                     break;
                 case "4":
@@ -285,7 +285,6 @@ public class UI {
                     break;
                 case "5":
                     artikelInWarenkorbÄndern();
-                    warenkorbZeigen(liste);
                     break;
                 case "6":
                     shop.warenkorbLeeren();
@@ -349,61 +348,89 @@ public class UI {
 
     private void artikelInWarenkorbHinzufuegen() throws IOException {
         System.out.println("Bezeichnung:");
-        String bezeichnung= liesEingabe();
-    /*    Artikel artikel = shop.getArtikelByName(bezeichnung);
+        String bezeichnung = liesEingabe();
+        Artikel artikel = shop.getArtikelByName(bezeichnung);
+
         if (artikel == null) {
             System.out.println("Der Artikel existiert nicht.");
             return;
-        }*/
-        System.out.print("Geben Sie die Menge ein: ");
-        int menge = Integer.parseInt(liesEingabe());
-     /*   if (menge <= 0 || menge > artikel.getBestand()) {
-            System.out.println("Ungültige Menge oder nicht genügend Bestand für den Artikel.");
-            return;
-        }*/
-        try {
-            shop.FuegeArtikelInWarenkorb( bezeichnung,menge);
-            System.out.println("Artikel in Warenkorb eingefuegt!");
-        } catch (WarenkorbExistierBereitsException e) {
-            System.out.println("Fehler beim Einfuegen.");
-            e.printStackTrace();
         }
 
+        System.out.print("Geben Sie die Menge ein: ");
+        int menge = 0;
+
+        try {
+            menge = Integer.parseInt(liesEingabe());
+        } catch (NumberFormatException e) {
+            System.out.println("Ungültige Zahleneingabe.");
+            return;
         }
+
+        if (menge <= 0 || menge > artikel.getBestand()) {
+            System.out.println("Ungültige Menge oder nicht genügend Bestand für den Artikel.");
+            return;
+        }
+
+        try {
+            shop.FuegeArtikelInWarenkorb(bezeichnung, menge);
+            System.out.println("Artikel in den Warenkorb eingefügt!");
+        } catch (Exception e) {
+            System.out.println("Fehler beim Einfügen des Artikels in den Warenkorb.");
+            e.printStackTrace();
+        }
+    }
+
 
     private void warenkorbZeigen(List<Warenkorb> liste) {
             for (Warenkorb warenkorb : liste) {
                 System.out.println(warenkorb);
             }
         }
-        
+
     private void artikelInWarenkorbÄndern() throws IOException {
-        System.out.println(" geben Der Artikel Nummer:");
-        int artikelNummer= Integer.parseInt(liesEingabe());
-        Artikel artikel = shop.getArtikelByNummer((artikelNummer));
-        if (artikel == null) {
-            System.out.print("Artikel Nummer ' " + artikelNummer + " ' unbekannt!");
+        System.out.println("Geben Sie den Artikel Namen:");
+        String bezeichnung = liesEingabe();
+
+        System.out.println("Geben Sie die neue Menge ein:");
+        int neueMenge;
+        try {
+            neueMenge = Integer.parseInt(liesEingabe());
+        } catch (NumberFormatException e) {
+            System.out.println("Ungültige Zahleneingabe.");
             return;
-        } shop.loescheArtikelInWarenkorb(artikelNummer);
-        System.out.println("Artikel erfolgreich aus dem Warenkorb entfernt!");
+        }
+
+        if (neueMenge < 0) {
+            System.out.println("Die Menge darf nicht negativ sein.");
+            return;
+        }
+
+        try {
+            shop.aenderungImWarenkorb(bezeichnung, neueMenge);
+            System.out.println("Artikelmenge im Warenkorb erfolgreich geändert!");
+        } catch (Exception e) {
+            System.out.println("Fehler bei der Änderung der Artikelmenge im Warenkorb.");
+            e.printStackTrace();
+        }
     }
 
-  /*  private void warenkorLeer()  {
+
+    private void warenkorLeer()  {
         System.out.println(" Warenkorb erfolrechich geloescht!");
-     Artikel artikel;
-        shop.warenkorbLeeren(artikel);
-    }*/
+
+        shop.warenkorbLeeren();
+    }
 
 
 
 
        private void kaufen() throws IOException {
-          /* boolean success = shop.kaufen(new Benutzer());
-           if (success) {
-               System.out.println("Artikel erfolgreich gekauft!");
+          shop.kaufenArtikel(new Benutzer());
+           if (shop.getWarenkorbList().isEmpty()) {
+               System.out.println("Der Warenkorb ist jetzt leer.");
            } else {
-               System.out.println("Artikel nicht gefunden oder nicht genügend Bestand.");
-           }*/
+               System.out.println("Es gibt noch Artikel im Warenkorb.");
+           }
        }
 
 

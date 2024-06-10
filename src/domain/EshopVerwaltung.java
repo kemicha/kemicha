@@ -71,9 +71,12 @@ public class EshopVerwaltung {
     }
 
 
-
-
     // KundeVerwaltung
+
+    public List<Warenkorb> getWarenkorbList() {
+        return av.getWarenkorbList();
+
+    }
 
     public List<Kunde> gibAlleKunden() {
         return kv.getKundeList();
@@ -136,8 +139,12 @@ public class EshopVerwaltung {
         return av.getAlleArtikelMengeInwarenkorb();
     }
 
-    public void FuegeArtikelInWarenkorb(String bezeichnung, int menge) throws WarenkorbExistierBereitsException {
+    public void FuegeArtikelInWarenkorb(String bezeichnung, int menge) {
         av.fuegeArtikelInWarenkorbEin(bezeichnung, menge);
+    }
+
+    public void aenderungImWarenkorb(String bezeichnung, int neueMenge) {
+        av.aendereMengeImWarenkorb(bezeichnung, neueMenge);
     }
       /*  {
             throw new WarenkorbExistierBereitsException(artikel, menge);
@@ -156,6 +163,7 @@ public class EshopVerwaltung {
         }
         return null;
     }
+
     public Artikel getArtikelByNummer(int artikelNummer) {
         for (Artikel artikel : av.artikelList()) {
             if (artikel.getArtikelNummer() == artikelNummer) {
@@ -165,15 +173,6 @@ public class EshopVerwaltung {
         return null;
     }
 
-
-    public void loescheArtikelInWarenkorb(int artikelNummer) {
-        av.loeschenArtikelInWarenkorb(artikelNummer);
-    }
-
-    public Artikel ArtikelInWarenkorbÄndern(String bezeichnung, int menge) {
-        av.ändernWarenkorb(bezeichnung, menge);
-        return null;
-    }
 
    /* public boolean kaufen(Benutzer benutzer) {
         av.gekauftArtikel(benutzer);
@@ -187,15 +186,15 @@ public class EshopVerwaltung {
     public void warenkorbLeeren() {
         av.warenkorbLeeren();
     }
+
+    public void kaufenArtikel(Benutzer benutzer) {
+        av.kaufeWarenkorb(benutzer);
+    }
+
+    public Benutzer getBenutzerByName(String benutzerName) {
+        return (Benutzer) kv.getKundeList();
+    }
 }
-
-
-
-
-
-
-
-
 
 
 
@@ -212,67 +211,8 @@ public class EshopVerwaltung {
    /* public boolean fuegeMitarbeiterHinzu(int id, String name, String passwort, String adresse){
         return mv.fuegeMitarbeiterHinzu(id, name, passwort,adresse);
     }
-    public void legeArtikelAn(String bezeichnung,int bestand, double preis, int artikelnummer) {
-        av.artikelHinzufuegen(bezeichnung,bestand,  preis, artikelnummer);
 
-    }
-
-    public void erhoeheArtikelBestand(String bezeichnung, int menge) {
-        av.erhoeheBestand(bezeichnung,menge);
-    }
-
-    public List<Artikel> ArtikelAusgeben() {
-        return av.artikelAusgeben() ;
-    }
-    public List<Mitarbeiter> gibAlleMitarbeiter(){
-        return mv.gibAlleMitarbeiter();
-    }
-
-    public void artikelreduktieren(Artikel artikel){
-        av.artikelEntfernen(artikel);
-        return ;
-    }
-  *//*  public void artikelZumWarenkorbHinzufuegen(Artikel artikel, int menge){
-        av.artikelHinzufuegen(artikel, menge);
-    }*//*
-    public boolean artikelVomWarenkorbEntfernen(Artikel artikel){
-        return wk.artikelEntfernen(artikel);
-    }
-
-
-    public void artikelMengeAendern(Warenkorb warenkorb, int artikelnummer, int neueMenge) {
-       warenkorb.artikelMengeAendern(av.artikelSuchen(artikelnummer), neueMenge);
-    }
-   public void addArtikelInWarenkorb(Artikel  artikel,int menge){
-        kv.artikelInWarenkorbHinzufuegen(artikel, menge);
-
-   }
-    public void warenkorbLöschen(){
-        kv.warenkorbLeeren();
-    }
-
-    public String zeigtWarenkorb(){
-        return kv.warenkorbInhaltAnzeigen();
-    }
-    public boolean existierteArtikel(Artikel artikel){
-         av.artikelExistiert(artikel);
-        return false;
-    }
-    public Artikel  findeArtikelnachBezeichnung(String bezeichnung) {
-       return av.artikelNachBezeichnung(bezeichnung);
-    }
-
-    public Artikel findeArtikelNachNummer(int artikelNummer) {
-        return av.artikelNachNummer(artikelNummer);
-    }
-
-    public void anderungInWarenkorb(Artikel artikel,int neueMenge){
-        kv.artikelMengeAendern(artikel, neueMenge);
-    }
-
-    public void artikelZumWarenkorbHinzufuegen(Artikel artikel, int menge) {
-        av.artikelImWarenkorbAnzeigen();
-    }*/
+ */
 
 
 

@@ -52,12 +52,18 @@ public class Rechnung {
 
     @Override
     public String toString() {
-        return "RechnungObjekt{" +
-                "Benutzer=" + benutzer +
-                ", datum=" + datum +
-                ", gekaufteArtikel=" +gekaufteArtikel +
-                ", gesamtePreis=" + gesamtePreis +
-                '}';
+        StringBuilder sb = new StringBuilder();
+        sb.append("Rechnung\n");
+        sb.append("Kunde: ").append(benutzer).append("\n");
+        sb.append("Datum: ").append(datum).append("\n");
+        sb.append("Artikel:\n");
+        for (Warenkorb w : gekaufteArtikel) {
+            sb.append("- ").append(w.getArtikel().getBezeichnung())
+                    .append(", Menge: ").append(w.getMenge())
+                    .append(", Einzelpreis: ").append(w.getArtikel().getPreis()).append("€\n");
+        }
+        sb.append("Gesamtpreis: ").append(gesamtePreis).append("€\n");
+        return sb.toString();
     }
 
 
