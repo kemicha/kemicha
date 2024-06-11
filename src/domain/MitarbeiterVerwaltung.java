@@ -12,41 +12,45 @@ public class MitarbeiterVerwaltung {
     private List<Mitarbeiter> mitarbeiterList = new ArrayList<>();
 
     private PersistenceManager pm = new FilePersistenceManager();
-    public MitarbeiterVerwaltung() throws IOException {
+    public MitarbeiterVerwaltung() {
+        this.pm = pm;
     }
 
 
-    public void liesDatenVonMitarbeiter(String datei) throws IOException {
-        try {
-            mitarbeiterList = pm.leseMitarbeiterListe(datei);
-        } catch (MitarbeiterExistiertBereitsException e) {
-            System.err.println("Mitarbeiter Liste enthaelt Duplikate und konnte nicht geladen werden: " + e);
-        }
-    }
 
-    public void schreibeDatenVonMitarbeiter ( String datei) throws IOException{
-        pm.schreibeMitarbeiterListe(mitarbeiterList,datei);
-    }
-
-    public List<Mitarbeiter> getMitarbeiterList() {
-        return mitarbeiterList;
-    }
-
-    public List<Mitarbeiter> sucheMitarbeiter(String name, int id, String passwort) {
-        List<Mitarbeiter> suche = new ArrayList<>();
-        Iterator it = getMitarbeiterList().iterator();
-        while (it.hasNext()) {
-            Mitarbeiter mitarbeiter = (Mitarbeiter) it.next();
-            if (mitarbeiter.getName().equals(name) && mitarbeiter.getId() == id && mitarbeiter.getPasswort().equals(passwort)) {
-                suche.add(mitarbeiter);
+        public void liesDatenVonMitarbeiter(String datei) throws IOException {
+            try {
+                mitarbeiterList = pm.leseMitarbeiterListe(datei);
+            } catch (MitarbeiterExistiertBereitsException e) {
+                System.err.println("Mitarbeiter Liste enthaelt Duplikate und konnte nicht geladen werden: " + e);
             }
         }
-        return suche;
+
+        public void schreibeDatenVonMitarbeiter(String datei) throws IOException {
+            pm.schreibeMitarbeiterListe(mitarbeiterList, datei);
+        }
+
+        public List<Mitarbeiter> getMitarbeiterList() {
+            return mitarbeiterList;
+        }
+
+        public List<Mitarbeiter> sucheMitarbeiter(String name, int id, String passwort) {
+            List<Mitarbeiter> suche = new ArrayList<>();
+            Iterator it = getMitarbeiterList().iterator();
+            while (it.hasNext()) {
+                Mitarbeiter mitarbeiter = (Mitarbeiter) it.next();
+                if (mitarbeiter.getName().equals(name) && mitarbeiter.getId() == id && mitarbeiter.getPasswort().equals(passwort)) {
+                    suche.add(mitarbeiter);
+                }
+            }
+            return suche;
+        }
+
+        public void mitarbeiterLoeschen(int id) {
+            mitarbeiterList.removeIf(Mitarbeiter -> Mitarbeiter.getId() == id);
+        }
     }
 
-    public void mitarbeiterLoeschen(int id) {
-        mitarbeiterList.removeIf(Mitarbeiter -> Mitarbeiter.getId() == id);
-    }
 
 
 
@@ -99,5 +103,5 @@ public class MitarbeiterVerwaltung {
         }
         return maxId + 1;
     }*/
-}
+
 

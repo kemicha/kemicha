@@ -1,20 +1,21 @@
 package src.persistence;
 
-import src.valueObjects.Artikel;
-import src.valueObjects.Kunde;
-import src.valueObjects.Mitarbeiter;
-import src.valueObjects.Warenkorb;
+import src.valueObjects.*;
 
 import java.io.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-public class FilePersistenceManager implements PersistenceManager {
+public  class FilePersistenceManager implements PersistenceManager {
 
+    private final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
     private BufferedReader reader = null;
     private PrintWriter writer = null;
 
-    public FilePersistenceManager() throws IOException {
+    public FilePersistenceManager() {
     }
 
     // ArtikelVerwaltung
@@ -79,15 +80,11 @@ public class FilePersistenceManager implements PersistenceManager {
         writer.close();
     }
 
-    private boolean speichereArtikel(Artikel artikel) {
+    private void speichereArtikel(Artikel artikel) {
         schreibeZeile(artikel.getBezeichnung());
         schreibeZeile(String.valueOf(artikel.getArtikelNummer()));
         schreibeZeile(String.valueOf(artikel.getBestand()));
         schreibeZeile(String.valueOf(artikel.getPreis()));
-        if (artikel.getBestand() != 0)
-
-            return true;
-        return false;
     }
 
 
@@ -155,12 +152,11 @@ public class FilePersistenceManager implements PersistenceManager {
         writer.close();
     }
 
-    private boolean speicherKunde(Kunde kunde) {
+    private void speicherKunde(Kunde kunde) {
 	  schreibeZeile(kunde.getName());
       schreibeZeile(String.valueOf(kunde.getId()));
       schreibeZeile(String.valueOf(kunde.getPasswort()));
       schreibeZeile(String.valueOf(kunde.getAdresse()));
-                  return true;
     }
 
 
@@ -214,11 +210,14 @@ public class FilePersistenceManager implements PersistenceManager {
         writer.close();
     }
 
-    private boolean speichereMitarbeiter(Mitarbeiter mitarbeiter) throws IOException{
+
+
+
+
+    private void speichereMitarbeiter(Mitarbeiter mitarbeiter) {
         schreibeZeile(mitarbeiter.getName());
         schreibeZeile(String.valueOf(mitarbeiter.getId()));
         schreibeZeile(String.valueOf(mitarbeiter.getPasswort()));
-        return true;
     }
 
 
@@ -227,41 +226,44 @@ public class FilePersistenceManager implements PersistenceManager {
 
 
 
-    // Warenkorb
+    // Ereignis
 
     @Override
-    public List<Warenkorb> leseWarenkorbList(String datenquelle) throws IOException, WarenkorbExistierBereitsException {
+    public List<Ereignis> leseEreignisList(String datenquelle) throws IOException, EreignisExistierBereitsException {
         reader = new BufferedReader(new FileReader(datenquelle));
-        List<Warenkorb> warenkorbMenge = new ArrayList<>();
-        Warenkorb warenkorb;
+        List<Ereignis> ereignisMenge = new ArrayList<>();
+        Ereignis ereignis;
         do {
 
-            warenkorb = ladeWarenkorb();
-            if (warenkorb != null) {
-                if (warenkorbMenge.contains(warenkorb)) {
-                    throw new WarenkorbExistierBereitsException (warenkorb.getArtikel(),warenkorb.getMenge());
+            ereignis = ladeEreignis();
+
+            if (ereignis != null) {
+                if (ereignisMenge.contains(ereignis)) {
+                    throw new EreignisExistierBereitsException (ereignis.getArtikel(),ereignis.getMenge());
                 }
 
-                warenkorbMenge.add(warenkorb);
+                ereignisMenge.add(ereignis);
             }
-        } while (warenkorb != null);
+        } while (ereignis != null);
 
-        return warenkorbMenge;
+        return ereignisMenge;
 
     }
 
     @Override
-    public void schreibeInWarenkorblList(List<Warenkorb> liste, String datei) throws IOException {
-            writer = new PrintWriter(new BufferedWriter(new FileWriter(datei)));
+    public void schreibeInEreignisList(List<Ereignis> liste, String datei) throws IOException {
+        writer = new PrintWriter(new BufferedWriter(new FileWriter(datei)));
 
-            for (Warenkorb warenkorb : liste)
-                speichereWarenkorb(warenkorb);
+        for (Ereignis ereignis : liste)
+            speichereEreignis(ereignis);
 
-            writer.close();
-        }
+        writer.close();
+    }
 
 
-        private Warenkorb ladeWarenkorb() throws IOException {
+
+
+    private Ereignis ladeEreignis() throws IOException {
             String bezeichnung = liesZeile();
             if (bezeichnung == null) {
                 return null;
@@ -273,9 +275,9 @@ public class FilePersistenceManager implements PersistenceManager {
                 return null;
             }
 
-            int bestand;
+            int menge;
             try {
-                bestand = Integer.parseInt((liesZeile()));
+                menge = Integer.parseInt((liesZeile()));
             } catch
             (NumberFormatException e) {
                 return null;
@@ -287,35 +289,25 @@ public class FilePersistenceManager implements PersistenceManager {
             } catch (NumberFormatException e) {
                 return null;
             }
+            Date dateFormat;
+            try {
+                dateFormat = DATE_FORMAT.parse(liesZeile());
+            } catch (ParseException e) {
+                return null;
+            }
 
-            Artikel artikel= new Artikel(bezeichnung,artikelNummer,preis,bestand) ;
+            Artikel artikel= new Artikel(bezeichnung,artikelNummer,preis,menge) ;
 
-            return new Warenkorb(artikel, bestand);
+            return new Ereignis(menge, artikel, dateFormat);
         }
 
 
-        private boolean speichereWarenkorb(Warenkorb warenkorb) {
-            schreibeZeile(warenkorb.getArtikel().getBezeichnung());
-            schreibeZeile(String.valueOf(warenkorb.getArtikel().getArtikelNummer()));
-            schreibeZeile(String.valueOf(warenkorb.getMenge()));
-            schreibeZeile(String.valueOf(warenkorb.getArtikel().getPreis()));
-            if (warenkorb.getMenge() != 0)
-
-                return true;
-            return false;
+        private void speichereEreignis(Ereignis ereignis) {
+            schreibeZeile(ereignis.getArtikel().getBezeichnung());
+            schreibeZeile(String.valueOf(ereignis.getArtikel().getArtikelNummer()));
+            schreibeZeile(String.valueOf(ereignis.getMenge()));
+            schreibeZeile(String.valueOf(ereignis.getArtikel().getPreis()));
         }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     }

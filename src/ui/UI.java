@@ -4,7 +4,7 @@ import src.domain.EshopVerwaltung;
 import src.persistence.ArtikelExistiertBereitsException;
 import src.persistence.KundeExistiertBereitsException;
 import src.persistence.MitarbeiterExistiertBereitsException;
-import src.persistence.WarenkorbExistierBereitsException;
+import src.persistence.EreignisExistierBereitsException;
 import src.valueObjects.*;
 
 import java.io.BufferedReader;
@@ -277,7 +277,7 @@ public class UI {
                     break;
                 case "3":
                      artikelInWarenkorbHinzufuegen();
-                    shop.speicherWarenkorb();
+                    shop.speicherEreignis();
                     break;
                 case "4":
                     liste = shop.gibAlleArtikelInWarenkorb();

@@ -3,35 +3,29 @@ package src.domain;
 import src.persistence.ArtikelExistiertBereitsException;
 import src.persistence.FilePersistenceManager;
 import src.persistence.PersistenceManager;
-import src.persistence.WarenkorbExistierBereitsException;
+import src.persistence.EreignisExistierBereitsException;
 import src.valueObjects.*;
-import src.valueObjects.Warenkorb;
 
 import java.io.IOException;
 import java.util.*;
 
 public class ArtikelVerwaltung {
 
-
-    private List <Artikel> artikelList = new ArrayList<>();
-    private PersistenceManager pm = new FilePersistenceManager();
+    private List<Artikel> artikelList = new ArrayList<>();
+    private  PersistenceManager pm = new FilePersistenceManager();
     private List<Warenkorb> warenkorbList = new ArrayList<>();
-    private List<Rechnung> rechnung = new ArrayList<>();
+    private List<Rechnung> rechnungList = new ArrayList<>();
     private List<Ereignis> ereignisList = new ArrayList<>();
 
-
     public ArtikelVerwaltung() throws IOException {
-        this.warenkorbList = warenkorbList;
-        this.rechnung = rechnung;
-        this.ereignisList = ereignisList;
 
     }
-
 
     public void liesDaten(String datei) throws IOException {
         try {
             artikelList = pm.leseArtikelList(datei);
         } catch (ArtikelExistiertBereitsException e) {
+            System.err.println("Artikel existiert bereits: " + e.getMessage());
         }
     }
 
@@ -43,16 +37,9 @@ public class ArtikelVerwaltung {
         return artikelList;
     }
 
-    public List<Artikel> artikelList() {
-        return artikelList;
-    }
-
-
     public List<Artikel> sucheArtikelNachName(String bezeichnung) {
         List<Artikel> suche = new ArrayList<>();
-        Iterator it = getArtikelBestand().iterator();
-        while (it.hasNext()) {
-            Artikel artikel = (Artikel) it.next();
+        for (Artikel artikel : artikelList) {
             if (artikel.getBezeichnung().equals(bezeichnung)) {
                 suche.add(artikel);
             }
@@ -76,10 +63,8 @@ public class ArtikelVerwaltung {
 
         if (artikel != null) {
             artikel.setBestand(artikel.getBestand() + menge);
-
         } else {
             System.out.println("Artikel unbekannt!");
-            return;
         }
     }
 
@@ -88,26 +73,11 @@ public class ArtikelVerwaltung {
         return artikelList;
     }
 
-/*    public List<Artikel> sucheArtikelNachNummer(String artikelNummer) {
-        List<Artikel> suche = new ArrayList<>();
-        Iterator it = getBestand().iterator();
-        while (it.hasNext()) {
-            Artikel artikel = (Artikel) it.next();
-            if (artikel.getArtikelNummer().equals(artikelNummer)) {
-                suche.add(artikel);
-            }
-        }
-        return suche;
-    }*/
-
-
     public void loeschen(int artikelNummer) {
-        artikelList.removeIf(Artikel -> Artikel.getArtikelNummer() == artikelNummer);
+        artikelList.removeIf(artikel -> artikel.getArtikelNummer() == artikelNummer);
     }
 
-
-// WarenkorbVerwaltung
-
+    // WarenkorbVerwaltung
 
     public List<Warenkorb> getWarenkorbList() {
         return warenkorbList;
@@ -117,22 +87,25 @@ public class ArtikelVerwaltung {
         return ereignisList;
     }
 
-    public void liesWarenkorbDaten(String datei) throws IOException {
+    public void liesEreignisDaten(String datei) throws IOException {
         try {
-            warenkorbList = pm.leseWarenkorbList(datei);
-        } catch (WarenkorbExistierBereitsException e) {
+            ereignisList = pm.leseEreignisList(datei);
+        } catch (EreignisExistierBereitsException e) {
+            System.err.println("Ereignis existiert bereits: " + e.getMessage());
         }
     }
 
-    public void schreibeDatenInWarenkorb(String datei) throws IOException {
-        pm.schreibeInWarenkorblList(warenkorbList, datei);
+    public void schreibeDatenInEreignis(String datei) throws IOException {
+        pm.schreibeInEreignisList(ereignisList, datei);
+    }
+
+    public List<Ereignis> getEreignisList() {
+        return ereignisList;
     }
 
     public List<Warenkorb> getAlleArtikelMengeInwarenkorb() {
         return warenkorbList;
     }
-
-
 
     public void artikelInWarenkorbRein(Artikel artikel, int menge) {
         for (Warenkorb eintrag : warenkorbList) {
@@ -145,8 +118,6 @@ public class ArtikelVerwaltung {
         warenkorbList.add(new Warenkorb(artikel, menge));
         ereignisList.add(new Ereignis(menge, artikel, new Date()));
     }
-
-
 
     public void fuegeArtikelInWarenkorbEin(String bezeichnung, int menge) {
         Artikel artikel = null;
@@ -168,7 +139,6 @@ public class ArtikelVerwaltung {
             System.out.println("Artikel " + bezeichnung + " nicht gefunden.");
         }
     }
-
 
     public void aendereMengeImWarenkorb(String bezeichnung, int neueMenge) {
         boolean artikelGefunden = false;
@@ -203,10 +173,8 @@ public class ArtikelVerwaltung {
         }
     }
 
-
     public void kaufeWarenkorb(Benutzer benutzer) {
         if (warenkorbList.isEmpty()) {
-            System.out.println("Der Warenkorb ist leer.");
             return;
         }
 
@@ -222,9 +190,6 @@ public class ArtikelVerwaltung {
     }
 
     public void warenkorbLeeren() {
-            warenkorbList.clear();
-        }
-
+        warenkorbList.clear();
     }
-
-
+}

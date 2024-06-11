@@ -11,44 +11,49 @@ import java.util.*;
 public class KundeVerwaltung {
 
     private List<Kunde> kundeList = new ArrayList<>();
-    private  List<Benutzer> benutzerList= new ArrayList<>();
-    private PersistenceManager pm = new FilePersistenceManager();
-    public KundeVerwaltung() throws IOException {
+    private List<Benutzer> benutzerList = new ArrayList<>();
+    private List<Ereignis> ereignisList = new ArrayList<>();
+    private PersistenceManager pm;
+
+    public KundeVerwaltung() {
+        this.pm = new FilePersistenceManager();
     }
 
 
-    public void liesDatenVonKunde(String datei) throws IOException {
-        try {
-            kundeList = pm.leseKunedeListe(datei);
-        } catch (KundeExistiertBereitsException e) {
-            System.err.println("kundeliste enthaelt Duplikate und konnte nicht geladen werden: " + e);
-        }
-    }
-
-    public void schreibeDatenVonKunde ( String datei) throws IOException{
-        pm.schreibeKundeListe(kundeList,datei);
-    }
-
-    public List<Kunde> sucheKunde(String name, int id, String passwort, String adresse) {
-        List<Kunde> suche = new ArrayList<>();
-        Iterator it = getKundeList().iterator();
-        while (it.hasNext()) {
-            Kunde kunde = (Kunde) it.next();
-            if (kunde.getName().equals(name) && kunde.getId() == id && kunde.getPasswort().equals(passwort)
-                    && kunde.getAdresse().equals(adresse)) {
-                suche.add(kunde);
+        public void liesDatenVonKunde(String datei) throws IOException {
+            try {
+                kundeList = pm.leseKunedeListe(datei);
+            } catch (KundeExistiertBereitsException e) {
+                System.err.println("kundeliste enthaelt Duplikate und konnte nicht geladen werden: " + e);
             }
         }
-        return suche;
-    }
 
-    public List<Kunde> getKundeList() {
-        return kundeList;
-    }
+        public void schreibeDatenVonKunde(String datei) throws IOException {
+            pm.schreibeKundeListe(kundeList, datei);
+        }
+
+        public List<Kunde> sucheKunde(String name, int id, String passwort, String adresse) {
+            List<Kunde> suche = new ArrayList<>();
+            Iterator it = getKundeList().iterator();
+            while (it.hasNext()) {
+                Kunde kunde = (Kunde) it.next();
+                if (kunde.getName().equals(name) && kunde.getId() == id && kunde.getPasswort().equals(passwort)
+                        && kunde.getAdresse().equals(adresse)) {
+                    suche.add(kunde);
+                }
+            }
+            return suche;
+        }
+
+        public List<Kunde> getKundeList() {
+            return kundeList;
+        }
 
     public void kundeLoeschen(int id) {
         kundeList.removeIf(Kunde -> Kunde.getId() == id);
     }
+    }
+
 
 
 
@@ -159,4 +164,4 @@ public class KundeVerwaltung {
     public void ereignisseBehandeln() {
         // Implementiere die Logik zum Behandeln von Ereignissen im Warenkorb
     }*/
-}
+

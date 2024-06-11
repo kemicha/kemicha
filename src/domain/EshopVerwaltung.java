@@ -4,7 +4,7 @@ package src.domain;
 import src.persistence.ArtikelExistiertBereitsException;
 import src.persistence.KundeExistiertBereitsException;
 import src.persistence.MitarbeiterExistiertBereitsException;
-import src.persistence.WarenkorbExistierBereitsException;
+import src.persistence.EreignisExistierBereitsException;
 import src.valueObjects.*;
 
 import java.io.IOException;
@@ -23,13 +23,15 @@ public class EshopVerwaltung {
         this.datei = datei;
         av = new ArtikelVerwaltung();
         av.liesDaten(datei + "_ArtikelDB.txt");
-        av.liesWarenkorbDaten(datei + "_Warenkorb.txt");
+
+        av.liesEreignisDaten(datei + "_Ereignis.txt");
         kv = new KundeVerwaltung();
+
         kv.liesDatenVonKunde(datei + "_KundeDB.txt ");
         mv = new MitarbeiterVerwaltung();
+
         mv.liesDatenVonMitarbeiter(datei + "_MitarbeiterDB.txt");
         bv = new BenutzerVerwaltung();
-
 
     }
 
@@ -131,8 +133,8 @@ public class EshopVerwaltung {
 
 // WarenkorbVerwaltung
 
-    public void speicherWarenkorb() throws IOException {
-        av.schreibeDatenInWarenkorb(datei + "_Warenkorb.txt");
+    public void speicherEreignis() throws IOException {
+        av.schreibeDatenInEreignis(datei + "_Warenkorb.txt");
     }
 
     public List<Warenkorb> gibAlleArtikelInWarenkorb() {
@@ -154,7 +156,7 @@ public class EshopVerwaltung {
     }*/
 
     public Artikel getArtikelByName(String bezeichnung) {
-        for (Artikel artikel : av.artikelList()) {
+        for (Artikel artikel : av.getArtikelBestand()) {
             if (artikel.getBezeichnung().equals(bezeichnung)) {
                 return artikel;
 
@@ -165,7 +167,7 @@ public class EshopVerwaltung {
     }
 
     public Artikel getArtikelByNummer(int artikelNummer) {
-        for (Artikel artikel : av.artikelList()) {
+        for (Artikel artikel : av.getArtikelBestand()) {
             if (artikel.getArtikelNummer() == artikelNummer) {
                 return artikel;
             }
