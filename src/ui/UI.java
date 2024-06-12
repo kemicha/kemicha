@@ -4,7 +4,6 @@ import src.domain.EshopVerwaltung;
 import src.persistence.ArtikelExistiertBereitsException;
 import src.persistence.KundeExistiertBereitsException;
 import src.persistence.MitarbeiterExistiertBereitsException;
-import src.persistence.EreignisExistierBereitsException;
 import src.valueObjects.*;
 
 import java.io.BufferedReader;
@@ -366,7 +365,7 @@ public class UI {
             return;
         }
 
-        if (menge <= 0 || menge > artikel.getBestand()) {
+        if (menge <= 0 || menge > artikel.getAnzahl()) {
             System.out.println("Ungültige Menge oder nicht genügend Bestand für den Artikel.");
             return;
         }

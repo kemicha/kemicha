@@ -20,6 +20,17 @@ public class KundeVerwaltung {
     }
 
 
+    public Kunde kundeRegistrierung(int id, String name, String passwort, String adresse) {
+        for (Kunde kunde : kundeList) {
+            if (kunde.getName().equals(name)) {
+                return null;
+            }
+        }
+        Kunde neuerKunde = new Kunde( name,id, passwort, adresse);
+        kundeList.add(neuerKunde);
+        return neuerKunde;
+    }
+
         public void liesDatenVonKunde(String datei) throws IOException {
             try {
                 kundeList = pm.leseKunedeListe(datei);

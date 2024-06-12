@@ -1,14 +1,22 @@
 package src.valueObjects;
+
+import java.util.Collections;
+import java.util.List;
+
 public class  Artikel{
-    // Attribute
+
 
     private int ArtikelNummer;
     private String bezeichnung;
     private int bestand;
     private double preis;
+    private List<Einlagerung> einlagerungen;
+    private List<Auslagerung> auslagerungen;
 
 
-    // Konstruktoren
+
+
+
     public Artikel(String bezeichnung, int bestand, double preis, int artikelnummer) {
         this.ArtikelNummer = artikelnummer;
         this.bestand = bestand;
@@ -19,7 +27,8 @@ public class  Artikel{
     }
 
 
-    // Getter und Setter
+
+
     public int getArtikelNummer() {
         return ArtikelNummer;
     }
@@ -28,12 +37,12 @@ public class  Artikel{
         return bezeichnung;
     }
 
-    public int  getBestand() {
+    public int getAnzahl() {
         return bestand;
     }
 
-    public void setBestand(int bestand) {
-        this.bestand = bestand;
+    public void setAnzahl(int anzahl) {
+        this.bestand = anzahl;
     }
 
     public double getPreis() {
@@ -52,8 +61,17 @@ public class  Artikel{
         this.preis = preis;
     }
 
+    public void sortiereEinlagerungen() {
+        Collections.sort(einlagerungen);
+    }
 
-    // toString-Methode
+
+    public void sortiereAuslagerungen() {
+        Collections.sort(auslagerungen);
+    }
+
+
+
     @Override
     public String toString() {
         return    "  Bezeichnung: " + bezeichnung +  " Artikelnummer: " + ArtikelNummer +

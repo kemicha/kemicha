@@ -62,7 +62,7 @@ public class ArtikelVerwaltung {
                 .orElse(null);
 
         if (artikel != null) {
-            artikel.setBestand(artikel.getBestand() + menge);
+            artikel.setAnzahl(artikel.getAnzahl() + menge);
         } else {
             System.out.println("Artikel unbekannt!");
         }
@@ -128,9 +128,9 @@ public class ArtikelVerwaltung {
             }
         }
         if (artikel != null) {
-            if (artikel.getBestand() >= menge) {
+            if (artikel.getAnzahl() >= menge) {
                 artikelInWarenkorbRein(artikel, menge);
-                artikel.setBestand(artikel.getBestand() - menge);
+                artikel.setAnzahl(artikel.getAnzahl() - menge);
                 System.out.println("Artikel " + bezeichnung + " wurde in den Warenkorb gelegt.");
             } else {
                 System.out.println("Nicht genügend Bestand für den Artikel " + bezeichnung + ".");
@@ -150,8 +150,8 @@ public class ArtikelVerwaltung {
                 if (neueMenge > 0) {
                     int differenz = neueMenge - warenkorb.getMenge();
 
-                    if (warenkorb.getArtikel().getBestand() >= differenz) {
-                        warenkorb.getArtikel().setBestand(warenkorb.getArtikel().getBestand() - differenz);
+                    if (warenkorb.getArtikel().getAnzahl() >= differenz) {
+                        warenkorb.getArtikel().setAnzahl(warenkorb.getArtikel().getAnzahl() - differenz);
                         warenkorb.setMenge(neueMenge);
                         ereignisList.add(new Ereignis(neueMenge, warenkorb.getArtikel(), new Date()));
                         System.out.println("Die Menge des Artikels " + bezeichnung + " wurde auf " + neueMenge + " geändert.");
@@ -159,7 +159,7 @@ public class ArtikelVerwaltung {
                         System.out.println("Nicht genügend Bestand für den Artikel " + bezeichnung + ".");
                     }
                 } else {
-                    warenkorb.getArtikel().setBestand(warenkorb.getArtikel().getBestand() + warenkorb.getMenge());
+                    warenkorb.getArtikel().setAnzahl(warenkorb.getArtikel().getAnzahl() + warenkorb.getMenge());
                     ereignisList.add(new Ereignis(-warenkorb.getMenge(), warenkorb.getArtikel(), new Date()));
                     warenkorbList.remove(warenkorb);
                     System.out.println("Der Artikel " + bezeichnung + " wurde aus dem Warenkorb entfernt.");

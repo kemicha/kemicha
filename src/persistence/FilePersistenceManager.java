@@ -83,7 +83,7 @@ public  class FilePersistenceManager implements PersistenceManager {
     private void speichereArtikel(Artikel artikel) {
         schreibeZeile(artikel.getBezeichnung());
         schreibeZeile(String.valueOf(artikel.getArtikelNummer()));
-        schreibeZeile(String.valueOf(artikel.getBestand()));
+        schreibeZeile(String.valueOf(artikel.getAnzahl()));
         schreibeZeile(String.valueOf(artikel.getPreis()));
     }
 

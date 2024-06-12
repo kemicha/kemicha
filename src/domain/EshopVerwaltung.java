@@ -35,6 +35,15 @@ public class EshopVerwaltung {
 
     }
 
+
+
+    private void speicherDaten() throws IOException {
+        av.schreibeDaten(datei + "_ArtikelDB.txt");
+        av.schreibeDatenInEreignis(datei + "_Ereignis.txt");
+        kv.schreibeDatenVonKunde(datei + "_KundeDB.txt");
+        mv.schreibeDatenVonMitarbeiter(datei + "_MitarbeiterDB.txt");
+    }
+
     // ArtikelVerwaltung
 
     public void speicherArtikel() throws IOException {
@@ -134,7 +143,7 @@ public class EshopVerwaltung {
 // WarenkorbVerwaltung
 
     public void speicherEreignis() throws IOException {
-        av.schreibeDatenInEreignis(datei + "_Warenkorb.txt");
+        av.schreibeDatenInEreignis(datei + "_Ereignis.txt");
     }
 
     public List<Warenkorb> gibAlleArtikelInWarenkorb() {
@@ -196,20 +205,13 @@ public class EshopVerwaltung {
     public Benutzer getBenutzerByName(String benutzerName) {
         return (Benutzer) kv.getKundeList();
     }
-}
 
 
-
-
-
-
-
-
-   /* public Kunde registierteKunde (int id, String name, String passwort, String adresse) {
-        return kv. kundeRegistrierung(id, name, passwort, adresse);
+    public Kunde registierteKunde(int id, String name, String passwort, String adresse) {
+        return kv.kundeRegistrierung(id, name, passwort, adresse);
     }
-*/
 
+}
    /* public boolean fuegeMitarbeiterHinzu(int id, String name, String passwort, String adresse){
         return mv.fuegeMitarbeiterHinzu(id, name, passwort,adresse);
     }
