@@ -107,17 +107,16 @@ public  class FilePersistenceManager implements PersistenceManager {
 
     // KundeVerwaltung
     @Override
-    public List<Kunde> leseKunedeListe(String datenquelle) throws IOException,KundeExistiertBereitsException  {
+    public List<Kunde> leseKundeListe(String datenquelle) throws IOException  {
         reader= new BufferedReader(new FileReader(datenquelle));
         List<Kunde> kundelist = new ArrayList<>();
         Kunde kunde;
         do {
             kunde = ladeKunde();
             if (kunde != null) {
-                if (kundelist.contains(kunde)) {
-                    throw new KundeExistiertBereitsException(kunde.getName(), kunde.getId());
+                if (!kundelist.contains(kunde)) {
+                    kundelist.add(kunde);
                 }
-                kundelist.add(kunde);
             }
         } while (kunde != null);
 
@@ -160,22 +159,45 @@ public  class FilePersistenceManager implements PersistenceManager {
     }
 
 
+// Benutzer
+
+
+    private boolean existierteFile(String weg) {
+        File file = new File(weg);
+        return file.exists();
+    }
+
+    public List<Benutzer> leseAlleBenutzer() throws IOException {
+        List<Benutzer> benutzerListe = new ArrayList<>();
+        if (existierteFile("_MitarbeiterDB.txt")) {
+            benutzerListe.addAll(leseMitarbeiterListe("_MitarbeiterDB.txt"));
+        } else {
+
+        }
+        if (existierteFile("_KundeDB.txt")) {
+            benutzerListe.addAll(leseKundeListe("_KundeDB.txt"));
+        } else {
+
+        }
+        return benutzerListe;
+    }
 
 
 
-      // MitarbeiterVerwaltung
+
+
+    // MitarbeiterVerwaltung
     @Override
-    public List<Mitarbeiter> leseMitarbeiterListe(String datenquelle) throws IOException, MitarbeiterExistiertBereitsException {
+    public List<Mitarbeiter> leseMitarbeiterListe(String datenquelle) throws IOException {
         reader= new BufferedReader(new FileReader(datenquelle));
         List<Mitarbeiter> mitarbeiterList = new ArrayList<>();
         Mitarbeiter mitarbeiter;
         do {
             mitarbeiter= ladeMitarbeiter();
             if (mitarbeiter != null) {
-                if (mitarbeiterList.contains(mitarbeiter)) {
-                    throw new MitarbeiterExistiertBereitsException(mitarbeiter.getName(), mitarbeiter.getId());
+                if (!mitarbeiterList.contains(mitarbeiter)) {
+                    mitarbeiterList.add(mitarbeiter);
                 }
-                mitarbeiterList.add(mitarbeiter);
             }
         } while (mitarbeiter != null);
 

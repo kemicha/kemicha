@@ -2,7 +2,7 @@ package src.persistence;
 
 public class KundeExistiertBereitsException extends Exception {
 
-    public KundeExistiertBereitsException(String name, int id) {
-        super(" Kunde name" + name+ " Kunde Nummer" + id + " Kunde existiert bereit");
+    public KundeExistiertBereitsException(String name, String passwort, int id, String adresse) {
+        super(" Kunde name" + name+"passwort"+passwort+ " Kunde Nummer" + id +"adresse"+adresse+ " Kunde existiert bereit");
     }
 }

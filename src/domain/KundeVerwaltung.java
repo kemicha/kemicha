@@ -33,7 +33,7 @@ public class KundeVerwaltung {
 
         public void liesDatenVonKunde(String datei) throws IOException {
             try {
-                kundeList = pm.leseKunedeListe(datei);
+                kundeList = pm.leseKundeListe(datei);
             } catch (KundeExistiertBereitsException e) {
                 System.err.println("kundeliste enthaelt Duplikate und konnte nicht geladen werden: " + e);
             }

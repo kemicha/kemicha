@@ -1,13 +1,11 @@
 package src.domain;
 
 
-import src.persistence.ArtikelExistiertBereitsException;
-import src.persistence.KundeExistiertBereitsException;
-import src.persistence.MitarbeiterExistiertBereitsException;
-import src.persistence.EreignisExistierBereitsException;
+import src.persistence.*;
 import src.valueObjects.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class EshopVerwaltung {
@@ -17,6 +15,7 @@ public class EshopVerwaltung {
     private ArtikelVerwaltung av;
     private MitarbeiterVerwaltung mv;
     private KundeVerwaltung kv;
+
 
 
     public EshopVerwaltung(String datei) throws IOException {
@@ -37,7 +36,7 @@ public class EshopVerwaltung {
 
 
 
-    private void speicherDaten() throws IOException {
+    public void speicherDaten() throws IOException {
         av.schreibeDaten(datei + "_ArtikelDB.txt");
         av.schreibeDatenInEreignis(datei + "_Ereignis.txt");
         kv.schreibeDatenVonKunde(datei + "_KundeDB.txt");
@@ -95,17 +94,17 @@ public class EshopVerwaltung {
 
     public void NeueKunde(String name, int id, String passwort, String adresse) throws KundeExistiertBereitsException {
         if (!kv.sucheKunde(name, id, passwort, adresse).isEmpty()) {
-            throw new KundeExistiertBereitsException(name, id);
+            throw new KundeExistiertBereitsException(name,passwort, id,adresse);
         }
         Kunde kunde = new Kunde(name, id, passwort, adresse);
         kv.getKundeList().add(kunde);
 
     }
 
-    public void speicherKunden() throws IOException {
+    /*public void speicherKunden() throws IOException {
         kv.schreibeDatenVonKunde(datei + "_KundeDB.txt");
     }
-
+*/
     public void loescheKunde(int id) {
         kv.kundeLoeschen(id);
     }
@@ -118,7 +117,7 @@ public class EshopVerwaltung {
 
     public void NeueMitarbeiter(String name, int id, String passwort) throws MitarbeiterExistiertBereitsException {
         if (!mv.sucheMitarbeiter(name, id, passwort).isEmpty()) {
-            throw new MitarbeiterExistiertBereitsException(name, id);
+            throw new MitarbeiterExistiertBereitsException(name, passwort,id);
         }
         Mitarbeiter mitarbeiter = new Mitarbeiter(name, id, passwort);
         mv.getMitarbeiterList().add(mitarbeiter);
@@ -134,9 +133,24 @@ public class EshopVerwaltung {
     }
 
 
-    public boolean eingelogt(String name, String passwort) {
-        return bv.login(name, passwort);
 
+//Benutzer
+    public boolean eingelogt(String name, String passwort) throws IOException, BenutzerExistiertBereitsException {
+        List<Benutzer> benutzerListe = new ArrayList<>();
+        bv.eingelogt(name,passwort);
+
+        for (Benutzer benutzer : benutzerListe) {
+            if (benutzer.getName().equals(name) && benutzer.getPasswort().equals(passwort)) {
+                return true;
+            }
+        }
+        throw new BenutzerExistiertBereitsException(name, passwort);
+    }
+
+
+    public Benutzer ausgeloggt() {
+        bv.ausloggen();
+        return null;
     }
 
 

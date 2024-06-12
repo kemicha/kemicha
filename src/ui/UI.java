@@ -2,6 +2,7 @@ package src.ui;
 
 import src.domain.EshopVerwaltung;
 import src.persistence.ArtikelExistiertBereitsException;
+import src.persistence.BenutzerExistiertBereitsException;
 import src.persistence.KundeExistiertBereitsException;
 import src.persistence.MitarbeiterExistiertBereitsException;
 import src.valueObjects.*;
@@ -114,8 +115,8 @@ public class UI {
             System.out.println("6. Artikelliste speichern & zeigen");
             System.out.println("7. Mitarbeiterliste anzeigen");
             System.out.println("8. Mitarbeiter speichern");
-            System.out.println("9. Mitarbeiter loeschen!");
-            System.out.println("e. Zurueck zum Hauptmenue");
+            System.out.println("9. Mitarbeiter loeschen & Ausloggen!");
+            System.out.println("e. Ausloggen & Zurueck zum Hauptmenue");
             System.out.print("> Ihre Auswahl: ");
             System.out.flush();
 
@@ -151,9 +152,11 @@ public class UI {
                     shop.speicherMitarbeiter();
                     break;
                 case "9":
+                    shop.ausgeloggt();
                     entferntMitarbeiter();
                     break;
                 case "e":
+                    shop.ausgeloggt();
                     System.out.println("Zurueck zum Hauptmenue");
                     break;
                 default:
@@ -218,18 +221,22 @@ public class UI {
     }
 
     private void benutzerEinlogge() throws IOException {
-        System.out.println(" Geben Sie Ihren Benutzername ein:");
+        System.out.println("Geben Sie Ihren Benutzernamen ein:");
         String name = liesEingabe();
-        System.out.println(" Geben Sie Ihr Passwort ein:");
+        System.out.println("Geben Sie Ihr Passwort ein:");
         String passwort = liesEingabe();
-        System.out.println(shop.eingelogt(name, passwort));
-        boolean loginErfolgreich = shop.eingelogt(name, passwort);
-        if (loginErfolgreich) {
-            System.out.println("Erfolgreich eingeloggt!");
-        } else {
-            System.out.println("Fehler beim Einloggen. Benutzername oder Passwort falsch.");
+
+        try {
+            boolean loginErfolgreich = shop.eingelogt(name, passwort);
+            System.err.println(loginErfolgreich);
+            if (loginErfolgreich) {
+                System.out.println("Erfolgreich eingeloggt!");
+            }
+        } catch (BenutzerExistiertBereitsException e) {
+            System.out.println("Fehler beim Einloggen: Benutzer existiert nicht.");
         }
     }
+
 
     private void mitarbeiterRegistrieren() throws IOException {
         System.out.println("Bitte geben Sie Ihren Namen ein: ");
@@ -240,9 +247,9 @@ public class UI {
         String passwort = liesEingabe();
         try {
             shop.NeueMitarbeiter(name, id, passwort);
-            System.out.println("Mitarbeiter erfolgreich registriert.");
+            System.out.println("\nMitarbeiter erfolgreich registriert.");
         } catch (MitarbeiterExistiertBereitsException e) {
-            System.out.println("Fehler bei der Registrierung: Mitarbeiter existiert bereits.");
+            System.out.println("\nFehler bei der Registrierung: Mitarbeiter existiert bereits.");
         }
     }
 
@@ -259,8 +266,8 @@ public class UI {
             System.out.println("7. Artikel im Warenkorb kaufen und Rechnung anzeigen!");
             System.out.println("8. Kundenliste anzeigen");
             System.out.println("9. Kunde speichern");
-            System.out.println("10. Kunde loeschen");
-            System.out.println("e. Zurueck zum Hauptmenue");
+            System.out.println("10. Kunde loeschen & Ausloggen");
+            System.out.println("e. Ausloggen & Zurueck zum Hauptmenue");
             System.out.print("> Ihre Auswahl: ");
             System.out.flush();
 
@@ -297,13 +304,15 @@ public class UI {
                     gibKundeliste(list);
                     break;
                 case "9":
-                    shop.speicherKunden();
+                    shop.speicherDaten();
                     System.out.println("Neue Kunden erfolgreich gespeichert!");
                     break;
                 case "10":
+                    shop.ausgeloggt();
                     kundeLoeschen();
                     break;
                 case "e":
+                    shop.ausgeloggt();
                     System.out.println("Zurueck zum Hauptmenue");
                     break;
                 default:
@@ -323,9 +332,9 @@ public class UI {
         String adresse = br.readLine();
         try {
             shop.NeueKunde(name, id, passwort, adresse);
-            System.out.println("Registrierung erfolgreich. Sie koennen sich jetzt einloggen.");
+            System.out.println("\nRegistrierung erfolgreich. Sie koennen sich jetzt einloggen.");
         } catch (KundeExistiertBereitsException e) {
-            System.out.println("Ein Kunde mit diesen Anmeldeinformationen existiert bereits.");
+            System.out.println("\nEin Kunde mit diesen Anmeldeinformationen existiert bereits.");
         }
     }
 
@@ -339,9 +348,9 @@ public class UI {
         try {
             int id = Integer.parseInt(liesEingabe());
             shop.loescheKunde(id);
-            System.out.println("Kunde erfolgreich geloescht.");
+            System.out.println("\nKunde erfolgreich geloescht.");
         } catch (NumberFormatException e) {
-            System.out.println("Ungueltige ID.");
+            System.out.println("\nUngueltige ID.");
         }
     }
 
