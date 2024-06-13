@@ -1,4 +1,4 @@
-package src.persistence;
+package src.Exeptions;
 
 import src.valueObjects.Artikel;
 

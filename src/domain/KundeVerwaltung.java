@@ -1,7 +1,7 @@
 package src.domain;
 
 import src.persistence.FilePersistenceManager;
-import src.persistence.KundeExistiertBereitsException;
+import src.Exeptions.KundeExistiertBereitsException;
 import src.persistence.PersistenceManager;
 import src.valueObjects.*;
 

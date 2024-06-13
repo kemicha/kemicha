@@ -1,6 +1,6 @@
 package src.domain;
 import src.persistence.FilePersistenceManager;
-import src.persistence.MitarbeiterExistiertBereitsException;
+import src.Exeptions.MitarbeiterExistiertBereitsException;
 import src.persistence.PersistenceManager;
 import src.valueObjects.Mitarbeiter;
 

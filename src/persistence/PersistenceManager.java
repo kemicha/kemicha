@@ -1,5 +1,9 @@
 package src.persistence;
 
+import src.Exeptions.ArtikelExistiertBereitsException;
+import src.Exeptions.EreignisExistierBereitsException;
+import src.Exeptions.KundeExistiertBereitsException;
+import src.Exeptions.MitarbeiterExistiertBereitsException;
 import src.valueObjects.*;
 
 import java.io.IOException;
@@ -16,7 +20,7 @@ public interface PersistenceManager {
     List<Mitarbeiter> leseMitarbeiterListe(String datenquelle) throws IOException, MitarbeiterExistiertBereitsException;
     void schreibeMitarbeiterListe(List<Mitarbeiter> liste, String datei) throws IOException;
 
-    List<Ereignis> leseEreignisList(String datenquelle) throws IOException,  EreignisExistierBereitsException;
+    List<Ereignis> leseEreignisList(String datenquelle) throws IOException, EreignisExistierBereitsException;
 
 
     void schreibeInEreignisList(List<Ereignis> liste, String datei) throws IOException;

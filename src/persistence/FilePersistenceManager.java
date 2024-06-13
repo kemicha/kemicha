@@ -1,5 +1,7 @@
 package src.persistence;
 
+import src.Exeptions.ArtikelExistiertBereitsException;
+import src.Exeptions.EreignisExistierBereitsException;
 import src.valueObjects.*;
 
 import java.io.*;
@@ -167,22 +169,17 @@ public  class FilePersistenceManager implements PersistenceManager {
         return file.exists();
     }
 
+    @Override
     public List<Benutzer> leseAlleBenutzer() throws IOException {
         List<Benutzer> benutzerListe = new ArrayList<>();
-        if (existierteFile("_MitarbeiterDB.txt")) {
-            benutzerListe.addAll(leseMitarbeiterListe("_MitarbeiterDB.txt"));
-        } else {
-
+        if (existierteFile("Eshop_MitarbeiterDB.txt")) {
+            benutzerListe.addAll(leseMitarbeiterListe("Eshop_MitarbeiterDB.txt"));
         }
-        if (existierteFile("_KundeDB.txt")) {
-            benutzerListe.addAll(leseKundeListe("_KundeDB.txt"));
-        } else {
-
+        if (existierteFile("Eshop_KundeDB.txt")) {
+            benutzerListe.addAll(leseKundeListe("Eshop_KundeDB.txt"));
         }
         return benutzerListe;
     }
-
-
 
 
 
@@ -217,7 +214,7 @@ public  class FilePersistenceManager implements PersistenceManager {
             return null;}
 
         String passwort = liesZeile();
-        
+
         return new Mitarbeiter( name,id,passwort);
 
     }

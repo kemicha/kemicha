@@ -1,4 +1,4 @@
-package src.persistence;
+package src.Exeptions;
 
 public class BenutzerExistiertBereitsException extends Exception {
     public BenutzerExistiertBereitsException(String name, String passwort) {

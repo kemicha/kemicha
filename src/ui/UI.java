@@ -1,10 +1,9 @@
 package src.ui;
 
 import src.domain.EshopVerwaltung;
-import src.persistence.ArtikelExistiertBereitsException;
-import src.persistence.BenutzerExistiertBereitsException;
-import src.persistence.KundeExistiertBereitsException;
-import src.persistence.MitarbeiterExistiertBereitsException;
+import src.Exeptions.ArtikelExistiertBereitsException;
+import src.Exeptions.KundeExistiertBereitsException;
+import src.Exeptions.MitarbeiterExistiertBereitsException;
 import src.valueObjects.*;
 
 import java.io.BufferedReader;
@@ -140,7 +139,6 @@ public class UI {
                     artikelEntfernen();
                     break;
                 case "6":
-                    shop.speicherArtikel();
                     artikelListe = shop.gibAlleArtikel();
                     gibArtikellisteAus(artikelListe);
                     break;
@@ -152,11 +150,12 @@ public class UI {
                     shop.speicherMitarbeiter();
                     break;
                 case "9":
-                    shop.ausgeloggt();
+                    shop.logout();
                     entferntMitarbeiter();
                     break;
                 case "e":
-                    shop.ausgeloggt();
+                    shop.speicherDaten();
+                    shop.logout();
                     System.out.println("Zurueck zum Hauptmenue");
                     break;
                 default:
@@ -226,14 +225,10 @@ public class UI {
         System.out.println("Geben Sie Ihr Passwort ein:");
         String passwort = liesEingabe();
 
-        try {
-            boolean loginErfolgreich = shop.eingelogt(name, passwort);
-            System.err.println(loginErfolgreich);
-            if (loginErfolgreich) {
-                System.out.println("Erfolgreich eingeloggt!");
-            }
-        } catch (BenutzerExistiertBereitsException e) {
-            System.out.println("Fehler beim Einloggen: Benutzer existiert nicht.");
+        boolean loginErfolgreich = shop.login(name, passwort);
+        System.err.println(loginErfolgreich);
+        if (loginErfolgreich) {
+            System.out.println("Erfolgreich eingeloggt!");
         }
     }
 
@@ -266,7 +261,7 @@ public class UI {
             System.out.println("7. Artikel im Warenkorb kaufen und Rechnung anzeigen!");
             System.out.println("8. Kundenliste anzeigen");
             System.out.println("9. Kunde speichern");
-            System.out.println("10. Kunde loeschen & Ausloggen");
+            System.out.println("10. Kunde loeschen ");
             System.out.println("e. Ausloggen & Zurueck zum Hauptmenue");
             System.out.print("> Ihre Auswahl: ");
             System.out.flush();
@@ -304,15 +299,16 @@ public class UI {
                     gibKundeliste(list);
                     break;
                 case "9":
-                    shop.speicherDaten();
+
                     System.out.println("Neue Kunden erfolgreich gespeichert!");
                     break;
                 case "10":
-                    shop.ausgeloggt();
+                    shop.logout();
                     kundeLoeschen();
                     break;
                 case "e":
-                    shop.ausgeloggt();
+                    shop.speicherDaten();
+                    shop.logout();
                     System.out.println("Zurueck zum Hauptmenue");
                     break;
                 default:
@@ -433,7 +429,7 @@ public class UI {
 
 
        private void kaufen() throws IOException {
-          shop.kaufenArtikel(new Benutzer());
+          shop.kaufenArtikel(new Benutzer()) ;
            if (shop.getWarenkorbList().isEmpty()) {
                System.out.println("Der Warenkorb ist jetzt leer.");
            } else {

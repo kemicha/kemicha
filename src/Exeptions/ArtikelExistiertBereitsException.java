@@ -1,4 +1,4 @@
-package src.persistence;
+package src.Exeptions;
 
 public class ArtikelExistiertBereitsException extends Throwable {
 

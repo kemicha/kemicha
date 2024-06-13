@@ -1,9 +1,9 @@
 package src.domain;
 
-import src.persistence.ArtikelExistiertBereitsException;
+import src.Exeptions.ArtikelExistiertBereitsException;
 import src.persistence.FilePersistenceManager;
 import src.persistence.PersistenceManager;
-import src.persistence.EreignisExistierBereitsException;
+import src.Exeptions.EreignisExistierBereitsException;
 import src.valueObjects.*;
 
 import java.io.IOException;
@@ -16,6 +16,7 @@ public class ArtikelVerwaltung {
     private List<Warenkorb> warenkorbList = new ArrayList<>();
     private List<Rechnung> rechnungList = new ArrayList<>();
     private List<Ereignis> ereignisList = new ArrayList<>();
+    private List<Massengutartikel>massengutartikelListe= new ArrayList<>();
 
     public ArtikelVerwaltung() throws IOException {
 
@@ -192,4 +193,63 @@ public class ArtikelVerwaltung {
     public void warenkorbLeeren() {
         warenkorbList.clear();
     }
+
+
+
+
+
+    // Massengut
+    public void addMassengutartikel(Massengutartikel artikel) {
+        massengutartikelListe.add(artikel);
+        System.out.println("Artikel hinzugefügt: " + artikel.getBezeichnung());
+    }
+
+    public void removeMassengutartikel(int artikelNummer) {
+        massengutartikelListe.removeIf(artikel -> artikel.getArtikelNummer() == artikelNummer);
+        System.out.println("Artikel entfernt mit Artikelnummer: " + artikelNummer);
+    }
+
+    public Massengutartikel findMassengutartikel(int artikelNummer) {
+        for (Massengutartikel artikel : massengutartikelListe) {
+            if (artikel.getArtikelNummer() == artikelNummer) {
+                return artikel;
+            }
+        }
+        return null;
+    }
+
+    public void einlagern(int artikelNummer, int menge) {
+        Massengutartikel artikel = findMassengutartikel(artikelNummer);
+        if (artikel != null) {
+            artikel.einlagern(menge);
+            System.out.println("Einlagerung durchgeführt für Artikelnummer: " + artikelNummer + " mit Menge: " + menge);
+        } else {
+            System.out.println("Artikel nicht gefunden mit Artikelnummer: " + artikelNummer);
+        }
+    }
+
+    public void auslagern(int artikelNummer, int menge) {
+        Massengutartikel artikel = findMassengutartikel(artikelNummer);
+        if (artikel != null) {
+            artikel.auslagern(menge);
+            System.out.println("Auslagerung durchgeführt für Artikelnummer: " + artikelNummer + " mit Menge: " + menge);
+        } else {
+            System.out.println("Artikel nicht gefunden mit Artikelnummer: " + artikelNummer);
+        }
+    }
+
+    public void printEreignisse(int artikelNummer) {
+        Massengutartikel artikel = findMassengutartikel(artikelNummer);
+        if (artikel != null) {
+            List<Ereignis> ereignisse = artikel.getEreignisseSortedByDate();
+            for (Ereignis ereignis : ereignisse) {
+                System.out.println(ereignis);
+            }
+        } else {
+            System.out.println("Artikel nicht gefunden mit Artikelnummer: " + artikelNummer);
+        }
+    }
 }
+
+
+

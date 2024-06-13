@@ -1,40 +1,36 @@
 package src.domain;
 
+import src.Exeptions.BenutzerExistiertBereitsException;
 import src.persistence.*;
 import src.valueObjects.Benutzer;
-import src.valueObjects.Kunde;
-import src.valueObjects.Mitarbeiter;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class BenutzerVerwaltung {
-    List<Benutzer> benutzerList = new ArrayList<>();
-    private Benutzer benutzer;
-    private PersistenceManager pm = new FilePersistenceManager();
+    private List<Benutzer> benutzerListe;
+    private PersistenceManager pm;
     private Benutzer angemeldeteBenutzer;
 
     public BenutzerVerwaltung() {
-        this.benutzerList = benutzerList;
-        this.benutzer = benutzer;
-        this.pm = pm;
+        this.pm = new FilePersistenceManager();
+        try {
+            this.benutzerListe = pm.leseAlleBenutzer();
+        } catch (IOException e) {
+            e.printStackTrace();
+            this.benutzerListe = new ArrayList<>();
+        }
     }
 
-
-    public boolean eingelogt(String name, String passwort) throws IOException, BenutzerExistiertBereitsException {
-        List<Benutzer> benutzerListe = pm.leseAlleBenutzer();
+    public boolean einloggen(String name, String passwort) throws BenutzerExistiertBereitsException {
         for (Benutzer benutzer : benutzerListe) {
-            System.out.println(benutzer.getName() + benutzer.getPasswort());
             if (benutzer.getName().equals(name) && benutzer.getPasswort().equals(passwort)) {
                 this.angemeldeteBenutzer = benutzer;
-                System.err.println("true");
                 return true;
             }
         }
-
-        throw new BenutzerExistiertBereitsException(name, passwort);
+        return false;
     }
 
     public void ausloggen() {
@@ -45,17 +41,7 @@ public class BenutzerVerwaltung {
         return this.angemeldeteBenutzer != null;
     }
 
+    public Benutzer getAngemeldeteBenutzer() {
+        return angemeldeteBenutzer;
+    }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

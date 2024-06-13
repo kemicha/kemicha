@@ -77,7 +77,8 @@ public class Benutzer {
         if (this == o) return true;
         if (!(o instanceof Benutzer)) return false;
         Benutzer benutzer = (Benutzer) o;
-        return getId() == benutzer.getId() && Objects.equals(getName(), benutzer.getName()) && Objects.equals(getPasswort(), benutzer.getPasswort());
+        return getId() == benutzer.getId() && Objects.equals(getName(),
+                benutzer.getName()) && Objects.equals(getPasswort(), benutzer.getPasswort());
     }
 
     @Override

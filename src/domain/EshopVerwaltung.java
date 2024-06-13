@@ -1,11 +1,13 @@
 package src.domain;
 
 
-import src.persistence.*;
+import src.Exeptions.ArtikelExistiertBereitsException;
+import src.Exeptions.BenutzerExistiertBereitsException;
+import src.Exeptions.KundeExistiertBereitsException;
+import src.Exeptions.MitarbeiterExistiertBereitsException;
 import src.valueObjects.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class EshopVerwaltung {
@@ -45,9 +47,9 @@ public class EshopVerwaltung {
 
     // ArtikelVerwaltung
 
-    public void speicherArtikel() throws IOException {
+   /* public void speicherArtikel() throws IOException {
         av.schreibeDaten(datei + "_ArtikelDB.txt");
-    }
+    }*/
 
     public List<Artikel> gibAlleArtikel() {
         return av.getArtikelBestand();
@@ -135,22 +137,27 @@ public class EshopVerwaltung {
 
 
 //Benutzer
-    public boolean eingelogt(String name, String passwort) throws IOException, BenutzerExistiertBereitsException {
-        List<Benutzer> benutzerListe = new ArrayList<>();
-        bv.eingelogt(name,passwort);
+public boolean login(String username, String password) {
+    try {
+        boolean success = bv.einloggen(username, password);
+        if (success) {
+            System.out.println("Erfolreich Eingelogt: " + bv.getAngemeldeteBenutzer().getName());
+        } else {
 
-        for (Benutzer benutzer : benutzerListe) {
-            if (benutzer.getName().equals(name) && benutzer.getPasswort().equals(passwort)) {
-                return true;
-            }
         }
-        throw new BenutzerExistiertBereitsException(name, passwort);
+    } catch (BenutzerExistiertBereitsException e) {
+        System.err.println("Fehler Beim Einloggen : " + e.getMessage());
+    }
+    return false;
+}
+
+    public void logout() {
+        bv.ausloggen();
+        System.out.println("Benutzer Ausgeloggt.");
     }
 
-
-    public Benutzer ausgeloggt() {
-        bv.ausloggen();
-        return null;
+    public boolean isLoggedIn() {
+        return bv.istEingeloggt();
     }
 
 
@@ -225,6 +232,28 @@ public class EshopVerwaltung {
         return kv.kundeRegistrierung(id, name, passwort, adresse);
     }
 
+
+
+    // Massengut
+
+    public void addMassengut(Massengutartikel atikel){
+        av.addMassengutartikel(atikel);
+    }
+
+    public void removeInMassengut(int artikelNummer ){
+        av.removeMassengutartikel(artikelNummer);
+    }
+
+    public void einlargern( int artikelNummer, int menge){
+        av.einlagern(artikelNummer, menge);
+    }
+    public void auslagern (int artikelNummer, int menge){
+        av.auslagern(artikelNummer,menge);
+    }
+
+    public void printEreignis(int artikelNummer){
+        av.printEreignisse(artikelNummer);
+    }
 }
    /* public boolean fuegeMitarbeiterHinzu(int id, String name, String passwort, String adresse){
         return mv.fuegeMitarbeiterHinzu(id, name, passwort,adresse);
