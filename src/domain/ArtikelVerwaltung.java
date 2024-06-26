@@ -16,7 +16,7 @@ public class ArtikelVerwaltung {
     private List<Warenkorb> warenkorbList = new ArrayList<>();
     private List<Rechnung> rechnungList = new ArrayList<>();
     private List<Ereignis> ereignisList = new ArrayList<>();
-    private List<Massengutartikel>massengutartikelListe= new ArrayList<>();
+    private List<Massengut>massengutartikelListe= new ArrayList<>();
 
     public ArtikelVerwaltung() throws IOException {
 
@@ -64,10 +64,14 @@ public class ArtikelVerwaltung {
 
         if (artikel != null) {
             artikel.setAnzahl(artikel.getAnzahl() + menge);
+            ereignisList.add(new Ereignis("Mitarbeiter",0, artikel,menge,new Date(),"besstand erhöhen"));
         } else {
             System.out.println("Artikel unbekannt!");
+            return;
         }
     }
+
+
 
     public List<Artikel> artikelNachArtikelnummer() {
         artikelList.sort(Comparator.comparingInt(Artikel::getArtikelNummer));
@@ -112,12 +116,11 @@ public class ArtikelVerwaltung {
         for (Warenkorb eintrag : warenkorbList) {
             if (eintrag.getArtikel().equals(artikel)) {
                 eintrag.setMenge(eintrag.getMenge() + menge);
-                ereignisList.add(new Ereignis(menge, artikel, new Date()));
                 return;
             }
         }
         warenkorbList.add(new Warenkorb(artikel, menge));
-        ereignisList.add(new Ereignis(menge, artikel, new Date()));
+
     }
 
     public void fuegeArtikelInWarenkorbEin(String bezeichnung, int menge) {
@@ -141,7 +144,7 @@ public class ArtikelVerwaltung {
         }
     }
 
-    public void aendereMengeImWarenkorb(String bezeichnung, int neueMenge) {
+    public boolean aendereMengeImWarenkorb(String bezeichnung, int neueMenge) {
         boolean artikelGefunden = false;
 
         for (Warenkorb warenkorb : warenkorbList) {
@@ -154,14 +157,14 @@ public class ArtikelVerwaltung {
                     if (warenkorb.getArtikel().getAnzahl() >= differenz) {
                         warenkorb.getArtikel().setAnzahl(warenkorb.getArtikel().getAnzahl() - differenz);
                         warenkorb.setMenge(neueMenge);
-                        ereignisList.add(new Ereignis(neueMenge, warenkorb.getArtikel(), new Date()));
+
                         System.out.println("Die Menge des Artikels " + bezeichnung + " wurde auf " + neueMenge + " geändert.");
                     } else {
                         System.out.println("Nicht genügend Bestand für den Artikel " + bezeichnung + ".");
                     }
                 } else {
                     warenkorb.getArtikel().setAnzahl(warenkorb.getArtikel().getAnzahl() + warenkorb.getMenge());
-                    ereignisList.add(new Ereignis(-warenkorb.getMenge(), warenkorb.getArtikel(), new Date()));
+
                     warenkorbList.remove(warenkorb);
                     System.out.println("Der Artikel " + bezeichnung + " wurde aus dem Warenkorb entfernt.");
                 }
@@ -172,20 +175,24 @@ public class ArtikelVerwaltung {
         if (!artikelGefunden) {
             System.out.println("Artikel " + bezeichnung + " nicht im Warenkorb gefunden.");
         }
+        return artikelGefunden;
     }
 
     public void kaufeWarenkorb(Benutzer benutzer) {
         if (warenkorbList.isEmpty()) {
             return;
         }
+        Rechnung rechnung =null;
 
         double gesamtPreis = 0.0;
         for (Warenkorb warenkorb : warenkorbList) {
             Artikel artikel = warenkorb.getArtikel();
             int menge = warenkorb.getMenge();
             gesamtPreis += artikel.getPreis() * menge;
+            rechnung = new Rechnung(benutzer, new Date(),  gesamtPreis,menge, artikel.getBezeichnung());
+
         }
-        Rechnung rechnung = new Rechnung(benutzer, new Date(), new ArrayList<>(warenkorbList), gesamtPreis);
+
         System.out.println(rechnung);
         warenkorbList.clear();
     }
@@ -194,14 +201,18 @@ public class ArtikelVerwaltung {
         warenkorbList.clear();
     }
 
+// Rechnung
 
+    public List<Rechnung> getRechnungList(){
+        return rechnungList;
+    }
 
 
 
     // Massengut
-    public void addMassengutartikel(Massengutartikel artikel) {
+    public void addMassengutartikel(Massengut artikel) {
         massengutartikelListe.add(artikel);
-        System.out.println("Artikel hinzugefügt: " + artikel.getBezeichnung());
+
     }
 
     public void removeMassengutartikel(int artikelNummer) {
@@ -209,8 +220,8 @@ public class ArtikelVerwaltung {
         System.out.println("Artikel entfernt mit Artikelnummer: " + artikelNummer);
     }
 
-    public Massengutartikel findMassengutartikel(int artikelNummer) {
-        for (Massengutartikel artikel : massengutartikelListe) {
+    public Massengut findMassengutartikel(int artikelNummer) {
+        for (Massengut artikel : massengutartikelListe) {
             if (artikel.getArtikelNummer() == artikelNummer) {
                 return artikel;
             }
@@ -218,10 +229,10 @@ public class ArtikelVerwaltung {
         return null;
     }
 
-    public void einlagern(int artikelNummer, int menge) {
-        Massengutartikel artikel = findMassengutartikel(artikelNummer);
+    public void einlagern(Artikel artikelNummer, int menge) {
+        Massengut artikel = findMassengutartikel(artikelNummer.getArtikelNummer());
         if (artikel != null) {
-            artikel.einlagern(menge);
+            artikel.einlagern(artikel);
             System.out.println("Einlagerung durchgeführt für Artikelnummer: " + artikelNummer + " mit Menge: " + menge);
         } else {
             System.out.println("Artikel nicht gefunden mit Artikelnummer: " + artikelNummer);
@@ -229,9 +240,9 @@ public class ArtikelVerwaltung {
     }
 
     public void auslagern(int artikelNummer, int menge) {
-        Massengutartikel artikel = findMassengutartikel(artikelNummer);
+        Massengut artikel = findMassengutartikel(artikelNummer);
         if (artikel != null) {
-            artikel.auslagern(menge);
+            artikel.auslagern(artikel);
             System.out.println("Auslagerung durchgeführt für Artikelnummer: " + artikelNummer + " mit Menge: " + menge);
         } else {
             System.out.println("Artikel nicht gefunden mit Artikelnummer: " + artikelNummer);
@@ -239,7 +250,7 @@ public class ArtikelVerwaltung {
     }
 
     public void printEreignisse(int artikelNummer) {
-        Massengutartikel artikel = findMassengutartikel(artikelNummer);
+        Massengut artikel = findMassengutartikel(artikelNummer);
         if (artikel != null) {
             List<Ereignis> ereignisse = artikel.getEreignisseSortedByDate();
             for (Ereignis ereignis : ereignisse) {

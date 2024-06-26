@@ -20,7 +20,8 @@ public class EshopVerwaltung {
 
 
 
-    public EshopVerwaltung(String datei) throws IOException {
+
+    public  EshopVerwaltung(String datei) throws IOException {
         this.datei = datei;
         av = new ArtikelVerwaltung();
         av.liesDaten(datei + "_ArtikelDB.txt");
@@ -126,9 +127,9 @@ public class EshopVerwaltung {
 
     }
 
-    public void speicherMitarbeiter() throws IOException {
+   /* public void speicherMitarbeiter() throws IOException {
         mv.schreibeDatenVonMitarbeiter(datei + "_MitarbeiterDB.txt");
-    }
+    }*/
 
     public void loescheMitabeiter(int id) {
         mv.mitarbeiterLoeschen(id);
@@ -175,8 +176,9 @@ public boolean login(String username, String password) {
         av.fuegeArtikelInWarenkorbEin(bezeichnung, menge);
     }
 
-    public void aenderungImWarenkorb(String bezeichnung, int neueMenge) {
+    public boolean aenderungImWarenkorb(String bezeichnung, int neueMenge) {
         av.aendereMengeImWarenkorb(bezeichnung, neueMenge);
+        return false;
     }
       /*  {
             throw new WarenkorbExistierBereitsException(artikel, menge);
@@ -236,7 +238,7 @@ public boolean login(String username, String password) {
 
     // Massengut
 
-    public void addMassengut(Massengutartikel atikel){
+    public void addMassengut(Massengut atikel){
         av.addMassengutartikel(atikel);
     }
 
@@ -244,7 +246,7 @@ public boolean login(String username, String password) {
         av.removeMassengutartikel(artikelNummer);
     }
 
-    public void einlargern( int artikelNummer, int menge){
+    public void einlargern(Artikel artikelNummer, int menge){
         av.einlagern(artikelNummer, menge);
     }
     public void auslagern (int artikelNummer, int menge){
@@ -254,7 +256,25 @@ public boolean login(String username, String password) {
     public void printEreignis(int artikelNummer){
         av.printEreignisse(artikelNummer);
     }
+
+
+    public List<Rechnung> getRechnungenListe() {
+        return getRechnungenListe();
+    }
+
+    public List<Ereignis> getEreignisLite(){
+        return getEreignisLite();
+    }
+    public void addEreignis(Ereignis ereignis) {
+        av.getEreignisListe();
+
+    }
 }
+
+
+
+
+
    /* public boolean fuegeMitarbeiterHinzu(int id, String name, String passwort, String adresse){
         return mv.fuegeMitarbeiterHinzu(id, name, passwort,adresse);
     }

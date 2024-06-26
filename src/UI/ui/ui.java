@@ -1,4 +1,4 @@
-package src.ui;
+package src.UI.ui;
 
 import src.domain.EshopVerwaltung;
 import src.Exeptions.ArtikelExistiertBereitsException;
@@ -11,11 +11,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
 
-public class UI {
+public class ui {
     private BufferedReader br;
     private EshopVerwaltung shop;
 
-    public UI(String datei) throws IOException {
+    public ui(String datei) throws IOException {
         shop = new EshopVerwaltung(datei);
         br = new BufferedReader(new InputStreamReader(System.in));
     }
@@ -113,8 +113,8 @@ public class UI {
             System.out.println("5. Artikel entfernen!");
             System.out.println("6. Artikelliste speichern & zeigen");
             System.out.println("7. Mitarbeiterliste anzeigen");
-            System.out.println("8. Mitarbeiter speichern");
-            System.out.println("9. Mitarbeiter loeschen & Ausloggen!");
+            System.out.println("8. Mitarbeiter loeschen & Ausloggen!");
+            System.out.println("9. fühge Artikel in Massegut hin");
             System.out.println("e. Ausloggen & Zurueck zum Hauptmenue");
             System.out.print("> Ihre Auswahl: ");
             System.out.flush();
@@ -147,11 +147,11 @@ public class UI {
                     gibMitarbeiterliste(liste);
                     break;
                 case "8":
-                    shop.speicherMitarbeiter();
-                    break;
-                case "9":
                     shop.logout();
                     entferntMitarbeiter();
+                    break;
+                case "9":
+                    addArtikelInMassengut();
                     break;
                 case "e":
                     shop.speicherDaten();
@@ -164,7 +164,37 @@ public class UI {
         } while (!input.equals("e"));
     }
 
-    private void entferntMitarbeiter() {
+    public void addArtikelInMassengut() throws IOException {
+
+
+        try {
+            System.out.print("Bezeichnung des Artikels: ");
+            String bezeichnung = liesEingabe();
+
+            System.out.print("Artikelnummer: ");
+            int artikelNummer = Integer.parseInt(liesEingabe());
+
+            System.out.print("Preis: ");
+            double preis = Double.parseDouble(liesEingabe());
+            System.out.println(" bestand");
+            int bestand = Integer.parseInt(liesEingabe());
+
+            System.out.print("Packungsgröße: ");
+            int packungsgroesse = Integer.parseInt(liesEingabe());
+
+            Massengut artikel1 = new Massengut(bezeichnung, artikelNummer, preis,bestand, packungsgroesse);
+
+            shop.addMassengut(artikel1);
+
+            System.out.println("Artikel erfolgreich hinzugefügt! " + artikel1.getBezeichnung());
+        } catch (NumberFormatException e) {
+            System.err.println("Fehler: Ungültiges Zahlenformat. Bitte geben Sie eine gültige Zahl ein.");
+        } catch (IOException e) {
+            System.err.println("Fehler: Ein-/Ausgabe-Fehler beim Lesen der Eingabe.");
+        }
+    }
+
+       private void entferntMitarbeiter() {
         System.out.println("Bitte geben Sie die ID des zu löschenden Mitarbeiter ein: ");
         try {
             int id = Integer.parseInt(liesEingabe());
@@ -454,7 +484,7 @@ public class UI {
 
     public static void main(String[] args) {
         try {
-            UI ui = new UI("Eshop");
+            ui ui = new ui("Eshop");
             ui.run();
         } catch (IOException e) {
             e.printStackTrace();

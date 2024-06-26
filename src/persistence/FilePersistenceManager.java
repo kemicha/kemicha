@@ -90,7 +90,6 @@ public  class FilePersistenceManager implements PersistenceManager {
     }
 
 
-
     private String liesZeile() throws IOException {
         if (reader != null)
             return reader.readLine();
@@ -104,13 +103,10 @@ public  class FilePersistenceManager implements PersistenceManager {
     }
 
 
-
-
-
     // KundeVerwaltung
     @Override
-    public List<Kunde> leseKundeListe(String datenquelle) throws IOException  {
-        reader= new BufferedReader(new FileReader(datenquelle));
+    public List<Kunde> leseKundeListe(String datenquelle) throws IOException {
+        reader = new BufferedReader(new FileReader(datenquelle));
         List<Kunde> kundelist = new ArrayList<>();
         Kunde kunde;
         do {
@@ -126,38 +122,39 @@ public  class FilePersistenceManager implements PersistenceManager {
     }
 
     private Kunde ladeKunde() throws IOException {
-        String name= liesZeile();
+        String name = liesZeile();
         if (name == null) {
             return null;
         }
-         int id;
-        try{id= Integer.parseInt((liesZeile()));
+        int id;
+        try {
+            id = Integer.parseInt((liesZeile()));
+        } catch (NumberFormatException e) {
+            return null;
         }
-        catch   (NumberFormatException e){
-            return null;}
 
         String passwort = liesZeile();
         String adresse = liesZeile();
 
 
-        return new Kunde( name, id, passwort,adresse);
-}
+        return new Kunde(name, id, passwort, adresse);
+    }
 
     @Override
     public void schreibeKundeListe(List<Kunde> liste, String datei) throws IOException {
         writer = new PrintWriter(new BufferedWriter(new FileWriter(datei)));
 
-        for(Kunde kunde: liste)
+        for (Kunde kunde : liste)
             speicherKunde(kunde);
 
         writer.close();
     }
 
     private void speicherKunde(Kunde kunde) {
-	  schreibeZeile(kunde.getName());
-      schreibeZeile(String.valueOf(kunde.getId()));
-      schreibeZeile(String.valueOf(kunde.getPasswort()));
-      schreibeZeile(String.valueOf(kunde.getAdresse()));
+        schreibeZeile(kunde.getName());
+        schreibeZeile(String.valueOf(kunde.getId()));
+        schreibeZeile(String.valueOf(kunde.getPasswort()));
+        schreibeZeile(String.valueOf(kunde.getAdresse()));
     }
 
 
@@ -182,15 +179,14 @@ public  class FilePersistenceManager implements PersistenceManager {
     }
 
 
-
     // MitarbeiterVerwaltung
     @Override
     public List<Mitarbeiter> leseMitarbeiterListe(String datenquelle) throws IOException {
-        reader= new BufferedReader(new FileReader(datenquelle));
+        reader = new BufferedReader(new FileReader(datenquelle));
         List<Mitarbeiter> mitarbeiterList = new ArrayList<>();
         Mitarbeiter mitarbeiter;
         do {
-            mitarbeiter= ladeMitarbeiter();
+            mitarbeiter = ladeMitarbeiter();
             if (mitarbeiter != null) {
                 if (!mitarbeiterList.contains(mitarbeiter)) {
                     mitarbeiterList.add(mitarbeiter);
@@ -202,20 +198,21 @@ public  class FilePersistenceManager implements PersistenceManager {
     }
 
     private Mitarbeiter ladeMitarbeiter() throws IOException {
-        String name= liesZeile();
+        String name = liesZeile();
         if (name == null) {
             return null;
         }
 
         int id;
-        try{
-            id= Integer.parseInt((liesZeile()));
-        }catch   (NumberFormatException e){
-            return null;}
+        try {
+            id = Integer.parseInt((liesZeile()));
+        } catch (NumberFormatException e) {
+            return null;
+        }
 
         String passwort = liesZeile();
 
-        return new Mitarbeiter( name,id,passwort);
+        return new Mitarbeiter(name, id, passwort);
 
     }
 
@@ -223,14 +220,11 @@ public  class FilePersistenceManager implements PersistenceManager {
     public void schreibeMitarbeiterListe(List<Mitarbeiter> liste, String datei) throws IOException {
         writer = new PrintWriter(new BufferedWriter(new FileWriter(datei)));
 
-        for(Mitarbeiter mitarbeiter: liste)
+        for (Mitarbeiter mitarbeiter : liste)
             speichereMitarbeiter(mitarbeiter);
 
         writer.close();
     }
-
-
-
 
 
     private void speichereMitarbeiter(Mitarbeiter mitarbeiter) {
@@ -238,11 +232,6 @@ public  class FilePersistenceManager implements PersistenceManager {
         schreibeZeile(String.valueOf(mitarbeiter.getId()));
         schreibeZeile(String.valueOf(mitarbeiter.getPasswort()));
     }
-
-
-
-
-
 
 
     // Ereignis
@@ -258,7 +247,7 @@ public  class FilePersistenceManager implements PersistenceManager {
 
             if (ereignis != null) {
                 if (ereignisMenge.contains(ereignis)) {
-                    throw new EreignisExistierBereitsException (ereignis.getArtikel(),ereignis.getMenge());
+                    throw new EreignisExistierBereitsException(ereignis.getArtikel(), ereignis.getMenge());
                 }
 
                 ereignisMenge.add(ereignis);
@@ -280,54 +269,55 @@ public  class FilePersistenceManager implements PersistenceManager {
     }
 
 
-
-
     private Ereignis ladeEreignis() throws IOException {
-            String bezeichnung = liesZeile();
-            if (bezeichnung == null) {
-                return null;
-            }
-            int artikelNummer;
-            try {
-                artikelNummer = Integer.parseInt((liesZeile()));
-            } catch (NumberFormatException e) {
-                return null;
-            }
-
-            int menge;
-            try {
-                menge = Integer.parseInt((liesZeile()));
-            } catch
-            (NumberFormatException e) {
-                return null;
-            }
-
-            double preis;
-            try {
-                preis = Double.parseDouble(liesZeile());
-            } catch (NumberFormatException e) {
-                return null;
-            }
-            Date dateFormat;
-            try {
-                dateFormat = DATE_FORMAT.parse(liesZeile());
-            } catch (ParseException e) {
-                return null;
-            }
-
-            Artikel artikel= new Artikel(bezeichnung,artikelNummer,preis,menge) ;
-
-            return new Ereignis(menge, artikel, dateFormat);
+        String bezeichnung = liesZeile();
+        if (bezeichnung == null) {
+            return null;
+        }
+        int artikelNummer;
+        try {
+            artikelNummer = Integer.parseInt((liesZeile()));
+        } catch (NumberFormatException e) {
+            return null;
         }
 
 
-        private void speichereEreignis(Ereignis ereignis) {
-            schreibeZeile(ereignis.getArtikel().getBezeichnung());
-            schreibeZeile(String.valueOf(ereignis.getArtikel().getArtikelNummer()));
-            schreibeZeile(String.valueOf(ereignis.getMenge()));
-            schreibeZeile(String.valueOf(ereignis.getArtikel().getPreis()));
+        int menge;
+        try {
+            menge = Integer.parseInt((liesZeile()));
+        } catch
+        (NumberFormatException e) {
+            return null;
         }
 
+        double preis;
+        try {
+            preis = Double.parseDouble(liesZeile());
+        } catch (NumberFormatException e) {
+            return null;
+        }
+        Date dateFormat;
+        try {
+            dateFormat = DATE_FORMAT.parse(liesZeile());
+        } catch (ParseException e) {
+            return null;
+        }
+
+        Artikel artikel = new Artikel(bezeichnung, artikelNummer, preis, menge);
+
+        return new Ereignis(" ", 1, artikel, 1, new Date(), "");
 
     }
+
+
+    private void speichereEreignis(Ereignis ereignis) {
+        schreibeZeile(ereignis.getArtikel().getBezeichnung());
+        schreibeZeile(String.valueOf(ereignis.getArtikel().getArtikelNummer()));
+        schreibeZeile(String.valueOf(ereignis.getMenge()));
+
+    }
+}
+
+
+
 

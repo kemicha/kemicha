@@ -27,6 +27,7 @@ public class KundeVerwaltung {
             }
         }
         Kunde neuerKunde = new Kunde( name,id, passwort, adresse);
+        //String name,int id, String passwort,String adresse
         kundeList.add(neuerKunde);
         return neuerKunde;
     }

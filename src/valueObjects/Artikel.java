@@ -10,6 +10,7 @@ public class  Artikel{
     private String bezeichnung;
     private int bestand;
     private double preis;
+    private int packungsgroesse;
     private List<Einlagerung> einlagerungen;
     private List<Auslagerung> auslagerungen;
 
@@ -22,6 +23,7 @@ public class  Artikel{
         this.bestand = bestand;
         this.preis = preis;
         this.bezeichnung = bezeichnung;
+        this.packungsgroesse=packungsgroesse;
 
 
     }
@@ -61,6 +63,14 @@ public class  Artikel{
         this.preis = preis;
     }
 
+    public int getBestand() {
+        return bestand;
+    }
+
+    public int getPackungsgroesse() {
+        return packungsgroesse;
+    }
+
     public void sortiereEinlagerungen() {
         Collections.sort(einlagerungen);
     }
@@ -79,4 +89,10 @@ public class  Artikel{
 
     }
 
-}
+    public void setArtikel(Artikel artikel) {
+            this.setArtikelNummer(artikel.getArtikelNummer());
+            this.setBezeichnung(artikel.getBezeichnung());
+            this.setPreis(artikel.getPreis());
+            this.setAnzahl(artikel.getAnzahl());
+        }
+    }

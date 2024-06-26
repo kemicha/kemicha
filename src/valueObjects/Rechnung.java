@@ -1,48 +1,100 @@
 package src.valueObjects;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public class Rechnung {
-    private Benutzer benutzer;
+    private Benutzer kunde;
     private Date datum;
-    private List< Warenkorb> gekaufteArtikel;
     private double gesamtePreis;
+    private String bezeichnung;
+    private int anzahl;
 
-    public Rechnung(Benutzer benutzer, Date datum, List<Warenkorb> gekaufteArtikel, double gesamtePreis) {
-        this.benutzer = benutzer;
-        this.datum = datum;
-        this.gekaufteArtikel =gekaufteArtikel;
-        this.gesamtePreis = gesamtePreis;
+
+    public Rechnung(Benutzer kunde, Date datum, double gesamtePreis,int anzahl, String bezeichnung){
+        this.kunde = kunde;
+        this.anzahl=anzahl;
+        this.datum= datum;
+        this.gesamtePreis= gesamtePreis;
+        this.bezeichnung= bezeichnung;
+
+
+    }
+
+    public List<Rechnungsposition> getPositionen() {
+        return null;
     }
 
 
-    public Kunde getBenutzer() {
-        return (Kunde) benutzer;
+    public static class RechnungInfos {
+        public String kunde;
+        public String artikel;
+        public String artikelPreis;
+        public String artikelGesamtPreis;
+        public String anzahl;
+    }
+    private List<Ereignis> artikelList;
+    private List<RechnungInfos>rechnungsListe;
+
+
+
+    /* public String genererFacture(Kunde kunde, List<Artikel> articles) {
+         StringBuilder facture = new StringBuilder();
+         double total = 0;*/
+    /*Kunde, Datum, die
+gekauften Artikel inkl. Stückzahl und Preisinformation sowie den Gesamtprei
+    * */
+
+
+    public Benutzer getKunde() {
+        return kunde;
     }
 
-    public void setBenutzer(Benutzer benutzer) {
-        this.benutzer = benutzer;
+    public double getGesamtePreis() {
+        return gesamtePreis;
+    }
+
+    public int getAnzahl() {
+        return anzahl;
+    }
+
+    public List<Ereignis> getArtikelList() {
+        return artikelList;
+    }
+
+    public List<RechnungInfos> getRechnungsListe() {
+        return rechnungsListe;
+    }
+
+    public void RechnungErzeugen(Kunde kunde, Map<Artikel, Integer> artikelListe)
+    {
+        rechnungsListe.clear();
+        double _gesamtPreis = 0.0;
+        for (Map.Entry<Artikel, Integer> mapArtikel : artikelListe.entrySet()) {
+            // 1 artikel bezeichnung aus der Liste holen
+            Artikel artikel = mapArtikel.getKey();
+            int anzahl = mapArtikel.getValue();
+            double total =  (anzahl * artikel.getPreis());
+            _gesamtPreis +=total;
+            RechnungInfos r = new RechnungInfos();
+            r.anzahl = String.valueOf(anzahl);
+            r.artikel = artikel.getBezeichnung();
+            r.artikelPreis = String.valueOf(artikel.getPreis());
+            r.artikelGesamtPreis = String.valueOf(total);
+            rechnungsListe.add(r);
+            // Zyklus wiederholen.
+        }
+        this.gesamtePreis = _gesamtPreis;
     }
 
     public Date getDatum() {
         return datum;
     }
 
-    public void setDatum(Date datum) {
-        this.datum = datum;
-    }
-
-    public List<Warenkorb> getGekaufteArtikel() {
-        return gekaufteArtikel;
-    }
-
-    public List<Warenkorb> setGekaufteArtikel() {
-        this.gekaufteArtikel = gekaufteArtikel;
-        return null;
-    }
-
-    public double getGesamtePreis() {
+    public double getGesamtPreis(){
         return gesamtePreis;
     }
 
@@ -50,40 +102,38 @@ public class Rechnung {
         this.gesamtePreis = gesamtePreis;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Rechnung\n");
-        sb.append("Kunde: ").append(benutzer).append("\n");
-        sb.append("Datum: ").append(datum).append("\n");
-        sb.append("Artikel:\n");
-        for (Warenkorb w : gekaufteArtikel) {
-            sb.append("- ").append(w.getArtikel().getBezeichnung())
-                    .append(", Menge: ").append(w.getMenge())
-                    .append(", Einzelpreis: ").append(w.getArtikel().getPreis()).append("€\n");
+    public void showRechnung(){
+
+        System.out.println("####### Rechnung #######");
+        System.out.println("Kunde: " + kunde.getName());
+        System.out.println("Datum: " + datum.toString());
+        System.out.println("GesamtPreis: " + this.gesamtePreis);
+        for (RechnungInfos r : rechnungsListe) {
+            System.out.println("Artikel: " + r.artikel +
+                    " Anzahl: " + r.anzahl +
+                    " Stückpreis: " + r.artikelPreis +
+                    " GesamtPreis: " + r.artikelGesamtPreis);
         }
-        sb.append("Gesamtpreis: ").append(gesamtePreis).append("€\n");
-        return sb.toString();
+        System.out.println("#######  #######");
     }
 
 
-  /*  public void zeigeRechung() {
-        System.out.println("####### Rechnung #######");
-        System.out.println("Benutzer: " + Benutzer.getName() );
-        System.out.println("Datum: " + datum.toString());
-        System.out.println("GesamtPreis: " + this.gesamtePreis);
-        for (Warenkorb r : getGekaufteArtikel()) {
-            System.out.println(new StringBuilder().append("Artikel: ")
-                    .append(r.getArtikel())
-                    .append(" Benutzer: ")
-                    .append(r.getArtikel())
-                    .append(" Stückpreis: ")
-                    .append(r.getMenge())
-                    .append(" GesamtPreis: ")
-                    .append(r.getGesamtePreis()));
+    public class Rechnungsposition {
+        private Artikel artikel;
+        private int stueckzahl;
+
+        public Rechnungsposition(Artikel artikel, int stueckzahl) {
+            this.artikel = artikel;
+            this.stueckzahl = stueckzahl;
         }
-        System.out.println("#######  #######");
-    }*/
 
+       public  Artikel getArtikel() {
+            return artikel;
+        }
 
+        public  int getStueckzahl() {
+            return stueckzahl;
+        }
+
+    }
 }

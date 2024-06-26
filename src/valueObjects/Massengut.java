@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class Massengutartikel extends Artikel {
+public class Massengut extends Artikel {
     private int anzahl;
     private final int packungsgroesse;
     private List<Einlagerung> einlagerungen;
     private List<Auslagerung> auslagerungen;
     private List<Ereignis> ereignisse;
 
-    public Massengutartikel(String bezeichnung, int artikelNummer, double preis, int bestand, int packungsgroesse) {
+    public Massengut(String bezeichnung, int artikelNummer, double preis, int bestand, int packungsgroesse) {
         super(bezeichnung, artikelNummer, preis, bestand);
         this.packungsgroesse = packungsgroesse;
         this.anzahl = 0;
@@ -70,20 +70,26 @@ public class Massengutartikel extends Artikel {
         anzahl -= menge;
     }
 
-    public void einlagern(int menge) {
-        if (menge % packungsgroesse != 0) {
+
+
+    public void einlagern(Artikel artikel) {
+        int bestand = artikel.getBestand();
+        int packungsgroesse = artikel.getPackungsgroesse();
+        if (bestand % packungsgroesse != 0) {
             throw new IllegalArgumentException("Die Einlagerungsmenge muss ein Vielfaches der Packungsgröße sein.");
         }
-        einlagerungen.add(new Einlagerung(menge));
-        ereignisse.add(new Ereignis(menge, this, new Date()));
+
+        einlagerungen.add(new Einlagerung(bestand));
+        ereignisse.add(new Ereignis("Mitarbeiter", 0, artikel, 1, new Date(), "Bestand erhöhen"));
     }
 
-    public void auslagern(int menge) {
-        if (menge % packungsgroesse != 0) {
+    public void auslagern(Artikel artikel) {
+        int bestand = artikel.getBestand();
+        if (bestand % packungsgroesse != 0) {
             throw new IllegalArgumentException("Die Auslagerungsmenge muss ein Vielfaches der Packungsgröße sein.");
         }
-        auslagerungen.add(new Auslagerung(menge));
-        ereignisse.add(new Ereignis(-menge, this, new Date()));
+        auslagerungen.add(new Auslagerung(bestand));
+        ereignisse.add(new Ereignis("Mitarbeiter", 0, artikel, 1, new Date(), "Bestand erhöhen"));
     }
 
     public int getLagerbestand() {
