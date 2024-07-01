@@ -74,7 +74,7 @@ public class ShopGui extends Container {
                 public void actionPerformed(ActionEvent e) {
                     String name = nameField.getText();
                     String password = new String(passwordField.getPassword());
-                    if (shop.login(name, password)) {
+                    if (shop.loginKunde(name, password)) {
                         statusLabel.setText("Online : " + name);
                     } else {
                         statusLabel.setText("loggin nicht möglich.");

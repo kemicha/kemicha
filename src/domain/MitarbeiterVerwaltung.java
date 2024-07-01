@@ -10,14 +10,25 @@ import java.util.Iterator;
 import java.util.List;
 public class MitarbeiterVerwaltung {
     private List<Mitarbeiter> mitarbeiterList = new ArrayList<>();
+    private Mitarbeiter angemeldelteMitarbeiter;
 
     private PersistenceManager pm = new FilePersistenceManager();
     public MitarbeiterVerwaltung() {
         this.pm = pm;
+       /* this.eingemeldelteMitarbeiter= new Mitarbeiter();*/
     }
 
 
 
+    public boolean einloggenMitarbeiter(String name, String passwort) throws MitarbeiterExistiertBereitsException {
+        for (Mitarbeiter mitarbeiter : getMitarbeiterList()) {
+            if (mitarbeiter.getName().equals(name) && mitarbeiter.getPasswort().equals(passwort)) {
+                this.angemeldelteMitarbeiter = mitarbeiter;
+                return true;
+            }
+        }
+        return false;
+    }
         public void liesDatenVonMitarbeiter(String datei) throws IOException {
             try {
                 mitarbeiterList = pm.leseMitarbeiterListe(datei);
@@ -29,6 +40,9 @@ public class MitarbeiterVerwaltung {
         public void schreibeDatenVonMitarbeiter(String datei) throws IOException {
             pm.schreibeMitarbeiterListe(mitarbeiterList, datei);
         }
+    public Mitarbeiter getAngemeldeteMitarbeiter() {
+        return angemeldelteMitarbeiter;
+    }
 
         public List<Mitarbeiter> getMitarbeiterList() {
             return mitarbeiterList;
@@ -50,6 +64,8 @@ public class MitarbeiterVerwaltung {
             mitarbeiterList.removeIf(Mitarbeiter -> Mitarbeiter.getId() == id);
         }
     }
+
+
 
 
 

@@ -121,17 +121,6 @@ public class ArtikelTableModel extends AbstractTableModel {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
     public ArtikelTableModel(){
         List<Artikel> aktuelleArtikelList = null;
         this.artikelList = aktuelleArtikelList;

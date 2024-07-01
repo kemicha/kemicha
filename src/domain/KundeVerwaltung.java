@@ -1,5 +1,6 @@
 package src.domain;
 
+import src.Exeptions.MitarbeiterExistiertBereitsException;
 import src.persistence.FilePersistenceManager;
 import src.Exeptions.KundeExistiertBereitsException;
 import src.persistence.PersistenceManager;
@@ -14,12 +15,25 @@ public class KundeVerwaltung {
     private List<Benutzer> benutzerList = new ArrayList<>();
     private List<Ereignis> ereignisList = new ArrayList<>();
     private PersistenceManager pm;
+    private Kunde angemeldelteKunde;
 
     public KundeVerwaltung() {
         this.pm = new FilePersistenceManager();
     }
 
+    public Kunde getAngemeldelteKunde() {
+        return angemeldelteKunde;
+    }
 
+    public boolean einloggenKunde(String name, String passwort) throws KundeExistiertBereitsException {
+        for (Kunde kunde : getKundeList()) {
+            if (kunde.getName().equals(name) && kunde.getPasswort().equals(passwort)) {
+                this.angemeldelteKunde = kunde;
+                return true;
+            }
+        }
+        return false;
+    }
     public Kunde kundeRegistrierung(int id, String name, String passwort, String adresse) {
         for (Kunde kunde : kundeList) {
             if (kunde.getName().equals(name)) {

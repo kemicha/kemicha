@@ -18,11 +18,11 @@ public class  Artikel{
 
 
 
-    public Artikel(String bezeichnung, int bestand, double preis, int artikelnummer) {
-        this.ArtikelNummer = artikelnummer;
+    public Artikel(String bezeichnung, int artikelNummer, int bestand,double preis) {
+        this.bezeichnung = bezeichnung;
+        this.ArtikelNummer = artikelNummer;
         this.bestand = bestand;
         this.preis = preis;
-        this.bezeichnung = bezeichnung;
         this.packungsgroesse=packungsgroesse;
 
 

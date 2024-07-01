@@ -15,20 +15,22 @@ import static javax.swing.JOptionPane.showMessageDialog;
 
 public class PanelKunde extends JPanel {
 
+    private JFrame frame;
+    private EshopVerwaltung shop = null ;
+    private KundenserviceListener listener = null;
 
-        public interface KundenserviceListener {
+    public PanelKunde(EshopVerwaltung shop) {
+        this.shop = shop;
 
+    }
 
-
+    public interface KundenserviceListener {
             void onKundenservice(java.util.List<Artikel> liste, int a);
 
 
         }
 
-        private JFrame frame;
-        private EshopVerwaltung shop ;
-        private KundenserviceListener listener = null;
-        private void onKundeVerwaltungKlick() {
+        public void onKundeVerwaltungKlick() {
             List<Kunde> kundeListe = shop.gibAlleKunden();
             if (kundeListe.isEmpty()) {
                 showMessageDialog(frame, "Keine Kunden vorhanden!", "Kundenverwaltung", JOptionPane.INFORMATION_MESSAGE);
@@ -147,8 +149,6 @@ public class PanelKunde extends JPanel {
 
 
 
-
-
         private JButton kaufenButton = new JButton("Kaufen");
         private JButton warenkorbButton = new JButton("Warenkorb");
         private JButton infoBenutzerButton = new JButton("Info Benutzer");
@@ -158,8 +158,6 @@ public class PanelKunde extends JPanel {
          //   super (new FlowLayout());
             this.shop = shop;
             this.listener = listener;
-
-
 
 
 

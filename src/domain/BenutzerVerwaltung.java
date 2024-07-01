@@ -14,14 +14,14 @@ public class BenutzerVerwaltung {
     private Benutzer angemeldeteBenutzer;
 
     public BenutzerVerwaltung() {
-        this.pm = new FilePersistenceManager();
+       /* this.pm = new FilePersistenceManager();
         try {
             this.benutzerListe = pm.leseAlleBenutzer();
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace();*/
             this.benutzerListe = new ArrayList<>();
         }
-    }
+
 
     public boolean einloggen(String name, String passwort) throws BenutzerExistiertBereitsException {
         for (Benutzer benutzer : benutzerListe) {

@@ -1,5 +1,6 @@
 package src.UI.GUI;
 
+import src.domain.EshopVerwaltung;
 import src.valueObjects.Artikel;
 
 import javax.swing.*;
@@ -10,26 +11,26 @@ import java.util.List;
 public class MitarbeiterButton extends JPanel {
 
     private JTable artikelTable;
-    private TableModelGui tm;
+    private TableModelGui artikelGui;
     private JPanel taskPanel;
     private List<Artikel> artikelList;
+    private EshopVerwaltung eshop;
 
     public LogginGui login;
-    public TableModelGui artikelGui;
     public JButton erhoehenButton = new JButton("Erhöhen");
     public JButton loeschenButton = new JButton("Löschen");
 
-    public MitarbeiterButton(List<Artikel> artikels) {
+    public MitarbeiterButton(List<Artikel> artikels, EshopVerwaltung eshop) {
         super(new BorderLayout());
+        this.eshop=eshop;
 
-        artikelList = new ArrayList<>();
-        artikelList.addAll(artikels);
+        artikelList = new ArrayList<>(artikels);
 
         taskPanel = new JPanel(new GridLayout(15, 2, 5, 10));
         Dimension d = new Dimension(500, 600);
         taskPanel.setMinimumSize(d);
 
-        // Assuming login is properly initialized somewhere else
+        // Supposant que login est initialisé correctement ailleurs
         taskPanel.add(login.loginNameLabel);
         taskPanel.add(login.loginNameText);
         taskPanel.add(login.loginPasswortLabel);
@@ -37,16 +38,17 @@ public class MitarbeiterButton extends JPanel {
         taskPanel.add(login.einauslogenButton);
         taskPanel.add(login.registrierenButton);
 
-        // Artikel
-        artikelGui = new TableModelGui(); //
-        taskPanel.add(artikelGui.bezeichnungLabel);
-        taskPanel.add(artikelGui.bezeichnungTextField);
-        taskPanel.add(artikelGui.artikelNummerLabel);
-        taskPanel.add(artikelGui.artikelNummerSpinner);
-        taskPanel.add(artikelGui.preisLabel);
-        taskPanel.add(artikelGui.preisTextField);
-        taskPanel.add(artikelGui.bestandLabel);
-        taskPanel.add(artikelGui.bestandSpinner);
+        // Initialisation de TableModelGui et JTable
+        artikelGui = new TableModelGui(eshop.gibAlleArtikel());
+        artikelGui.setArtikels(artikelList);
+        taskPanel.add(new JLabel("Bezeichnung"));
+        taskPanel.add(new JTextField());
+        taskPanel.add(new JLabel("Artikel Nummer"));
+        taskPanel.add(new JSpinner());
+        taskPanel.add(new JLabel("Preis"));
+        taskPanel.add(new JTextField());
+        taskPanel.add(new JLabel("Bestand"));
+        taskPanel.add(new JSpinner());
         taskPanel.add(erhoehenButton);
         taskPanel.add(artikelGui.reduzierenButton);
         taskPanel.add(artikelGui.hinzufuegenButton);
@@ -54,7 +56,7 @@ public class MitarbeiterButton extends JPanel {
 
         add(taskPanel, BorderLayout.WEST);
 
-        // Initialize the JTable with the TableModel
+        // Initialisation de la JTable avec TableModelGui
         artikelTable = new JTable(artikelGui);
 
         add(new JScrollPane(artikelTable), BorderLayout.CENTER);
@@ -65,12 +67,12 @@ public class MitarbeiterButton extends JPanel {
     public boolean updateTableModel(Artikel artikel) {
         if (artikel == null)
             return false;
-        // Update or add artikel in your TableModelGui
-        tm.aktualisiereArtikelInfos(artikel);
+        // Mettre à jour ou ajouter un article dans votre TableModelGui
+        artikelGui.aktualisiereArtikelInfos(artikel);
         return true;
     }
 
     public void refreshTableModel() {
-        tm.refresTable();
+        artikelGui.refresTable();
     }
 }

@@ -19,9 +19,7 @@ public class EshopVerwaltung {
     private KundeVerwaltung kv;
 
 
-
-
-    public  EshopVerwaltung(String datei) throws IOException {
+    public EshopVerwaltung(String datei) throws IOException {
         this.datei = datei;
         av = new ArtikelVerwaltung();
         av.liesDaten(datei + "_ArtikelDB.txt");
@@ -36,7 +34,6 @@ public class EshopVerwaltung {
         bv = new BenutzerVerwaltung();
 
     }
-
 
 
     public void speicherDaten() throws IOException {
@@ -66,8 +63,8 @@ public class EshopVerwaltung {
         return artikel;
     }
 
-    public void loescheArtikel(int artikelNummer) {
-        av.loeschen(artikelNummer);
+    public boolean loescheArtikel(int artikelNummer) {
+        return  av.loeschen(artikelNummer);
     }
 
     public List<Artikel> sortiereArtikelNachNummer() {
@@ -97,7 +94,7 @@ public class EshopVerwaltung {
 
     public void NeueKunde(String name, int id, String passwort, String adresse) throws KundeExistiertBereitsException {
         if (!kv.sucheKunde(name, id, passwort, adresse).isEmpty()) {
-            throw new KundeExistiertBereitsException(name,passwort, id,adresse);
+            throw new KundeExistiertBereitsException(name, passwort, id, adresse);
         }
         Kunde kunde = new Kunde(name, id, passwort, adresse);
         kv.getKundeList().add(kunde);
@@ -120,7 +117,7 @@ public class EshopVerwaltung {
 
     public void NeueMitarbeiter(String name, int id, String passwort) throws MitarbeiterExistiertBereitsException {
         if (!mv.sucheMitarbeiter(name, id, passwort).isEmpty()) {
-            throw new MitarbeiterExistiertBereitsException(name, passwort,id);
+            throw new MitarbeiterExistiertBereitsException(name, passwort, id);
         }
         Mitarbeiter mitarbeiter = new Mitarbeiter(name, id, passwort);
         mv.getMitarbeiterList().add(mitarbeiter);
@@ -136,21 +133,41 @@ public class EshopVerwaltung {
     }
 
 
-
-//Benutzer
-public boolean login(String username, String password) {
-    try {
-        boolean success = bv.einloggen(username, password);
-        if (success) {
-            System.out.println("Erfolreich Eingelogt: " + bv.getAngemeldeteBenutzer().getName());
-        } else {
-
+    //Benutzer
+    public boolean loginMitarbeiter(String username, String password) {
+        try {
+            boolean success = mv.einloggenMitarbeiter(username, password);
+            if (success) {
+                System.out.println("Erfolreich Eingelogt: " + mv.getAngemeldeteMitarbeiter().getName());
+                return true;
+            }
+        } catch (MitarbeiterExistiertBereitsException e) {
+            System.err.println("Fehler Beim Einloggen : " + e.getMessage());
+            throw new RuntimeException(e);
         }
-    } catch (BenutzerExistiertBereitsException e) {
-        System.err.println("Fehler Beim Einloggen : " + e.getMessage());
+        return false;
     }
-    return false;
-}
+
+
+
+    public boolean loginKunde(String username, String password) {
+        try {
+            boolean success = kv.einloggenKunde(username,password);
+            if (success) {
+                System.out.println("Erfolreich Eingelogt: " + kv.getAngemeldelteKunde().getName());
+                return true;
+            } else {
+
+            }
+        } catch (KundeExistiertBereitsException e) {
+            System.err.println("Fehler Beim Einloggen : " + e.getMessage());
+            throw new RuntimeException(e);
+        }
+        return false;
+    }
+
+
+
 
     public void logout() {
         bv.ausloggen();
@@ -194,6 +211,7 @@ public boolean login(String username, String password) {
 
 
             }
+            return artikel;
         }
         return null;
     }
@@ -235,25 +253,25 @@ public boolean login(String username, String password) {
     }
 
 
-
     // Massengut
 
-    public void addMassengut(Massengut atikel){
+    public void addMassengut(Massengut atikel) {
         av.addMassengutartikel(atikel);
     }
 
-    public void removeInMassengut(int artikelNummer ){
+    public void removeInMassengut(int artikelNummer) {
         av.removeMassengutartikel(artikelNummer);
     }
 
-    public void einlargern(Artikel artikelNummer, int menge){
+    public void einlargern(Artikel artikelNummer, int menge) {
         av.einlagern(artikelNummer, menge);
     }
-    public void auslagern (int artikelNummer, int menge){
-        av.auslagern(artikelNummer,menge);
+
+    public void auslagern(int artikelNummer, int menge) {
+        av.auslagern(artikelNummer, menge);
     }
 
-    public void printEreignis(int artikelNummer){
+    public void printEreignis(int artikelNummer) {
         av.printEreignisse(artikelNummer);
     }
 
@@ -262,12 +280,21 @@ public boolean login(String username, String password) {
         return getRechnungenListe();
     }
 
-    public List<Ereignis> getEreignisLite(){
+    public List<Ereignis> getEreignisLite() {
         return getEreignisLite();
     }
+
     public void addEreignis(Ereignis ereignis) {
         av.getEreignisListe();
 
+    }
+
+    public void getBenutzer(String name) {
+        bv.getAngemeldeteBenutzer();
+    }
+
+    public List<Artikel> sucheArtikelNachName(String bezeichnung){
+        return av.sucheArtikelNachName(bezeichnung);
     }
 }
 

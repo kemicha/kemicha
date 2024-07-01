@@ -16,17 +16,58 @@ public class PanelMitarbeiter extends JPanel {
 
         private Mitarbeiter mitarbeiter;
         private JFrame frame;
-        private EshopVerwaltung shop;
+        private EshopVerwaltung shop = null;
 
-        public void PanelEinloggen() {
-            JFrame frame = new JFrame("Authentifizierung");
+
+
+    public PanelMitarbeiter(EshopVerwaltung shop) {
+        this.shop= shop;
+
+    }
+
+
+
+ /*   public JPanel PanelEinloggen() {
+        JPanel panel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+
+        panel.add(new JLabel("Benutzername"), gbc);
+        gbc.gridx = 1;
+        panel.add(new JTextField(15), gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        panel.add(new JLabel("Passwort"), gbc);
+        gbc.gridx = 1;
+        panel.add(new JPasswordField(15), gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        JButton loginButton = new JButton("Login");
+        panel.add(loginButton, gbc);
+
+        return panel;
+    }*/
+
+
+
+ /*   public JPanel PanelEinloggen() {
+           JPanel panel= new JPanel();
+           panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+            JFrame frame = new JFrame("Eshop");
             frame.setSize(400, 300);
             frame.setLocation(0, 500);
             frame.setLocationRelativeTo(null);
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setVisible(true);
             JPanel loginGui = new JPanel();
-            frame.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+            //frame.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+            panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
             JButton kundeBtn = new JButton("Kunde");
             JButton mitabeiterBtn = new JButton("Mitarbeiter");
@@ -54,9 +95,11 @@ public class PanelMitarbeiter extends JPanel {
 
             frame.add(loginGui, BoxLayout.Y_AXIS);
             frame.setSize(350, 300);
-            frame.setVisible(true);
+            frame.setLayout(new BorderLayout());
             frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        }
+        return panel;
+    }*/
+
 
         public void MitarbeiterVerwaltungKlick() {
             List<Mitarbeiter> mitarbeiterList = shop.gibAlleMitarbeiter();
@@ -153,7 +196,10 @@ public class PanelMitarbeiter extends JPanel {
             }
         }
 
-        public void onKundeRegistrierenDurchMitarbeiterKlick() {
+
+
+
+    public void onKundeRegistrierenDurchMitarbeiterKlick() {
             JTextField benutzerNameField = new JTextField();
             JPasswordField passwortField = new JPasswordField();
             JTextField nummerField = new JTextField();

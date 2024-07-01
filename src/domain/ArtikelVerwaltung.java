@@ -64,7 +64,7 @@ public class ArtikelVerwaltung {
 
         if (artikel != null) {
             artikel.setAnzahl(artikel.getAnzahl() + menge);
-            ereignisList.add(new Ereignis("Mitarbeiter",0, artikel,menge,new Date(),"besstand erhöhen"));
+            ereignisList.add(new Ereignis("Mitarbeiter",0, artikel,menge,new Date(),"bestand erhöhen"));
         } else {
             System.out.println("Artikel unbekannt!");
             return;
@@ -78,8 +78,8 @@ public class ArtikelVerwaltung {
         return artikelList;
     }
 
-    public void loeschen(int artikelNummer) {
-        artikelList.removeIf(artikel -> artikel.getArtikelNummer() == artikelNummer);
+    public boolean loeschen(int artikelNummer) {
+        return artikelList.removeIf(artikel -> artikel.getArtikelNummer() == artikelNummer);
     }
 
     // WarenkorbVerwaltung

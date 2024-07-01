@@ -1,6 +1,8 @@
 package src.UI.GUI.Panels;
 
+import src.Exeptions.ArtikelExistiertBereitsException;
 import src.UI.GUI.ArtikelTableModel;
+import src.UI.GUI.TableModelGui;
 import src.domain.BenutzerVerwaltung;
 import src.domain.EshopVerwaltung;
 import src.valueObjects.*;
@@ -20,16 +22,20 @@ public class PanelArtikel extends JPanel {
 
     private EshopVerwaltung eshop;
     private Frame frame;
+
     //private HinzufuegenListener listener = null;
     private JTable artikelTable;
     private ArtikelTableModel artikellisteTable;
     private BenutzerVerwaltung eingeloggterBenutzer;
 
-    public PanelArtikel(EshopVerwaltung eshop, ArtikelTableModel artikellisteTable, Kunde eingeloggterKunde, Frame frame) {
+    private TableModelGui tableModelGui;
+
+    public PanelArtikel(EshopVerwaltung eshop) {
         this.eshop = eshop;
         this.artikellisteTable = artikellisteTable;
         this.eingeloggterBenutzer = eingeloggterBenutzer;
         this.frame = frame;
+
     }
 
     public void artikelAnlegenKlick() {
@@ -65,35 +71,44 @@ public class PanelArtikel extends JPanel {
                     if (input != null && !input.isEmpty()) {
                         packungsgrosse = Integer.parseInt(input);
                     } else {
-                        showMessageDialog(frame, "Bitte eine gültige Packungsgröße eingeben.", "Artikel anlegen", JOptionPane.ERROR_MESSAGE);
-                        return; // Quit the method
+                        JOptionPane.showMessageDialog(frame, "Bitte eine gültige Packungsgröße eingeben.", "Artikel anlegen", JOptionPane.ERROR_MESSAGE);
+                        return;
                     }
                 }
 
-                /*Artikel artikel;
+
+                Artikel artikel = null;
                 if (massengutartikel) {
-                    artikel = new Artikel.Massengut(bezeichnung, artikelnummer, bestand, preis, packungsgrosse, eshop);
+                    artikel = new Massengut(bezeichnung, artikelnummer,  bestand, (int) preis, packungsgrosse);
                 } else {
-                    artikel = new Artikel(bezeichnung, artikelnummer, bestand, preis, eshop);
-                }*/
+                    artikel = new Artikel(bezeichnung, artikelnummer, bestand, (int) preis);
+                }
 
 
+                eshop.fuegeArtikelEin(bezeichnung,artikelnummer,bestand,preis);
+                eshop.speicherDaten();
+
+                JOptionPane.showMessageDialog(frame, "Artikel erfolgreich angelegt.", "Artikel anlegen", JOptionPane.INFORMATION_MESSAGE);
             } catch (NumberFormatException e) {
-                showMessageDialog(frame, "Bitte geben Sie gültige Zahlenwerte ein.", "Artikel anlegen", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(frame, "Bitte geben Sie gültige Zahlenwerte ein.", "Artikel anlegen", JOptionPane.ERROR_MESSAGE);
             } catch (Exception e) {
-                showMessageDialog(frame, "Fehler beim Anlegen des Artikels: " + e.getMessage(), "Artikel anlegen", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(frame, "Fehler beim Anlegen des Artikels: " + e.getMessage(), "Artikel anlegen", JOptionPane.ERROR_MESSAGE);
+            } catch (ArtikelExistiertBereitsException e) {
+                throw new RuntimeException(e);
             }
         }
     }
 
+
     public void entferneArtikelKlick() {
+        Object auswahl = null;
         java.util.List<Artikel> artikelList = eshop.gibAlleArtikel();
 
         if (artikelList.isEmpty()) {
             showMessageDialog(frame, "Keine Artikel vorhanden.", "Artikel entfernen", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        String auswahl = (String) JOptionPane.showInputDialog(
+         auswahl =  JOptionPane.showInputDialog(
                 frame,
                 "Wählen Sie einen Artikel zum Entfernen:",
                 "Artikel entfernen",
@@ -104,12 +119,10 @@ public class PanelArtikel extends JPanel {
         );
         if (auswahl != null) {
             try {
-                Artikel artikel = eshop.getArtikelByName(auswahl);
-                boolean artikelEntfernt = eshop.aenderungImWarenkorb(artikel.getBezeichnung(), 1);
-
+                Artikel artikel = eshop.getArtikelByName(auswahl.toString());
+                boolean artikelEntfernt = eshop.loescheArtikel(artikel.getArtikelNummer());
                 if (artikelEntfernt) {
                     showMessageDialog(frame, "Artikel erfolgreich entfernt.", "Artikel entfernt", JOptionPane.INFORMATION_MESSAGE);
-                    // Mettez à jour la liste des articles dans l'interface utilisateur si nécessaire.
                 } else {
                     showMessageDialog(frame, "Artikel konnte nicht entfernt werden.", "Fehler", JOptionPane.ERROR_MESSAGE);
                 }
@@ -381,7 +394,7 @@ public class PanelArtikel extends JPanel {
 
         if (artikellisteTable != null) {
             DefaultTableModel model = (DefaultTableModel) artikellisteTable.getModel();
-            model.setRowCount(0); // Efface toutes les lignes de la table
+            model.setRowCount(0);
 
             for (Artikel artikel : artikelliste) {
                 Object[] rowData = {
@@ -484,15 +497,14 @@ public class PanelArtikel extends JPanel {
     public void ArtikelsucheKlick() {
         String bezeichnung = JOptionPane.showInputDialog(frame, "Geben Sie den Suchbegriff ein:");
 
-        if (bezeichnung != null && !bezeichnung.isEmpty()) {
-            List<Artikel> suchergebnisse = (List<Artikel>) eshop.getArtikelByName(bezeichnung);
+        if (bezeichnung != null ) {
+            List<Artikel> suchergebnisse = eshop.sucheArtikelNachName(bezeichnung);
 
             if (suchergebnisse.isEmpty()) {
                 JOptionPane.showMessageDialog(frame, "Keine Artikel gefunden.", "Suchergebnisse", JOptionPane.INFORMATION_MESSAGE);
             } else {
                 DefaultTableModel searchResultModel = getArtikellisteTableModel();
-                searchResultModel.setRowCount(0); // Supprimer toutes les lignes existantes
-
+                searchResultModel.setRowCount(0);
                 for (Artikel artikel : suchergebnisse) {
                     Object[] rowData = {
                             artikel.getArtikelNummer(),
@@ -504,7 +516,7 @@ public class PanelArtikel extends JPanel {
                     searchResultModel.addRow(rowData);
                 }
 
-                // Erstellung einen neuen JFrame, um die Suchergebnisse anzuzeigen.
+
                 JFrame searchResultFrame = new JFrame("Suchergebnisse");
                 JTable searchResultTable = new JTable(searchResultModel);
                 searchResultTable.setEnabled(false);
@@ -518,9 +530,6 @@ public class PanelArtikel extends JPanel {
             JOptionPane.showMessageDialog(frame, "Keine Suchbegriff eingegeben.", "Suchergebnisse", JOptionPane.INFORMATION_MESSAGE);
         }
     }
-
-
-
 
     private void showEreignisliste() {
         List<Ereignis> ereignisListe = eshop.getEreignisLite();
@@ -558,7 +567,7 @@ public class PanelArtikel extends JPanel {
     }
 
     private DefaultTableModel getArtikellisteTableModel() {
-        return null;
+        return new DefaultTableModel(1,4);
     }
 
 

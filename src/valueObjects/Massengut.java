@@ -11,8 +11,8 @@ public class Massengut extends Artikel {
     private List<Auslagerung> auslagerungen;
     private List<Ereignis> ereignisse;
 
-    public Massengut(String bezeichnung, int artikelNummer, double preis, int bestand, int packungsgroesse) {
-        super(bezeichnung, artikelNummer, preis, bestand);
+    public Massengut(String bezeichnung, int artikelNummer,int bestand, double preis,  int packungsgroesse) {
+        super(bezeichnung, artikelNummer,  bestand,preis);
         this.packungsgroesse = packungsgroesse;
         this.anzahl = 0;
         this.einlagerungen = new ArrayList<>();

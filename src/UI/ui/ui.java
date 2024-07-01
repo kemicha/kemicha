@@ -124,7 +124,7 @@ public class ui {
             List<Artikel>artikelListe;
             switch (input) {
                 case "1":
-                    benutzerEinlogge();
+                    mitarbeiterEinloggen();
                     break;
                 case "2":
                     mitarbeiterRegistrieren();
@@ -137,6 +137,7 @@ public class ui {
                     break;
                 case "5":
                     artikelEntfernen();
+                    shop.speicherDaten();
                     break;
                 case "6":
                     artikelListe = shop.gibAlleArtikel();
@@ -182,7 +183,7 @@ public class ui {
             System.out.print("Packungsgröße: ");
             int packungsgroesse = Integer.parseInt(liesEingabe());
 
-            Massengut artikel1 = new Massengut(bezeichnung, artikelNummer, preis,bestand, packungsgroesse);
+            Massengut artikel1 = new Massengut(bezeichnung, artikelNummer, bestand,preis, packungsgroesse);
 
             shop.addMassengut(artikel1);
 
@@ -249,18 +250,22 @@ public class ui {
         }
     }
 
-    private void benutzerEinlogge() throws IOException {
+    private void mitarbeiterEinloggen() throws IOException {
         System.out.println("Geben Sie Ihren Benutzernamen ein:");
         String name = liesEingabe();
         System.out.println("Geben Sie Ihr Passwort ein:");
         String passwort = liesEingabe();
 
-        boolean loginErfolgreich = shop.login(name, passwort);
+        boolean loginErfolgreich = shop.loginMitarbeiter(name, passwort);
         System.err.println(loginErfolgreich);
         if (loginErfolgreich) {
             System.out.println("Erfolgreich eingeloggt!");
         }
     }
+
+
+
+
 
 
     private void mitarbeiterRegistrieren() throws IOException {
@@ -301,7 +306,7 @@ public class ui {
             List<Warenkorb>liste = null;
             switch (input) {
                 case "1":
-                     benutzerEinlogge();
+                     kundeEinloggen();
                     break;
                 case "2":
                     kundeRegistrieren();
@@ -345,6 +350,19 @@ public class ui {
                     System.out.println("Ungueltige Eingabe. Bitte versuchen Sie es erneut.");
             }
         } while (!input.equals("e"));
+    }
+
+    private void kundeEinloggen() throws IOException {
+        System.out.println("Geben Sie Ihren Benutzernamen ein:");
+        String name = liesEingabe();
+        System.out.println("Geben Sie Ihr Passwort ein:");
+        String passwort = liesEingabe();
+
+        boolean loginKundeErforlgreich = shop.loginKunde(name, passwort);
+        System.err.println(loginKundeErforlgreich);
+        if (loginKundeErforlgreich) {
+            System.out.println("Erfolgreich eingeloggt!");
+        }
     }
 
     private void kundeRegistrieren() throws IOException {
