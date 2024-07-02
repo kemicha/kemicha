@@ -28,8 +28,7 @@ public class Gui extends JFrame {
     private PanelKunde pk;
     private PanelRegistrieren pr;
 
-    private Mitarbeiter eingeloggterMitarbeiter;
-    private Kunde eingelogenkunde;
+
 
     public Gui(EshopVerwaltung shop) {
         this.shop = shop;
@@ -37,8 +36,6 @@ public class Gui extends JFrame {
         this.pa = new PanelArtikel(shop);
         this.pm = new PanelMitarbeiter(shop);
         this.pk = new PanelKunde(shop);
-        this.eingeloggterMitarbeiter = null;
-        this.eingelogenkunde = null;
         this.tmg = new TableModelGui(shop.gibAlleArtikel());
         this.pr= new PanelRegistrieren(shop);
         initialize();
@@ -48,14 +45,7 @@ public class Gui extends JFrame {
         JFrame frame = new JFrame("Einloggen");
         frame.setDefaultCloseOperation((JFrame.EXIT_ON_CLOSE));
         frame.setLayout((new BorderLayout()));
-   /*     frame.setSize(400, 300);
-        frame.setLocation(0, 500);
-        //frame.setLocationRelativeTo();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);*/
         JPanel panel = new JPanel(new GridLayout(1,3));
-
-
         JButton kundeBtn = new JButton("Kunde");
         JButton mitabeiterBtn = new JButton("Mitarbeiter");
         JButton registierenBtn = new JButton("Registrieren");
@@ -141,17 +131,24 @@ public class Gui extends JFrame {
         JButton ereignisButton = new JButton("EreignisListe");
 
 
+
+
         suchenButton.addActionListener(e -> pa.ArtikelsucheKlick());
         sortierenButton.addActionListener(e -> pa.SortierOptionKlick());
         kundenButton.addActionListener(e -> onKundeKlick());
-        mitarbeiterButton.addActionListener(e -> onMitarbeiterKlick());
+        mitarbeiterButton.addActionListener(e -> pm.MitarbeiterVerwaltungKlick());
         mitarbeiterRegistrierenButton.addActionListener(e -> pm.onMitarbeiterRegistrierenKlick());
         kundeRegistrierenDurchMitarbeiterButton.addActionListener(e -> pm.onKundeRegistrierenDurchMitarbeiterKlick());
-        logoutMitarbeiterButton.addActionListener(e -> logoutMitarbeiter());
         artikelAnlegenButton.addActionListener(e -> pa.artikelAnlegenKlick());
         artikelEinlagernButton.addActionListener(e -> pa.artikelEinlagernKlick());
         artikelauslagerButton.addActionListener(e -> pa.artikelauslagerKlick());
         artikelEntfernButton.addActionListener(e -> pa.entferneArtikelKlick());
+        logoutMitarbeiterButton.addActionListener(e ->{
+               frame.dispose();
+                PanelEinloggen();
+                logout();
+        });
+
 
 
         grid.gridwidth = 1;
@@ -221,7 +218,7 @@ public class Gui extends JFrame {
                     showMessageDialog(frame, e.getMessage(), "Fehler", JOptionPane.ERROR_MESSAGE);
                 }
             } else {
-                logoutMitarbeiter();
+                logout();
             }
         } while (!isValidCredentials);
     }
@@ -259,7 +256,7 @@ public class Gui extends JFrame {
                     showMessageDialog(frame, e.getMessage(), "Fehler", JOptionPane.ERROR_MESSAGE);
                 }
             } else {
-                logoutKunde();
+                logout();
             }
 
         } while (!isValidCredentials && result == JOptionPane.OK_OPTION);
@@ -305,7 +302,7 @@ public class Gui extends JFrame {
         rechnungButton.addActionListener(e -> pa.RechnunKlick());
         logoutButton.addActionListener(e -> {
             kundenmenuFrame.dispose();
-            logoutKunde();
+            logout();
             PanelEinloggen();
         });
         artikelHinzufuegenButton.addActionListener(e -> pa.artikelZumWarenkorbHinzufuegenKlick());
@@ -340,7 +337,7 @@ public class Gui extends JFrame {
                 Kunde kunde = shop.registierteKunde(Integer.valueOf(id), name, passwort, kundenAdresse);
                 if (kunde != null) {
                     shop.speicherDaten();
-                    eingelogenkunde = kunde;
+                   // eingelogenkunde = kunde;
                     KundeMenu();
                 } else {
                     showMessageDialog(frame, "Fehler bei der Registrierung", "Kunde registrieren", JOptionPane.ERROR_MESSAGE);
@@ -353,14 +350,7 @@ public class Gui extends JFrame {
         }
     }
 
-    private void logoutKunde() {
-        eingelogenkunde = null;
-        showMessageDialog(frame, "Sie haben sich erfolgreich ausgeloggt.", "Abmeldung erfolgreich", JOptionPane.INFORMATION_MESSAGE);
-        PanelEinloggen();
-    }
-
-    private void logoutMitarbeiter() {
-        eingeloggterMitarbeiter = null;
+    private void logout() {
         showMessageDialog(frame, "Sie haben sich erfolgreich ausgeloggt.", "Abmeldung erfolgreich", JOptionPane.INFORMATION_MESSAGE);
         PanelEinloggen();
     }

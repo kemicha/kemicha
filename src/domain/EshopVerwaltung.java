@@ -241,6 +241,11 @@ public class EshopVerwaltung {
 
     public void kaufenArtikel(Benutzer benutzer) {
         av.kaufeWarenkorb(benutzer);
+        if (getWarenkorbList().isEmpty()) {
+            System.out.println("Der Warenkorb ist jetzt leer.");
+        } else {
+            System.out.println("Es gibt noch Artikel im Warenkorb.");
+        }
     }
 
     public Benutzer getBenutzerByName(String benutzerName) {
@@ -277,17 +282,21 @@ public class EshopVerwaltung {
 
 
     public List<Rechnung> getRechnungenListe() {
-        return getRechnungenListe();
+        List<Rechnung> rechnungList = getRechnungenListe();
+        return rechnungList;
     }
 
     public List<Ereignis> getEreignisLite() {
         return getEreignisLite();
     }
+    public void zeigeAlleEreignisse() {
+        av.showAlleEreignisse();}
 
     public void addEreignis(Ereignis ereignis) {
         av.getEreignisListe();
 
     }
+
 
     public void getBenutzer(String name) {
         bv.getAngemeldeteBenutzer();
@@ -295,6 +304,10 @@ public class EshopVerwaltung {
 
     public List<Artikel> sucheArtikelNachName(String bezeichnung){
         return av.sucheArtikelNachName(bezeichnung);
+    }
+
+    public Kunde angemeldenKunde(){
+       return kv.getAngemeldelteKunde();
     }
 }
 

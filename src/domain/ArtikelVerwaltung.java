@@ -189,7 +189,7 @@ public class ArtikelVerwaltung {
             Artikel artikel = warenkorb.getArtikel();
             int menge = warenkorb.getMenge();
             gesamtPreis += artikel.getPreis() * menge;
-            rechnung = new Rechnung(benutzer, new Date(),  gesamtPreis,menge, artikel.getBezeichnung());
+            rechnung = new Rechnung( benutzer.getName(),new Date(), gesamtPreis,menge, artikel.getBezeichnung());
 
         }
 
@@ -246,6 +246,18 @@ public class ArtikelVerwaltung {
             System.out.println("Auslagerung durchgeführt für Artikelnummer: " + artikelNummer + " mit Menge: " + menge);
         } else {
             System.out.println("Artikel nicht gefunden mit Artikelnummer: " + artikelNummer);
+        }
+    }
+
+    public void showAlleEreignisse()
+    {
+        for (Ereignis er : ereignisList)
+        {
+            System.out.println("> " + String.valueOf(er.getDateFormat())
+                    +" " + String.valueOf(er.getBenutzer())
+                    +" " + String.valueOf(er.getEreignis())
+                    +" Artikel: " + String.valueOf(er.getArtikel().getBezeichnung())
+                    +" Stükzahl: " + String.valueOf(er.getMenge()));
         }
     }
 

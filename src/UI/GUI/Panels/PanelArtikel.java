@@ -122,12 +122,15 @@ public class PanelArtikel extends JPanel {
                 Artikel artikel = eshop.getArtikelByName(auswahl.toString());
                 boolean artikelEntfernt = eshop.loescheArtikel(artikel.getArtikelNummer());
                 if (artikelEntfernt) {
+                    eshop.speicherDaten();
                     showMessageDialog(frame, "Artikel erfolgreich entfernt.", "Artikel entfernt", JOptionPane.INFORMATION_MESSAGE);
                 } else {
                     showMessageDialog(frame, "Artikel konnte nicht entfernt werden.", "Fehler", JOptionPane.ERROR_MESSAGE);
                 }
             } catch (NumberFormatException e) {
                 showMessageDialog(frame, "Ungültige Artikelnummer", "Fehler", JOptionPane.ERROR_MESSAGE);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
         }
     }
@@ -383,11 +386,7 @@ public class PanelArtikel extends JPanel {
             JOptionPane.showMessageDialog(frame, "Warenkorb ist leer.", "Warenkorb kaufen", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
-
-        for (Warenkorb artikel : warenkorb) {
-        }
-
-
+        eshop.kaufenArtikel(eshop.angemeldenKunde());
     }
 
     private void updateArtikellisteTable(List<Artikel> artikelliste) {
@@ -417,8 +416,14 @@ public class PanelArtikel extends JPanel {
     }
 
     public void RechnunKlick() {
-        boolean aktuellerKunde = eingeloggterBenutzer.istEingeloggt();
-        List<Rechnung> rechnungenListe = eshop.getRechnungenListe();
+        Benutzer benutzer = eshop.angemeldenKunde();
+        boolean aktuellerKunde = benutzer!=null;
+        if (aktuellerKunde) {
+            eshop.kaufenArtikel(benutzer);
+
+        }
+
+       List<Rechnung> rechnungenListe = eshop.getRechnungenListe();
 
         if (rechnungenListe.isEmpty()) {
             showMessageDialog(frame, "Keine Rechnungen bis jetzt.", "Rechnung erstellen", JOptionPane.INFORMATION_MESSAGE);
@@ -430,7 +435,7 @@ public class PanelArtikel extends JPanel {
 
         for (Rechnung rechnung : rechnungenListe) {
             if (rechnung.getKunde().equals(aktuellerKunde)) {
-                rechnungText.append("Kunde: ").append(rechnung.getKunde().getName()).append("\n");
+                rechnungText.append("Kunde: ").append(rechnung.getKunde()).append("\n");
                 rechnungText.append("Kaufdatum: ").append(rechnung.getDatum()).append("\n");
 
                 List<Rechnung.Rechnungsposition> positionen = rechnung.getPositionen();
@@ -459,7 +464,7 @@ public class PanelArtikel extends JPanel {
             }
         }
 
-        JTextArea rechnungTextArea = new JTextArea(rechnungText.toString());
+        JTextArea rechnungTextArea = new JTextArea();
         rechnungTextArea.setEditable(false);
         JScrollPane rechnungScrollPane = new JScrollPane(rechnungTextArea);
         showMessageDialog(frame, rechnungScrollPane, "Rechnungen", JOptionPane.PLAIN_MESSAGE);
@@ -529,6 +534,7 @@ public class PanelArtikel extends JPanel {
         } else {
             JOptionPane.showMessageDialog(frame, "Keine Suchbegriff eingegeben.", "Suchergebnisse", JOptionPane.INFORMATION_MESSAGE);
         }
+
     }
 
     private void showEreignisliste() {
@@ -567,7 +573,9 @@ public class PanelArtikel extends JPanel {
     }
 
     private DefaultTableModel getArtikellisteTableModel() {
-        return new DefaultTableModel(1,4);
+            String[] columnNames = {"Artikelnummer", "Bezeichnung", "Preis", "Bestand", "Packungsgröße"};
+            return new DefaultTableModel(columnNames, 0);
+
     }
 
 

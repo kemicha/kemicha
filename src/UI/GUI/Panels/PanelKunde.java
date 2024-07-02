@@ -66,9 +66,9 @@ public class PanelKunde extends JPanel {
             }
         }
 
-        private void showKundeRegistrierung() {
+        private void zeigeKundeRegistrierung() {
             JTextField benutzerNameField = new JTextField();
-            JPasswordField passwortField = new JPasswordField(); // Utilisez JPasswordField pour les mots de passe
+            JPasswordField passwortField = new JPasswordField();
             JTextField nummerField = new JTextField();
             JTextField kundenAdresseField = new JTextField();
 
@@ -153,6 +153,9 @@ public class PanelKunde extends JPanel {
         private JButton warenkorbButton = new JButton("Warenkorb");
         private JButton infoBenutzerButton = new JButton("Info Benutzer");
         private JButton auslistenButton = new JButton("Artikel auslisten (A-Z)");
+
+
+
 
         public void PanelKundenservice(EshopVerwaltung shop, KundenserviceListener listener) {
          //   super (new FlowLayout());

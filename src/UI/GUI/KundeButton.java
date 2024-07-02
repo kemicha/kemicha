@@ -25,7 +25,7 @@ public class KundeButton extends JPanel {
         Dimension d = new Dimension(1000,1200);
         taskPanel.setMinimumSize(d);
         loginGui = new LogginGui();
-        //
+
         taskPanel.add(loginGui.loginNameLabel);
         taskPanel.add(loginGui.loginNameText);
         taskPanel.add(loginGui.loginPasswortLabel);

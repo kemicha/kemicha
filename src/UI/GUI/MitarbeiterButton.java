@@ -30,7 +30,7 @@ public class MitarbeiterButton extends JPanel {
         Dimension d = new Dimension(500, 600);
         taskPanel.setMinimumSize(d);
 
-        // Supposant que login est initialisé correctement ailleurs
+
         taskPanel.add(login.loginNameLabel);
         taskPanel.add(login.loginNameText);
         taskPanel.add(login.loginPasswortLabel);
@@ -38,7 +38,7 @@ public class MitarbeiterButton extends JPanel {
         taskPanel.add(login.einauslogenButton);
         taskPanel.add(login.registrierenButton);
 
-        // Initialisation de TableModelGui et JTable
+
         artikelGui = new TableModelGui(eshop.gibAlleArtikel());
         artikelGui.setArtikels(artikelList);
         taskPanel.add(new JLabel("Bezeichnung"));
@@ -56,7 +56,7 @@ public class MitarbeiterButton extends JPanel {
 
         add(taskPanel, BorderLayout.WEST);
 
-        // Initialisation de la JTable avec TableModelGui
+
         artikelTable = new JTable(artikelGui);
 
         add(new JScrollPane(artikelTable), BorderLayout.CENTER);
@@ -67,7 +67,7 @@ public class MitarbeiterButton extends JPanel {
     public boolean updateTableModel(Artikel artikel) {
         if (artikel == null)
             return false;
-        // Mettre à jour ou ajouter un article dans votre TableModelGui
+
         artikelGui.aktualisiereArtikelInfos(artikel);
         return true;
     }

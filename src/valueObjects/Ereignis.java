@@ -62,6 +62,10 @@ public class Ereignis {
         this.dateFormat = dateFormat;
     }
 
+    public String getEreignis() {
+        return ereignis;
+    }
+
     @Override
     public String toString() {
         return "Ereignis{" +

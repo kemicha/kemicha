@@ -9,6 +9,7 @@ import src.valueObjects.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ui {
@@ -265,9 +266,6 @@ public class ui {
 
 
 
-
-
-
     private void mitarbeiterRegistrieren() throws IOException {
         System.out.println("Bitte geben Sie Ihren Namen ein: ");
         String name = liesEingabe();
@@ -295,7 +293,7 @@ public class ui {
             System.out.println("6. Artikel im Warenkorb leeren!");
             System.out.println("7. Artikel im Warenkorb kaufen und Rechnung anzeigen!");
             System.out.println("8. Kundenliste anzeigen");
-            System.out.println("9. Kunde speichern");
+            System.out.println("9. Ereignis anzeigen");
             System.out.println("10. Kunde loeschen ");
             System.out.println("e. Ausloggen & Zurueck zum Hauptmenue");
             System.out.print("> Ihre Auswahl: ");
@@ -303,7 +301,7 @@ public class ui {
 
             input = liesEingabe();
             List<Kunde> list;
-            List<Warenkorb>liste = null;
+            List<Warenkorb>liste = new ArrayList<>();
             switch (input) {
                 case "1":
                      kundeEinloggen();
@@ -318,6 +316,7 @@ public class ui {
                 case "4":
                     liste = shop.gibAlleArtikelInWarenkorb();
                     warenkorbZeigen(liste);
+                    shop.speicherDaten();
                     break;
                 case "5":
                     artikelInWarenkorbÄndern();
@@ -326,7 +325,7 @@ public class ui {
                     shop.warenkorbLeeren();
                     break;
                 case "7":
-                    kaufen();
+                    kaufen(shop.angemeldenKunde());
                     rechnungErzeugen();
                     break;
                 case "8":
@@ -334,8 +333,7 @@ public class ui {
                     gibKundeliste(list);
                     break;
                 case "9":
-
-                    System.out.println("Neue Kunden erfolgreich gespeichert!");
+                    gibEreignis();
                     break;
                 case "10":
                     shop.logout();
@@ -350,6 +348,15 @@ public class ui {
                     System.out.println("Ungueltige Eingabe. Bitte versuchen Sie es erneut.");
             }
         } while (!input.equals("e"));
+    }
+
+
+
+
+
+    private void gibEreignis() {
+        System.out.println(" #### Akutelle Ereignisse: #### ");
+            shop.zeigeAlleEreignisse();
     }
 
     private void kundeEinloggen() throws IOException {
@@ -476,8 +483,8 @@ public class ui {
 
 
 
-       private void kaufen() throws IOException {
-          shop.kaufenArtikel(new Benutzer()) ;
+       private void kaufen(Benutzer  benutzer) throws IOException {
+          shop.kaufenArtikel(benutzer) ;
            if (shop.getWarenkorbList().isEmpty()) {
                System.out.println("Der Warenkorb ist jetzt leer.");
            } else {

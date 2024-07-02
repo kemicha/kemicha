@@ -24,83 +24,6 @@ public class PanelMitarbeiter extends JPanel {
         this.shop= shop;
 
     }
-
-
-
- /*   public JPanel PanelEinloggen() {
-        JPanel panel = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5);
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-
-        panel.add(new JLabel("Benutzername"), gbc);
-        gbc.gridx = 1;
-        panel.add(new JTextField(15), gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        panel.add(new JLabel("Passwort"), gbc);
-        gbc.gridx = 1;
-        panel.add(new JPasswordField(15), gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        gbc.gridwidth = 2;
-        gbc.anchor = GridBagConstraints.CENTER;
-        JButton loginButton = new JButton("Login");
-        panel.add(loginButton, gbc);
-
-        return panel;
-    }*/
-
-
-
- /*   public JPanel PanelEinloggen() {
-           JPanel panel= new JPanel();
-           panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-            JFrame frame = new JFrame("Eshop");
-            frame.setSize(400, 300);
-            frame.setLocation(0, 500);
-            frame.setLocationRelativeTo(null);
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setVisible(true);
-            JPanel loginGui = new JPanel();
-            //frame.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-            panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-
-            JButton kundeBtn = new JButton("Kunde");
-            JButton mitabeiterBtn = new JButton("Mitarbeiter");
-            JButton registierenBtn = new JButton("Registrieren");
-
-
-            mitabeiterBtn.addActionListener(e -> {
-                PanelEinloggen();
-                frame.dispose();
-            });
-
-            registierenBtn.addActionListener(e -> {
-                onMitarbeiterRegistrierenKlick();
-                frame.dispose();
-            });
-
-            kundeBtn.addActionListener(e -> {
-                PanelEinloggen();
-                frame.dispose();
-            });
-
-            loginGui.add(mitabeiterBtn);
-            loginGui.add(kundeBtn);
-            loginGui.add(registierenBtn);
-
-            frame.add(loginGui, BoxLayout.Y_AXIS);
-            frame.setSize(350, 300);
-            frame.setLayout(new BorderLayout());
-            frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        return panel;
-    }*/
-
-
         public void MitarbeiterVerwaltungKlick() {
             List<Mitarbeiter> mitarbeiterList = shop.gibAlleMitarbeiter();
             if (mitarbeiterList.isEmpty()) {
@@ -115,7 +38,7 @@ public class PanelMitarbeiter extends JPanel {
                     JButton bearbeitenButton = new JButton("Bearbeiten");
                     bearbeitenButton.addActionListener(e -> {
                         try {
-                            BearbeiteMitabeiter(mitarbeiter);
+                             BearbeiteMitabeiter(mitarbeiter);
                         } catch (MitarbeiterExistiertBereitsException ex) {
                             throw new RuntimeException(ex);
                         }

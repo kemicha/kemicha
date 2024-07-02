@@ -1,20 +1,19 @@
 package src.valueObjects;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 public class Rechnung {
-    private Benutzer kunde;
+    private String kunde;
     private Date datum;
     private double gesamtePreis;
     private String bezeichnung;
     private int anzahl;
 
 
-    public Rechnung(Benutzer kunde, Date datum, double gesamtePreis,int anzahl, String bezeichnung){
+    public Rechnung(String kunde, Date datum, double gesamtePreis,int anzahl, String bezeichnung){
         this.kunde = kunde;
         this.anzahl=anzahl;
         this.datum= datum;
@@ -25,7 +24,7 @@ public class Rechnung {
     }
 
     public List<Rechnungsposition> getPositionen() {
-        return null;
+        return new ArrayList<>();
     }
 
 
@@ -49,7 +48,7 @@ gekauften Artikel inkl. Stückzahl und Preisinformation sowie den Gesamtprei
     * */
 
 
-    public Benutzer getKunde() {
+    public String getKunde() {
         return kunde;
     }
 
@@ -102,10 +101,10 @@ gekauften Artikel inkl. Stückzahl und Preisinformation sowie den Gesamtprei
         this.gesamtePreis = gesamtePreis;
     }
 
-    public void showRechnung(){
+    public void zeigeRechnung(){
 
         System.out.println("####### Rechnung #######");
-        System.out.println("Kunde: " + kunde.getName());
+        System.out.println("Kunde: " + kunde);
         System.out.println("Datum: " + datum.toString());
         System.out.println("GesamtPreis: " + this.gesamtePreis);
         for (RechnungInfos r : rechnungsListe) {
@@ -135,5 +134,16 @@ gekauften Artikel inkl. Stückzahl und Preisinformation sowie den Gesamtprei
             return stueckzahl;
         }
 
+    }
+
+    @Override
+    public String toString() {
+        return "\n Rechnung{" +
+                "kunde= " + kunde +
+                ", datum=  " + datum +
+                ", gesamtePreis= " + gesamtePreis +
+                ", bezeichnung=' " + bezeichnung + '\'' +
+                ", anzahl= " + anzahl +
+                '}';
     }
 }
